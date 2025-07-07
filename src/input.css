@@ -1,0 +1,87 @@
+/* src/input.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer components {
+
+  .texto_titulo {
+    @apply text-[32px] font-light not-italic leading-normal;
+  }
+  .texto_btn {
+    @apply font-lato text-[14px] font-bold not-italic leading-normal;
+  }
+
+
+  .texto_20_800 {
+    @apply font-inter text-[20px] font-[800] not-italic leading-normal;
+  }
+
+  .texto_20_600 {
+    @apply font-inter text-[20px] font-[600] not-italic leading-normal;
+  }
+
+  .texto_20_500 {
+    @apply font-inter text-[20px] font-[500] not-italic leading-normal;
+  }
+
+
+  .texto_18_800 {
+    @apply font-inter text-[18px] font-[800] not-italic leading-normal;
+  }
+
+  .texto_18_600 {
+    @apply font-inter text-[18px] font-[600] not-italic leading-normal;
+  }
+
+  .texto_15_500 {
+    @apply font-inter text-[18px] font-[500] not-italic leading-normal;
+  }
+
+
+
+  .texto_16_800 {
+    @apply font-inter text-[16px] font-[800] not-italic leading-normal;
+  }
+
+  .texto_16_600 {
+    @apply font-inter text-[16px] font-[600] not-italic leading-normal;
+  }
+
+  .texto_16_500 {
+    @apply font-inter text-[16px] font-[500] not-italic leading-normal;
+  }
+
+
+  .texto_12_800 {
+    @apply font-inter text-[12px] font-[800] not-italic leading-normal;
+  }
+
+  .texto_12_600 {
+    @apply font-inter text-[12px] font-[600] not-italic leading-normal;
+  }
+
+  .texto_12_500 {
+    @apply font-inter text-[12px] font-[500] not-italic leading-normal;
+  }
+
+
+
+
+}
+/* Para navegadores Webkit (Chrome, Safari, Edge) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Para Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px white inset;
+  -webkit-text-fill-color: #5b5151;
+}
+
