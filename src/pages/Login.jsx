@@ -24,7 +24,7 @@ export const Login = () => {
 
 	const handleSubmit = async values => {
 		let respuesta = await dispatch(getAuth(values.user, values.pass));
-		if (respuesta == 'OK') navigate('/notificaciones/home');
+		if (respuesta == 'OK') navigate('/home');
 	};
 
 	const handleChange = (setFieldValue, field, value) => {
@@ -38,7 +38,7 @@ export const Login = () => {
 	useEffect(() => {
 		//MODO DEV
         const cookieLogin = Cookies.get("LOGIN");
-        if (isAuthenticated || cookieLogin) navigate("/notificaciones/home");
+        if (isAuthenticated || cookieLogin) navigate("/home");
         
         //MODO PROD
 		// if (isAuthenticated) navigate('/notificaciones/home');//prod
@@ -65,6 +65,7 @@ export const Login = () => {
                                     <label className='texto_12_500 texto-white absolute left-[8px] top-[-18px] rounded-xl bg-primary px-[1px] italic text-white'>
                                         Usuario
                                     </label>
+
                                     <input
                                         className='texto_15_700 h-3/4 w-[99%] text-secondary focus:outline-none disabled:bg-disabled'
                                         disabled={isSubmitting}
@@ -75,6 +76,14 @@ export const Login = () => {
                                         type='text'
                                         value={formValues.user}
                                     />
+
+                               
+                                    <ErrorMessage 
+                                        name='user' 
+                                        component='span' 
+                                        className='text-white text-sm mt-1 absolute left-[12px] bottom-[-20px]' 
+                                    />
+
                                 </div>
                                 
                                 {/* input password */}
@@ -111,8 +120,8 @@ export const Login = () => {
                                 )}
     
                                 {/* errores */}
-                                <div className='texto_11_700 text-center text-white'><ErrorMessage name='user' /></div>
-                                <div className='texto_11_700 text-center text-white'><ErrorMessage name='pass' /></div>
+                                {/* <div className='texto_11_700 text-center text-white'><ErrorMessage name='user' /></div>
+                                <div className='texto_11_700 text-center text-white'><ErrorMessage name='pass' /></div> */}
                                 {errorLogin && (<div className='texto_11_700 text-center text-white'>Error login</div>)}
                             </Form>
                         )}

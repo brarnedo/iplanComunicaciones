@@ -3,10 +3,12 @@ import { Outlet, Link } from "react-router-dom";
 import { Loader } from 'componentesUI';
 import { useSetState } from 'hooks';
 import Cookies from 'js-cookie';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 export const Home = () => {
-
+	let navigate = useNavigate();
 	
 	const { user = '' } = useSelector(state => state.auth);
 	const { setIsAuthenticated } = useSetState();

@@ -438,22 +438,25 @@ const FormularioGeneral = () => {
 			.test('max-length', 'Máximo 500 caracteres', function(value) {
 				const textContent = value?.replace(/<[^>]*>/g, '') || '';
 				return textContent.length <= 500;}),
-        imagen: Yup.string()
-			.required('Debés adjuntar una imágen'),
+        // imagen: Yup.string()
+		// 	.required('Debés adjuntar una imágen'),
 
 		
         });
         
 
 	const onSubmit = (values, { setSubmitting, resetForm }) => {
+		
 		console.log('Datos enviados:', values);
-
+		setSubmitting(true);
 		// Simular envío al servidor
 		setTimeout(() => {
 			alert('¡Formulario enviado con Formik!');
 			setSubmitting(false);
 			resetForm(); // Limpia el formulario
 		}, 1000);
+
+
 	};	
 
 	return(
@@ -461,7 +464,7 @@ const FormularioGeneral = () => {
 				initialValues={initialValues}
 				validationSchema={validationSchema}
 				onSubmit={onSubmit}>
-                     {({ values, setFieldValue, handleSubmit }) => (
+                     {({ values, setFieldValue, handleSubmit, isSubmitting }) => (
                     <Form>
 				<div className='bg-bg_primary flex flex-1 flex-col p-[16px] rounded-[12px] pt-[16px] gap-[16px]'>
 					<div className='pb-[12px] border-b-[1px] border-tertiary'>
@@ -662,6 +665,10 @@ const FormularioGeneral = () => {
 					<div className='flex justify-end'>
 						{/* BOTÓN BUSCAR */}
 						<ButtonPrimary texto='ENVIAR'  type="submit"/>
+						{isSubmitting && (
+							<p> Cargando </p>
+							
+						)}
 					</div>
 				</div>
                 </Form>
