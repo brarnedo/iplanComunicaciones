@@ -628,6 +628,22 @@ video {
   top: -18px;
 }
 
+.order-1 {
+  order: 1;
+}
+
+.order-2 {
+  order: 2;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.m-0 {
+  margin: 0px;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -635,6 +651,14 @@ video {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mt-8 {
+  margin-top: 2rem;
+}
+
+.mt-12 {
+  margin-top: 3rem;
 }
 
 .flex {
@@ -677,6 +701,14 @@ video {
   height: 100vh;
 }
 
+.h-\[36px\] {
+  height: 36px;
+}
+
+.h-\[48px\] {
+  height: 48px;
+}
+
 .w-\[1px\] {
   width: 1px;
 }
@@ -691,6 +723,14 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-\[360px\] {
+  width: 360px;
+}
+
+.w-\[36px\] {
+  width: 36px;
 }
 
 .max-w-\[1440px\] {
@@ -753,6 +793,10 @@ video {
   border-radius: 0.75rem;
 }
 
+.rounded-full {
+  border-radius: 9999px;
+}
+
 .border-2 {
   border-width: 2px;
 }
@@ -806,6 +850,11 @@ video {
   padding-right: 1px;
 }
 
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
 .pb-\[7px\] {
   padding-bottom: 7px;
 }
@@ -816,6 +865,14 @@ video {
 
 .pt-2 {
   padding-top: 0.5rem;
+}
+
+.pl-\[45px\] {
+  padding-left: 45px;
+}
+
+.pr-1 {
+  padding-right: 0.25rem;
 }
 
 .text-center {
@@ -889,9 +946,18 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #5b5151;
 }
 
+.hover\:cursor-pointer:hover {
+  cursor: pointer;
+}
+
 .hover\:bg-primary:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(255 0 110 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:text-primary:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 0 110 / var(--tw-text-opacity, 1));
 }
 
 .focus\:outline-none:focus {
@@ -911,8 +977,24 @@ input:-webkit-autofill {
 }
 
 @media (min-width: 1280px) {
+  .xl\:order-1 {
+    order: 1;
+  }
+
+  .xl\:order-2 {
+    order: 2;
+  }
+
+  .xl\:flex {
+    display: flex;
+  }
+
   .xl\:h-\[93px\] {
     height: 93px;
+  }
+
+  .xl\:h-\[80px\] {
+    height: 80px;
   }
 
   .xl\:grid-cols-3 {
@@ -938,6 +1020,11 @@ input:-webkit-autofill {
   .xl\:gap-x-4 {
     -moz-column-gap: 1rem;
          column-gap: 1rem;
+  }
+
+  .xl\:py-0 {
+    padding-top: 0px;
+    padding-bottom: 0px;
   }
 }
 
