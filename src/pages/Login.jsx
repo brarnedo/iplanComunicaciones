@@ -1,51 +1,119 @@
-import { ButtonWhite } from "../ui/componentes/ButtonWhite";
-import { useNavigate } from "react-router-dom";
-
+import { ButtonWhite, Loader } from 'componentesUI';
+import { ErrorMessage, Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { getAuth } from 'store';
+import * as Yup from 'yup';
+import Cookies from "js-cookie";
 
 export const Login = () => {
+	let navigate = useNavigate();
+	const dispatch = useDispatch();
 
-    let navigate = useNavigate();
+	const { isLoadingAuth, isAuthenticated, errorLogin } = useSelector(
+		state => state.auth,
+	);
 
-    const ingresar= () => {
+	const [formValues, setFormValues] = useState({
+		user: '',
+		pass: '',
+	});
 
-        navigate("/home");
-    }
+	const handleSubmit = async values => {
+		let respuesta = await dispatch(getAuth(values.user, values.pass));
+		if (respuesta == 'OK') navigate('/notificaciones/home');
+	};
+
+	const handleChange = (setFieldValue, field, value) => {
+		setFieldValue(field, value);
+		setFormValues(prevValues => ({
+			...prevValues,
+			[field]: value,
+		}));
+	};
+
+	useEffect(() => {
+		//MODO DEV
+        //const cookieLogin = Cookies.get("LOGIN");
+        //if (isAuthenticated || cookieLogin) navigate("/notificaciones/home");
+        
+        //MODO PROD
+		if (isAuthenticated) navigate('/notificaciones/home');//prod
+	}, [isAuthenticated]);
+
 	return (
-		<div className='bg-primary w-full py-[24px]'>
-			<div className='w-[1360px] max-w-[1360px] mx-auto pl-[75px] flex items-center gap-[12px]'>
-				<p className='text-white texto_16_500'> ACCEDER:</p>
+		<nav className='flex h-auto w-full max-w-[1440px] flex-col items-center gap-4 bg-primary px-6 xl:h-[93px] xl:flex-row'>
+            <p className='text-white texto_18_600'> ACCEDER:</p>
 
-                <div className="relative">
-				<label className='texto_12_500 texto-white absolute left-[8px] top-[-15px] rounded-xl px-[1px] italic text-white'>
-					Usuario
-				</label>
-				<input
-					className='texto_16_500 h-3/4 text-tertiary focus:outline-none disabled:bg-disabled rounded-[8px] py-[8px] px-[12px]'
-				/>
-                </div>
+            <Formik
+                initialValues={formValues}
+                onSubmit={handleSubmit}
+                validationSchema={Yup.object({
+                    user: Yup.string().required('Usuario requerido'),
+                    pass: Yup.string().required('Clave requerida'),
+                })}>
+                {({ isSubmitting, setFieldValue }) => (
+                        <Form className='grid grid-cols-1 justify-items-center gap-4 xl:grid-cols-3 xl:items-end xl:justify-items-start xl:gap-0 xl:gap-x-4'>
+                            
+                            {/* input usuario */}
+                            <div
+                                className={`${isSubmitting ? 'bg-disabled' : 'bg-white'} relative flex h-[44px] w-[294px] items-center justify-start rounded-[6px] pl-4`}>
+                                <label className='texto_12_500 texto-white absolute left-[8px] top-[-18px] rounded-xl bg-primary px-[1px] italic text-white'>
+                                    Usuario
+                                </label>
+                                <input
+                                    className='texto_15_700 h-3/4 w-[99%] text-secondary focus:outline-none disabled:bg-disabled'
+                                    disabled={isSubmitting}
+                                    name='user'
+                                    onChange={e =>
+                                        handleChange(setFieldValue, 'user', e.target.value)
+                                    }
+                                    type='text'
+                                    value={formValues.user}
+                                />
+                            </div>
+                            
+                            {/* input password */}
+                            <div
+                                className={`${isSubmitting ? 'bg-disabled' : 'bg-white'} relative flex h-[44px] w-[294px] items-center justify-start rounded-[6px] pl-4`}>
+                                <label className='texto_12_500 texto-white absolute left-[8px] top-[-18px] rounded-xl bg-primary px-[1px] text-white'>
+                                    Clave
+                                </label>
+                                <input
+                                    className='texto-15_700 h-3/4 w-[99%] text-secondary focus:outline-none disabled:bg-disabled'
+                                    disabled={isSubmitting}
+                                    name='pass'
+                                    onChange={e =>
+                                        handleChange(setFieldValue, 'pass', e.target.value)
+                                    }
+                                    type='password'
+                                    value={formValues.pass}
+                                />
+                            </div>
 
-                 <div className="relative">
-				<label className='texto_12_500 texto-white absolute left-[8px] top-[-15px] rounded-xl px-[1px] italic text-white'>
-					Clave
-				</label>
-				<input
-					className='texto_16_500 h-3/4 text-tertiary focus:outline-none disabled:bg-disabled rounded-[8px] py-[8px] px-[12px]'
-                     type="password"
-				/>
-                </div>
+                            {/* loader */}
+                            {isLoadingAuth ? (
+                                <Loader
+                                    color='#B8B8B8'
+                                    size='36'
+                                />
+                            ) : (
+                                <ButtonWhite
+                                    hover={false}
+                                    texto={'INGRESAR'}
+                                    type={'submit'}
+                                    width={'123'}
+                                />
+                            )}
 
-                <button
-                onClick={ingresar}>
-                    harcodeo
-                </button>
-
-                <ButtonWhite
-                hover={false}
-                texto={"INGRESAR"}
-                type={"submit"}
-                width={"123"}
-              />
-			</div>
-		</div>
+                            {/* errores */}
+                            <div className='texto_11_700 text-center text-white'><ErrorMessage name='user' /></div>
+                            <div className='texto_11_700 text-center text-white'><ErrorMessage name='pass' /></div>
+                            {errorLogin && (<div className='texto_11_700 text-center text-white'>Error login</div>)}
+                        </Form>
+                    )}
+            </Formik>
+		</nav>
 	);
 };

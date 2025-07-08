@@ -1,7 +1,7 @@
 import { RouterProvider, createHashRouter } from "react-router-dom";
 import { Login } from 'pages';
 import { Home, Layout } from "layouts";
-//import { PrivateRoutes } from "router";
+import { PrivateRoutes } from "router";
 
 const router = createHashRouter([
   {
@@ -13,33 +13,20 @@ const router = createHashRouter([
         element: <Login />,
       },
       {
-          path: "/home/",
+          path: "/notificaciones/",
           element: (
-          //  <PrivateRoutes>
+           <PrivateRoutes>
               <Home />
-          //  </PrivateRoutes>
+           </PrivateRoutes>
           ),
-		  /*
           children: [
           {
             index: true,
             path: "home",
-            element: <Resultado />,
+            element: <div>hola</div>,
           },
-          {
-            path: "resultado",
-            element: <Resultado />,
-          },
-          {
-            path: "resultado/:id",
-            element: <DataCenter />,
-          },
-          {
-            path: "accesos",
-            element: <AccessByDate/>
-          }
-        	],*/
-      },
+        ],
+      },  
     ],
   },
 ]);

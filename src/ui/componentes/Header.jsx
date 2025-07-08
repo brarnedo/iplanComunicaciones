@@ -5,8 +5,8 @@ import {SeparadorV } from "componentesUI";
 
 export const Header = () => {
 	return (
-		<header className='flex h-[75px] w-full items-center justify-between bg-bg_primary'>
-			<div className='flex items-center max-w-[1360px] w-[1360px] mx-auto'>
+		<header className='flex h-[75px] w-full max-w-[1440px] items-center justify-between bg-bg_primary px-6 md:px-4'>
+			<div className='flex items-center'>
 				<img
 					alt='logo'
 					
