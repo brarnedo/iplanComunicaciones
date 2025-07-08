@@ -1,8 +1,21 @@
 import { Outlet, Link } from "react-router-dom";
+/* ----------------------------------------- componentes ---------------------------------------- */
+import { Loader } from 'componentesUI';
+import { useSetState } from 'hooks';
+import Cookies from 'js-cookie';
+
 
 export const Home = () => {
-	const user = '';
 
+	
+	const { user = '' } = useSelector(state => state.auth);
+	const { setIsAuthenticated } = useSetState();
+	const logout = () => {
+		Cookies.remove('LOGIN');
+		Cookies.remove('PHPSESSID');
+		setIsAuthenticated(false);
+		navigate('/');
+	};
 	return (
         <>
          <div className="flex flex-col flex-1">
@@ -60,4 +73,5 @@ export const Home = () => {
         </>
 	
     )
-};
+}
+

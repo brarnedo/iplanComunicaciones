@@ -1,7 +1,7 @@
 import { RouterProvider, createHashRouter } from "react-router-dom";
 import { Login, Archivadas, Programadas, NuevaComunicacion} from 'pages';
 import { Home, Layout } from "layouts";
-//import { PrivateRoutes } from "router";
+import { PrivateRoutes } from "router";
 
 const router = createHashRouter([
  {
