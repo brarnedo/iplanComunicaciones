@@ -24,7 +24,7 @@ export const Login = () => {
 
 	const handleSubmit = async values => {
 		let respuesta = await dispatch(getAuth(values.user, values.pass));
-		if (respuesta == 'OK') navigate('/notificaciones/home');
+		if (respuesta == 'OK') navigate('/home');
 	};
 
 	const handleChange = (setFieldValue, field, value) => {
@@ -38,7 +38,7 @@ export const Login = () => {
 	useEffect(() => {
 		//MODO DEV
         const cookieLogin = Cookies.get("LOGIN");
-        if (isAuthenticated || cookieLogin) navigate("/notificaciones/home");
+        if (isAuthenticated || cookieLogin) navigate("/home");
         
         //MODO PROD
 		// if (isAuthenticated) navigate('/notificaciones/home');//prod
@@ -75,6 +75,14 @@ export const Login = () => {
                                         type='text'
                                         value={formValues.user}
                                     />
+
+                               
+                                    <ErrorMessage 
+                                        name='user' 
+                                        component='span' 
+                                        className='text-white text-sm mt-1 absolute left-[12px] bottom-[-20px]' 
+                                    />
+
                                 </div>
                                 
                                 {/* input password */}
@@ -111,8 +119,13 @@ export const Login = () => {
                                 )}
     
                                 {/* errores */}
+<<<<<<< HEAD
                                 <div className='texto_11_700 text-center text-white'><ErrorMessage name='user' /></div>
                                 <div className='texto_11_700 text-center text-white'><ErrorMessage name='pass' /></div>
+=======
+                                {/* <div className='texto_11_700 text-center text-white'><ErrorMessage name='user' /></div>
+                                <div className='texto_11_700 text-center text-white'><ErrorMessage name='pass' /></div> */}
+>>>>>>> edacb0466331449a686e28df8cf1bb9e509b1ed7
                                 {errorLogin && (<div className='texto_11_700 text-center text-white'>Error login</div>)}
                             </Form>
                         )}
