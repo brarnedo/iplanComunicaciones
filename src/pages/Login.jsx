@@ -119,13 +119,8 @@ export const Login = () => {
                                 )}
     
                                 {/* errores */}
-<<<<<<< HEAD
-                                <div className='texto_11_700 text-center text-white'><ErrorMessage name='user' /></div>
-                                <div className='texto_11_700 text-center text-white'><ErrorMessage name='pass' /></div>
-=======
                                 {/* <div className='texto_11_700 text-center text-white'><ErrorMessage name='user' /></div>
                                 <div className='texto_11_700 text-center text-white'><ErrorMessage name='pass' /></div> */}
->>>>>>> edacb0466331449a686e28df8cf1bb9e509b1ed7
                                 {errorLogin && (<div className='texto_11_700 text-center text-white'>Error login</div>)}
                             </Form>
                         )}
