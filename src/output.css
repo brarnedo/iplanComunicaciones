@@ -620,6 +620,22 @@ video {
   line-height: 1.5;
 }
 
+.texto_14_500 {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.5;
+}
+
+.texto_16_800 {
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  font-style: normal;
+  line-height: 1.5;
+}
+
 .texto_16_600 {
   font-family: Inter, sans-serif;
   font-size: 16px;
@@ -718,6 +734,10 @@ video {
   margin-top: 3rem;
 }
 
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
@@ -790,8 +810,12 @@ video {
   height: 100%;
 }
 
-.h-screen {
-  height: 100vh;
+.h-\[40px\] {
+  height: 40px;
+}
+
+.max-h-\[1000px\] {
+  max-height: 1000px;
 }
 
 .h-32 {
@@ -1012,10 +1036,6 @@ video {
   border-width: 1px;
 }
 
-.border-2 {
-  border-width: 2px;
-}
-
 .border-b-\[1px\] {
   border-bottom-width: 1px;
 }
@@ -1070,9 +1090,8 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
 
-.bg-blue-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1));
+.p-4 {
+  padding: 1rem;
 }
 
 .bg-black {
@@ -1139,9 +1158,9 @@ video {
   padding-bottom: 8px;
 }
 
-.py-\[24px\] {
-  padding-top: 24px;
-  padding-bottom: 24px;
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .px-3 {
@@ -1219,24 +1238,12 @@ video {
   padding-top: 33px;
 }
 
-.pl-\[75px\] {
-  padding-left: 75px;
-}
-
 .text-center {
   text-align: center;
 }
 
 .font-lato {
   font-family: Lato, sans-serif;
-}
-
-.font-figtree {
-  font-family: Figtree, sans-serif;
-}
-
-.font-nunito {
-  font-family: Nunito, sans-serif;
 }
 
 .text-\[30px\] {
@@ -1275,6 +1282,11 @@ video {
   font-style: italic;
 }
 
+.text-bg_secondary {
+  --tw-text-opacity: 1;
+  color: rgb(192 207 230 / var(--tw-text-opacity, 1));
+}
+
 .text-gray-400 {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity, 1));
@@ -1298,6 +1310,11 @@ video {
 .text-secondary {
   --tw-text-opacity: 1;
   color: rgb(57 138 255 / var(--tw-text-opacity, 1));
+}
+
+.text-subtitle {
+  --tw-text-opacity: 1;
+  color: rgb(79 92 107 / var(--tw-text-opacity, 1));
 }
 
 .text-tertiary {
@@ -1459,6 +1476,12 @@ input:-webkit-autofill {
   .md\:px-4 {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .lg\:mr-\[124px\] {
+    margin-right: 124px;
   }
 }
 

@@ -8,7 +8,8 @@ export default {
 				secondary: "#398AFF",
 				tertiary:"#7B828C",
 				bg_primary:"#EDF4FC",
-				bg_secondary:"#C0CFE6"
+				bg_secondary:"#C0CFE6",
+				subtitle: "#4F5C6B"
 			},
 			fontFamily: {
 				nunito: ['Nunito', 'sans-serif'],
