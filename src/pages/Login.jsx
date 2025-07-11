@@ -65,6 +65,7 @@ export const Login = () => {
                                     <label className='texto_12_500 texto-white absolute left-[8px] top-[-18px] rounded-xl bg-primary px-[1px] italic text-white'>
                                         Usuario
                                     </label>
+
                                     <input
                                         className='texto_15_700 h-3/4 w-[99%] text-secondary focus:outline-none disabled:bg-disabled'
                                         disabled={isSubmitting}

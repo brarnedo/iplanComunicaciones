@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
-    let navigate = useNavigate();
+	let navigate = useNavigate();
+	
 	const { user = '' } = useSelector(state => state.auth);
 	const { setIsAuthenticated } = useSetState();
 	const logout = () => {
@@ -16,7 +17,6 @@ export const Home = () => {
 		setIsAuthenticated(false);
 		navigate('/');
 	};
-	
 	return (
         <>
          <div className="flex flex-col flex-1">

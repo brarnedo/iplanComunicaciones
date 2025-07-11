@@ -4,7 +4,7 @@ import { Home, Layout } from "layouts";
 import { PrivateRoutes } from "router";
 
 const router = createHashRouter([
-{
+ {
     path: "/",
     element: <Layout />,
     children: [
