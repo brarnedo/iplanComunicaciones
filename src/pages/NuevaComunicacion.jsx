@@ -5,6 +5,10 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import * as Yup from 'yup';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { getSaveComunicacion } from '../store/slices/saveComunicacion/thunks';
+
+
 import {
 	ButtonPrimary,
 	Input,
@@ -380,7 +384,14 @@ const FormularioAumento = () => {
 	);
 };
 
+
+
 const FormularioGeneral = () => {
+	
+	const dispatch = useDispatch();
+
+	const { isLoadingSaveComunicacion, saveComunicacion } = useSelector(state => state.saveComunicacion);
+
 	const [isOn, setIsOn] = useState(false);
 
 	const onToggle = () => {
@@ -394,46 +405,70 @@ const FormularioGeneral = () => {
 
 
 	const [selectedFile, setSelectedFile] = useState(null);
-	const [fileFormData, setFileFormData] = useState(new FormData());
-
 	const fileInputRef = useRef(null);
 
 	// 🎯 VALORES INICIALES (como initialValues en Formik)
 	const initialValues = {
+		tituloInterno:'',
 		titulo: '',
 		fechaEnviar: '',
 		fechaArchivar: '',
 		contenidoComunicacion: '',
+		listadoDistribuccion:'',
 		imagen: '',
 	};
 
 	const validationSchema = Yup.object({
+		tituloInterno: Yup.string()
+			.min(2, 'Mínimo 2 caracteres')
+			.required('Ingresá un título interno'),
 		titulo: Yup.string()
 			.min(2, 'Mínimo 2 caracteres')
-			.required('Nombre es requerido'),
+			.required('Ingresa un título'),
 		fechaEnviar: Yup.date()
-			.min(new Date(), 'Fecha invalida')
+			.min(new Date(), 'Fecha invalida')			
 			.required('Fecha requerida'),
 		fechaArchivar: Yup.date()
 			.min(new Date(), 'Fecha invalida')
-			.required('Fecha requerida'),
+			.test(
+				'fecha-posterior',
+				'Fecha invalida',
+				function(value) {
+					const { fechaEnviar } = this.parent; // ← Acceder a fechaEnviar
+					if (!fechaEnviar || !value) return true; // Si alguna está vacía, no validar
+					return new Date(value) >= new Date(fechaEnviar);
+				}
+			),
+			//.required('Ingresá una fecha'),
 		contenidoComunicacion: Yup.string()
-			.test('is-not-empty', 'Contenido es requerido', function (value) {
+			.test('is-not-empty', 'Ingresá un contenido', function (value) {
 				// Quitar tags HTML para validar contenido real
 				const textContent = value?.replace(/<[^>]*>/g, '').trim();
 				return textContent && textContent.length > 0;
 			})
-			.test('max-length', 'Máximo 500 caracteres', function (value) {
+			.test('max-length', 'Máximo 900 caracteres', function (value) {
 				const textContent = value?.replace(/<[^>]*>/g, '') || '';
-				return textContent.length <= 500;
+				return textContent.length <= 900;
 			}),
-		imagen: Yup.string()
+		//listadoDistribuccion: Yup.string().required('Debés adjuntar un archivo'),
+		imagen: Yup.mixed()
+			.test('fileType', 'Tipo de archivo no permitido', function(value) {
+				if (!selectedFile) return true; // Si no hay archivo, no validar aquí
+				const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
+				return allowedTypes.includes(selectedFile.type);
+			})
+			.test('fileSize', 'Archivo muy grande. Máximo 15MB', function(value) {
+				if (!selectedFile) return true;
+				return selectedFile.size <= 15 * 1024 * 1024;
+			})
 		// 	.required('Debés adjuntar una imágen'),
 	});
 
 	const triggerFileSelect = () => {
 		fileInputRef.current?.click();
 	};
+
+	const [errorImagen, setErrorImagen] = useState ("");
 
 	const handleFileSelect = (event, setFieldValue) => {
 		const file = event.target.files[0];
@@ -443,14 +478,16 @@ const FormularioGeneral = () => {
 		// Validar tipo
 		const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
 		if (!allowedTypes.includes(file.type)) {
-			alert('Tipo de archivo no permitido. Solo: JPG, PNG, GIF, PDF');
+			setErrorImagen("Tipo de archivo no permitido. Solo: JPG, PNG, GIF, PDF");
+			setSelectedFile("");
 			return;
 		}
 		
 		// Validar tamaño (15MB = 15 * 1024 * 1024 bytes)
 		const maxSize = 15 * 1024 * 1024;
 		if (file.size > maxSize) {
-			alert('El archivo es muy grande. Máximo 15MB');
+			setErrorImagen("El archivo es muy grande. Máximo 15MB");
+			setSelectedFile("");
 			return;
 		}
 		
@@ -459,26 +496,15 @@ const FormularioGeneral = () => {
 		
 		// Actualizar Formik con el nombre
 		setFieldValue('imagen', file.name);
-		
-		// Crear/actualizar FormData
-		const newFormData = new FormData();
-		// Agregar la imagen
-		newFormData.append('imagen', file);
-		
-		// Guardar FormData
-		setFileFormData(newFormData);
-		
-		console.log('Archivo seleccionado:', file.name);
-		console.log('FormData creado:', newFormData.get('imagen'));
+
+		setErrorImagen("");
+
 	};
 
-	const onSubmit = (values, { setSubmitting, resetForm }) => {
-		
+	
 
-		console.log('Datos enviados:', values);
-
-		console.log('FormData con imagen:', fileFormData);
-
+	const onSubmit = async (values, { setSubmitting, resetForm }) => {
+			
 		//creador_usuario_ldap
 		//creacion_fecha
 		//type
@@ -488,20 +514,49 @@ const FormularioGeneral = () => {
 		//hasta
 		//mensaje
 
+		// Crear FormData completo al momento del envío
+		const completeFormData = new FormData();
 		
+		// Agregar TODOS los datos del formulario
+		completeFormData.append('tituloInterno', values.tituloInterno);
+		completeFormData.append('titulo', values.titulo);
+		completeFormData.append('notification_type ', 'general');
+		completeFormData.append('fechaEnviar', values.fechaEnviar);
+		completeFormData.append('fechaArchivar', values.fechaArchivar);
+		completeFormData.append('contenidoComunicacion', values.contenidoComunicacion);
+		completeFormData.append('esPush', isOn);
+		completeFormData.append('listadoDistribuccion', values.listadoDistribuccion);
+		
+		// Agregar archivo si existe
+		if (selectedFile) {
+			completeFormData.append('imagen', selectedFile);
+		}
+		
+		// // DEBUG
+		// console.log('=== FORMDATA COMPLETO ===');
+		// for (let [key, value] of completeFormData) {
+		// 	console.log(key, ':', value);
+		// }
+
+
+		const respuesta = await dispatch(getSaveComunicacion(completeFormData));
+    	 
 		setTimeout(() => {
 			alert('¡Formulario enviado con Formik!');
 			setSubmitting(false);
 			resetForm();
-			
 			// Limpiar estados de archivo
 			setSelectedFile(null);
-			setFileFormData(new FormData());
 			
 			}, 1000);
 	};
 
+
+
+	
+	if (isLoadingSaveComunicacion) return <Spinner />;
 	return (
+
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
@@ -511,12 +566,38 @@ const FormularioGeneral = () => {
 					<div className='bg-bg_primary flex flex-1 flex-col p-[16px] rounded-[12px] pt-[16px] gap-[16px]'>
 						<div className='pb-[12px] border-b-[1px] border-tertiary'>
 							<p className='text-primary texto_20_500'>
-								Notificación de aumento
+								Comunicación General
 							</p>
 						</div>
 
-						{/* PRIMERA FILA MOVILE*/}
+						{/* TITULO INTERNO */}
 						<div className='flex items-end gap-[12px] '>
+							
+							<div className='w-[100%] relative'>
+							
+								<Field
+									name='tituloInterno'
+									component={Input}
+									label='Título Interno'
+									placeholder='Ingresá...'
+								/>
+								<ErrorMessage
+									name='tituloInterno'
+									component='span'
+									className='text-red-500 text-sm absolute left-[12px]'
+								/>
+							</div>
+
+						
+						</div>
+
+						<div className='flex flex-col'></div>
+						
+						<SeparadorH separador='0' />
+
+						{/* TITULO  / ENVIAR / ARCHIVAR / PUSH */}
+						<div className='flex items-end gap-[12px] '>
+
 							{/** TÍTULO */}
 							<div className='w-[100%] relative'>
 								{/* <Input
@@ -534,7 +615,7 @@ const FormularioGeneral = () => {
 								<ErrorMessage
 									name='titulo'
 									component='span'
-									className='text-red-500 text-sm mt-1 absolute left-[12px]'
+									className='text-red-500 text-sm absolute left-[12px]'
 								/>
 							</div>
 
@@ -544,21 +625,23 @@ const FormularioGeneral = () => {
 							/>
 
 							{/** ENVIAR */}
-							<div className='flex flex-col relative'>
-								<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-									Enviar:
-								</label>
+							<div className='relative'>
+								<div className='flex flex-col'>
+									<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
+										Enviar:
+									</label>
 
-								<Field
-									type='date'
-									name='fechaEnviar'
-									className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-[160px]'
-								/>
+									<Field
+										type='date'
+										name='fechaEnviar'
+										className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-[160px]'
+									/>
+								</div>
 
 								<ErrorMessage
 									name='fechaEnviar'
 									component='span'
-									className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
+									className='text-red-500 text-sm  absolute left-[12px]'
 								/>
 							</div>
 
@@ -591,7 +674,7 @@ const FormularioGeneral = () => {
 								separador='0'
 							/>
 
-							{/* Switch 1 */}
+							{/* PUSH */}
 							<div className='flex items-end gap-3 w-[40%] pb-[6px]'>
 								<label className='texto_12_500 text-tertiary pb-[5px]'>
 									¿Es push?
@@ -622,7 +705,7 @@ const FormularioGeneral = () => {
 						
 						<SeparadorH separador='0' />
 
-						{/** Segunda fila : Imagenes */}
+						{/* IMAGEN */}
 						<div className='flex flex-col'>
 							<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
 								Imágen
@@ -633,7 +716,7 @@ const FormularioGeneral = () => {
 										ref={fileInputRef} // ← Necesitas crear este ref
 										style={{ display: 'none' }}
 										accept=".jpg,.jpeg,.png,.gif,.pdf"
-										onChange={(event) => handleFileSelect(event, setFieldValue)}
+										onChange={(event) => handleFileSelect(event, setFieldValue, )}
 									/>
 
 							<div className='flex gap-2'>
@@ -650,7 +733,7 @@ const FormularioGeneral = () => {
 										style={{ caretColor: 'transparent' }} // ← Oculta el cursor de texto
 									/>
 
-
+									<span className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]' >{errorImagen}</span>
 									<ErrorMessage
 										name='imagen'
 										component='span'
@@ -667,7 +750,7 @@ const FormularioGeneral = () => {
 
 						<SeparadorH separador='0' />
 
-						{/**  Tercera fila: Mensaje */}
+						{/**  MENSAJE */}
 						<div className='flex flex-col relative'>
 							<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
 								Contenido Comunicación
@@ -724,8 +807,43 @@ const FormularioGeneral = () => {
 						</div>
 					)} */}
 						</div>
-
+						
 						<SeparadorH separador='0' />
+
+						{/** ARCHIVO DE DISTRIBUCCIÓN */}
+						<div className='flex flex-col'>
+							<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
+								Lista de distribucción
+							</label>
+							<div className='flex gap-2'>
+								{/* INPUT */}
+								<div className='relative w-full'>
+									<Field
+										type='text'
+										placeholder={'Nombre del archivo..'}
+										readOnly
+										name='listadoDistribuccion'
+										className='texto_16_500 text-tertiary pl-[12px] pr-[40px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 cursor-default'
+										onFocus={e => e.target.blur()} // ← Quita el focus inmediatamente
+										style={{ caretColor: 'transparent' }} // ← Oculta el cursor de texto
+									/>
+
+									<ErrorMessage
+										name='listadoDistribuccion'
+										component='span'
+										className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]'
+									/>
+								</div>
+
+								{/* BOTÓN BUSCAR */}
+								<ButtonPrimary texto='BUSCAR' />
+							</div>
+						</div>
+
+						<div className='flex flex-col'></div>
+						<SeparadorH separador='0' />
+
+						{/** BOTON SUMMIT */}
 						<div className='flex justify-end'>
 							{/* BOTÓN BUSCAR */}
 							<ButtonPrimary
@@ -740,4 +858,17 @@ const FormularioGeneral = () => {
 			)}
 		</Formik>
 	);
+};
+
+
+
+const Spinner = () => {
+  return (
+    <>
+   
+    <h2> Enviando comunicación</h2>
+   
+   
+   </>
+  );
 };

@@ -1,12 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authSlice, counterSlice, pokemonSlice } from 'store';
+import { authSlice  } from 'store';
+import { saveComunicacionSlice } from "./slices/saveComunicacion";
 
 import './slices';
+
+// import {saveComunicacionSlice} from "./slices"
 
 export const store = configureStore({
 	reducer: {
 		auth: authSlice.reducer,
-		counter: counterSlice.reducer,
-		pokemon: pokemonSlice.reducer,
+		saveComunicacion: saveComunicacionSlice.reducer
+
+
+	
 	},
 });
