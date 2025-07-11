@@ -13,31 +13,19 @@ const router = createHashRouter([
         element: <Login />,  // ← URL: /
       },
       {
-        path: "home",
-        element: <Home />,   // ← URL: /home
+        element: <PrivateRoutes><Home /></PrivateRoutes>,   // ← URL: /home
         children: [
           {
             index: true,
+            path: "home",
             element: <NuevaComunicacion />,  // ← Por defecto en /home
-          }
-        ]
-      },
-      {
-        path: "archivadas", 
-        element: <Home />,   // ← URL: /archivadas
-        children: [
+          },
           {
-            index: true,
+            path: "archivadas",
             element: <Archivadas />,
-          }
-        ]
-      },
-      {
-        path: "programadas",
-        element: <Home />,   // ← URL: /programadas  
-        children: [
+          },
           {
-            index: true,
+            path: "programadas",
             element: <Programadas />,
           }
         ]
@@ -45,7 +33,6 @@ const router = createHashRouter([
     ],
   },
 ]);
-
 
 export const AppRouter = () => {
   return <RouterProvider router={router} />;
