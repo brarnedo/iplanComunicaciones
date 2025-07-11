@@ -4,7 +4,7 @@ export default {
 	theme: {
 		extend: {
 			 colors: {
-				primary: "#FF006E",        // ✅ SIN punto y coma
+				primary: "#FF006E",       
 				secondary: "#398AFF",
 				tertiary:"#7B828C",
 				bg_primary:"#EDF4FC",

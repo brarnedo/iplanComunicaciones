@@ -12,6 +12,7 @@ import { getSaveComunicacion } from '../store/slices/saveComunicacion/thunks';
 import {
 	ButtonPrimary,
 	Input,
+	Loader,
 	SeparadorH,
 	SeparadorV,
 } from '../ui/componentes';
@@ -554,9 +555,10 @@ const FormularioGeneral = () => {
 
 
 	
-	if (isLoadingSaveComunicacion) return <Spinner />;
+	if (isLoadingSaveComunicacion) return <Loader color={primary}/>;
 	return (
 
+		
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
@@ -571,6 +573,8 @@ const FormularioGeneral = () => {
 						</div>
 
 						{/* TITULO INTERNO */}
+						
+						<Loader color={"#FF006E"}/>
 						<div className='flex items-end gap-[12px] '>
 							
 							<div className='w-[100%] relative'>
