@@ -26,7 +26,7 @@ export const NuevaComunicacion = () => {
 	};
 
 	return (
-		<div className='bg-white flex-1 p-[16px] rounded-[12px] mr-[124px] flex flex-col gap-[16px]'>
+		<div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
 			<div className='pb-[12px] border-b-[1px] border-secondary flex justify-between'>
 				<p className='text-secondary texto_18_800'> Nueva comunicación </p>
 
@@ -47,7 +47,7 @@ export const NuevaComunicacion = () => {
 								Tipo de comunicación
 							</label>
 							<select
-								className={`texto_16_500 text-tertiary focus:outline-none disabled:bg-disabled rounded-[8px] py-[8px] px-[12px] w-[400px] border border-tertiary ${
+								className={`texto_16_500 text-tertiary focus:outline-none disabled:bg-disabled rounded-[8px] py-[8px] px-[12px] xl:w-[400px] border border-tertiary ${
 									tipoComunicación === '0' ? 'text-gray-400' : 'text-tertiary'
 								}`}
 								value={tipoComunicación}
@@ -69,321 +69,15 @@ export const NuevaComunicacion = () => {
 				</div>
 			)}
 
-			{/** Fomulario Aumento */}
-
+			{/** Fomulario Aumento  */}
+			{tipoComunicación != 0 && <FormularioGeneral tipoComunicacion={tipoComunicación} />}
 			
 
-			{tipoComunicación != 0 && <FormularioGeneral tipoComunicacion={tipoComunicación} />}
 		</div>
 	);
 };
 
-const FormularioAumento = () => {
-	const [isOn, setIsOn] = useState(false);
 
-	const onToggle = () => {
-		if (isOn) {
-			setIsOn(false);
-		} else {
-			setIsOn(true);
-		}
-	};
-
-	//let disabledON = false;
-
-	// 🎯 VALORES INICIALES (como initialValues en Formik)
-	const initialValues = {
-		titulo: '',
-		fechaEnviar: '',
-		fechaArchivar: '',
-		contenidoComunicacion: '',
-		listadoDistribuccion: '',
-		listadoServicio: '',
-	};
-
-	const validationSchema = Yup.object({
-		titulo: Yup.string()
-			.min(2, 'Mínimo 2 caracteres')
-			.required('Nombre es requerido'),
-		fechaEnviar: Yup.date()
-			.min(new Date(), 'La fecha no puede ser anterior a hoy')
-			.required('Fecha requerida'),
-		fechaArchivar: Yup.date()
-			.min(new Date(), 'La fecha no puede ser anterior a hoy')
-			.required('Fecha requerida'),
-		contenidoComunicacion: Yup.string()
-			.test('is-not-empty', 'Contenido es requerido', function (value) {
-				// Quitar tags HTML para validar contenido real
-				const textContent = value?.replace(/<[^>]*>/g, '').trim();
-				return textContent && textContent.length > 0;
-			})
-			.test('max-length', 'Máximo 500 caracteres', function (value) {
-				const textContent = value?.replace(/<[^>]*>/g, '') || '';
-				return textContent.length <= 500;
-			}),
-		listadoDistribuccion: Yup.string().required('Debés adjuntar un archivo'),
-
-		listadoServicio: Yup.string().required('Debés adjuntar un archivo'),
-	});
-
-	const onSubmit = (values, { setSubmitting, resetForm }) => {
-		console.log('Datos enviados:', values);
-
-		// Simular envío al servidor
-		setTimeout(() => {
-			alert('¡Formulario enviado con Formik!');
-			setSubmitting(false);
-			resetForm(); // Limpia el formulario
-		}, 1000);
-	};
-
-	return (
-		<Formik
-			initialValues={initialValues}
-			validationSchema={validationSchema}
-			onSubmit={onSubmit}>
-			{({ values, setFieldValue, handleSubmit }) => (
-				<Form>
-					<div className='bg-bg_primary flex flex-1 flex-col p-[16px] rounded-[12px] pt-[16px] gap-[16px]'>
-						<div className='pb-[12px] border-b-[1px] border-tertiary'>
-							<p className='text-primary texto_20_500'>
-								Notificación de aumento
-							</p>
-						</div>
-
-						{/* PRIMERA FILA MOVILE*/}
-						<div className='flex items-end gap-[12px] '>
-							{/** TÍTULO */}
-							<div className='w-[100%] relative'>
-								{/* <Input
-								label='Título'
-								placeholder='Ingresá...'
-								name='titulo'
-							/> */}
-
-								<Field
-									name='titulo'
-									component={Input}
-									label='Título'
-									placeholder='Ingresá...'
-								/>
-								<ErrorMessage
-									name='titulo'
-									component='span'
-									className='text-red-500 text-sm mt-1 absolute left-[12px]'
-								/>
-							</div>
-
-							<SeparadorV
-								height='60'
-								separador='0'
-							/>
-
-							{/** ENVIAR */}
-							<div className='flex flex-col relative'>
-								<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-									Enviar:
-								</label>
-
-								<Field
-									type='date'
-									name='fechaEnviar'
-									className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-[160px]'
-								/>
-
-								<ErrorMessage
-									name='fechaEnviar'
-									component='span'
-									className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
-								/>
-							</div>
-
-							<SeparadorV
-								height='0'
-								separador='-6'
-							/>
-
-							{/** ARCHIVAR */}
-							<div className='flex flex-col relative'>
-								<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-									Archivar:
-								</label>
-
-								<Field
-									type='date'
-									name='fechaArchivar'
-									className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-[160px]'
-								/>
-
-								<ErrorMessage
-									name='fechaArchivar'
-									component='span'
-									className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
-								/>
-							</div>
-
-							<SeparadorV
-								height='60'
-								separador='0'
-							/>
-
-							{/* Switch 1 */}
-							<div className='flex items-end gap-3 w-[40%] pb-[6px]'>
-								<label className='texto_12_500 text-tertiary pb-[5px]'>
-									¿Es push?
-								</label>
-								{/* 🔘 SWITCH BUTTON */}
-								<button
-									onClick={onToggle}
-									//disabled={disabled}
-									className={`
-                            relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none 
-                            ${isOn ? 'bg-primary' : 'bg-gray-300'}
-                            
-                            `}>
-									{/* CÍRCULO QUE SE MUEVE CON TEXTO DENTRO */}
-									<span
-										className={`
-                                    inline-flex items-center justify-center h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-lg text-xs font-bold
-                                    ${isOn ? 'translate-x-7 text-primary' : 'translate-x-1 text-gray-500'}
-                                `}>
-										{isOn ? 'SÍ' : 'NO'}
-									</span>
-								</button>
-							</div>
-						</div>
-
-						<div className='flex flex-col'></div>
-
-						{/**  Segunda fila */}
-						<div className='flex flex-col relative'>
-							<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-								Contenido Comunicación
-							</label>
-
-							<Field name='contenidoComunicacion'>
-								{({ field, form }) => (
-									<ReactQuill
-										modules={{
-											toolbar: [
-												['bold', 'italic', 'underline'],
-												[{ header: [1, 2, 3, false] }],
-												[{ list: 'ordered' }, { list: 'bullet' }],
-												['link'],
-												[{ color: [] }], // ← Color de texto
-												['clean'],
-											],
-										}}
-										value={field.value}
-										onChange={value => form.setFieldValue(field.name, value)}
-										placeholder='Escribe el contenido...'
-										className='bg-white texto_16_500 text-secondary pl-[12px] pr-[12px] pt-[12px] pb-[12px] rounded-[8px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 resize-none'
-									/>
-								)}
-							</Field>
-
-							<ErrorMessage
-								name='contenidoComunicacion'
-								component='span'
-								className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-0px]'
-							/>
-
-							{/* CONTADOR DE CARACTERES */}
-
-							<div className='flex justify-end mt-1 pr-[12px]'>
-								<span className={`texto_12_500 text-tertiary`}>0/200</span>
-							</div>
-
-							{/* {maxLength && (
-						<div className='flex justify-end mt-1 pr-[12px]'>
-							<span
-								className={`texto_11_400 ${charCount > maxLength * 0.9 ? 'text-red-500' : 'text-tertiary'}`}>
-								{charCount}/{maxLength}
-							</span>
-						</div>
-					)} */}
-						</div>
-
-						{/** Tercera fila */}
-						<SeparadorH separador='0' />
-
-						<div className='flex flex-col'>
-							<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-								Lista de distribucción
-							</label>
-							<div className='flex gap-2'>
-								{/* INPUT */}
-								<div className='relative w-full'>
-									<Field
-										type='text'
-										placeholder={'Nombre del archivo..'}
-										readOnly
-										name='listadoDistribuccion'
-										className='texto_16_500 text-tertiary pl-[12px] pr-[40px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 cursor-default'
-										onFocus={e => e.target.blur()} // ← Quita el focus inmediatamente
-										style={{ caretColor: 'transparent' }} // ← Oculta el cursor de texto
-									/>
-
-									<ErrorMessage
-										name='listadoDistribuccion'
-										component='span'
-										className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]'
-									/>
-								</div>
-
-								{/* BOTÓN BUSCAR */}
-								<ButtonPrimary texto='BUSCAR' />
-							</div>
-						</div>
-
-						<div className='flex flex-col'></div>
-						{/** Cuarta fila */}
-
-						<div className='flex flex-col'>
-							<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-								Lista de servicios afectados
-							</label>
-
-							<div className='flex gap-2'>
-								{/* INPUT */}
-								<div className='relative w-full'>
-									<Field
-										type='text'
-										placeholder={'Nombre del archivo..'}
-										readOnly
-										name='listadoServicio'
-										className='texto_16_500 text-tertiary pl-[12px] pr-[40px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 cursor-default'
-										onFocus={e => e.target.blur()} // ← Quita el focus inmediatamente
-										style={{ caretColor: 'transparent' }} // ← Oculta el cursor de texto
-									/>
-
-									<ErrorMessage
-										name='listadoServicio'
-										component='span'
-										className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]'
-									/>
-								</div>
-
-								{/* BOTÓN BUSCAR */}
-								<ButtonPrimary texto='BUSCAR' />
-							</div>
-						</div>
-
-						<SeparadorH separador='0' />
-
-						<div className='flex justify-end'>
-							{/* BOTÓN BUSCAR */}
-							<ButtonPrimary
-								texto='ENVIAR'
-								type='submit'
-							/>
-						</div>
-					</div>
-				</Form>
-			)}
-		</Formik>
-	);
-};
 
 const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 
@@ -721,6 +415,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 				<Form>
 					{!previewComunicacion ? (
 						<div className='bg-bg_primary flex flex-1 flex-col p-[16px] rounded-[12px] pt-[16px] gap-[16px]'>
+
 							<div className='pb-[12px] border-b-[1px] border-tertiary'>
 								<p className='text-primary texto_20_500'>
 									{tipoComunicacion == "general" ?"Comunicación General":"Comunicación de aumento"}
@@ -728,9 +423,8 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 								</p>
 							</div>
 
-							{/* TITULO INTERNO */}						
-							
-							<div className='flex items-end gap-[12px] '>
+							{/* TITULO INTERNO */}										
+							<div className='flex items-end gap-[12px]'>
 								
 								<div className='w-[100%] relative'>
 								
@@ -755,16 +449,11 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 							<SeparadorH separador='0' />
 
 							{/* TITULO  / ENVIAR / ARCHIVAR / PUSH */}
-							<div className='flex items-end gap-[12px] '>
+							<div className='flex flex-col xl:flex-row items-center xl:items-end gap-[12px] '>
 
 								{/** TÍTULO */}
 								<div className='w-[100%] relative'>
-									{/* <Input
-									label='Título'
-									placeholder='Ingresá...'
-									name='titulo'
-								/> */}
-
+								
 									<Field
 										name='titulo'
 										component={Input}
@@ -784,8 +473,9 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 								/>
 
 								{/** ENVIAR */}
-								<div className='relative'>
-									<div className='flex flex-col'>
+								<div className='relative w-full xl:w-auto'>
+
+									<div className='flex flex-col '>
 										<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
 											Enviar:
 										</label>
@@ -793,7 +483,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 										<Field
 											type='date'
 											name='fechaEnviar'
-											className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-[160px]'
+											className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full xl:w-[160px]'
 										/>
 									</div>
 
@@ -802,6 +492,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 										component='span'
 										className='text-red-500 text-sm  absolute left-[12px]'
 									/>
+
 								</div>
 
 								<SeparadorV
@@ -810,22 +501,26 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 								/>
 
 								{/** ARCHIVAR */}
-								<div className='flex flex-col relative'>
-									<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-										Archivar:
-									</label>
+								<div className='relative w-full xl:w-auto'>
+									<div className='flex flex-col'>
+										
+										<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
+											Archivar:
+										</label>
 
-									<Field
-										type='date'
-										name='fechaArchivar'
-										className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-[160px]'
-									/>
+										<Field
+											type='date'
+											name='fechaArchivar'
+											className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full xl:w-[160px]'
+										/>
+
+									</div>
 
 									<ErrorMessage
-										name='fechaArchivar'
-										component='span'
-										className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
-									/>
+											name='fechaArchivar'
+											component='span'
+											className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
+										/>
 								</div>
 
 								<SeparadorV
@@ -858,14 +553,16 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 										</span>
 									</button>
 								</div>
+
 							</div>
 
-							<div className='flex flex-col'></div>
+							<div className='flex flex-col xl:flex-row'></div>
 							
 							<SeparadorH separador='0' />
 
 							{/* IMAGEN */}
 							<div className='flex flex-col'>
+
 								<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
 									Imágen
 								</label>
@@ -878,7 +575,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 											onChange={(event) => handleFileSelect(event, setFieldValue, )}
 										/>
 
-								<div className='flex gap-2'>
+								<div className='flex flex-col xl:flex-row gap-2'>
 									{/* INPUT */}
 									<div className='relative w-full'>
 										<Field
@@ -928,7 +625,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 													['link'],
 													[{ color: [] }], // ← Color de texto
 													['clean'],
-													['code-block'],
+													
 													
 												],
 											}}
@@ -958,13 +655,13 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 								</div>
 
 								{/* {maxLength && (
-							<div className='flex justify-end mt-1 pr-[12px]'>
-								<span
-									className={`texto_11_400 ${charCount > maxLength * 0.9 ? 'text-red-500' : 'text-tertiary'}`}>
-									{charCount}/{maxLength}
-								</span>
-							</div>
-						)} */}
+									<div className='flex justify-end mt-1 pr-[12px]'>
+										<span
+											className={`texto_11_400 ${charCount > maxLength * 0.9 ? 'text-red-500' : 'text-tertiary'}`}>
+											{charCount}/{maxLength}
+										</span>
+									</div>
+								)} */}
 							</div>
 							
 							<SeparadorH separador='0' />
@@ -982,7 +679,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 											onChange={(event) => handleListaDistribuccion(event, setFieldValue)}
 								/>
 
-								<div className='flex gap-2'>
+								<div className='flex flex-col xl:flex-row gap-2'>
 									{/* INPUT */}
 									<div className='relative w-full'>
 										<Field
@@ -1024,7 +721,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 												onChange={(event) => handleListaServicio(event, setFieldValue)}
 									/>
 
-									<div className='flex gap-2'>
+									<div className='flex flex-col xl:flex-row gap-2'>
 										{/* INPUT */}
 										<div className='relative w-full'>
 											<Field

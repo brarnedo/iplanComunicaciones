@@ -19,7 +19,8 @@ export const Home = () => {
 	return (
 		<div className='flex flex-col flex-1'>
 			<nav className='w-full bg-primary'>
-				<div className='w-[1360px] max-w-[1360px] mx-auto h-[84px] flex items-center justify-end pr-[25px] gap-[12px]'>
+				<div className='max-w-[1360px] mx-auto h-[93px] flex justify-center   items-center xl:justify-end pr-[25px] gap-[12px]'>
+					
 					<span className='material-symbols-outlined text-white'>badge</span>
 
 					<p className='texto_15_900 text-white'>
@@ -38,11 +39,12 @@ export const Home = () => {
 					</button>
 				</div>
 			</nav>
-
+			
 			<div className='w-full bg-bg_primary flex  flex-1'>
-				<div className='w-[1360px] max-w-[1360px] mx-auto  flex flex-1 items-start gap-[24px] pt-[24px]'>
+				<div className='max-w-[1360px] mx-auto flex flex-col flex-1 items-center gap-[24px] pt-[24px] xl:flex-row xl:items-start'>
+					
 					<div className='w-[284px] flex flex-col gap-[12px] pt-[19px]'>
-						{/* 🔗 ENLACES DE NAVEGACIÓN */}
+						
 						<Link
 							to='/home'
 							className='texto_16_600 text-secondary cursor-pointer hover:opacity-80'>
@@ -63,10 +65,14 @@ export const Home = () => {
 							ARCHIVOS DE COMUNICACIONES
 						</Link>
 					</div>
-
+				
 					<Outlet />
+					
 				</div>
 			</div>
+			
+
+			
 		</div>
 	);
 };

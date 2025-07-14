@@ -3,8 +3,9 @@ import {SeparadorV } from "componentesUI";
 
 export const Header = () => {
 	return (
-		<header className='flex h-[75px] w-full max-w-[1440px] items-center justify-between bg-bg_primary px-6 md:px-4'>
+		<header className='flex h-[75px] w-full max-w-[1360px] mx-auto items-center justify-between bg-bg_primary px-6 md:px-4'>
 			<div className='flex items-center'>
+
 				<img alt='logo' src={iplan_logo}/>
 
 				<SeparadorV height={'48'} />
