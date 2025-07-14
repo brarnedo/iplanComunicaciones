@@ -81,6 +81,13 @@ export const NuevaComunicacion = () => {
 
 const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 
+	if(tipoComunicacion == "masivo") return (
+
+		<div className='bg-bg_primary p-[8px] flex items-center justify-center rounded-[12px] gap-[8px]'>
+			<p className='text-secondary texto_20_600'> AÚN NO DISPONIBLE </p>
+		</div>
+	)
+
 
 	const [previewComunicacion, setPreviewComunicacion] = useState(false);
 
@@ -105,6 +112,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 		fechaArchivar: '',
 		contenidoComunicacion: '',
 		listadoDistribuccion:'',
+		listadoServicio:'',
 		imagen: '',
 	};
 
@@ -150,8 +158,18 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 			.test('fileSize', 'Archivo muy grande. Máximo 15MB', function(value) {
 				if (!selectedFile) return true;
 				return selectedFile.size <= 15 * 1024 * 1024;
-			})
+			}),
 		// 	.required('Debés adjuntar una imágen'),
+		listadoDistribuccion: Yup.string().required('Debés adjuntar un archivo'),
+		listadoServicio:Yup.string()
+		 .test('conditional-required', 'Debés adjuntar un archivo', function (value) {
+			// Solo es requerido si tipoComunicacion ES "aumento"
+			if (tipoComunicacion === "aumento") {
+			return value && value.length > 0;
+			}
+			return true; // Si NO es "aumento", siempre válido (porque el campo no existe)
+		})
+		//listadoServicio: Yup.string().required('Debés adjuntar un archivo'),
 	});
 
 
@@ -788,7 +806,8 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 							
 							lista2 = {selectedListaServicio?.name || ''}
 							selectedListaServicio={selectedListaServicio?selectedListaServicio:''}        // ← El archivo completo para FormData
-    						listaServicioPreviewUrl={listaServicioPreviewUrl?listaServicioPreviewUrl:''}  // ← La URL para mostrar
+    						listaServicioPreviewUrl={listaServicioPreviewUrl?listaServicioPreviewUrl:''} 
+							formulario = {setPreviewComunicacion} // ← La URL para mostrar
 							
 						/>
 					)}
@@ -818,11 +837,15 @@ export const PreviewComunicacion = ({
     listaDistribuccionPreviewUrl = null,  // ← La URL para m
 
 	selectedListaServicio = null,      // ← El archivo completo para FormData
-    listaServicioPreviewUrl = null  // ← La URL para m
+    listaServicioPreviewUrl = null,  // ← La URL para m
+	formulario
 }) => {
 
 
 	const dispatch = useDispatch();
+
+	const [statusRespuesta, setStatusRespuesta]=useState(null);
+	const [mensajeRespuesta, setMensajeRespuesta]=useState("");
 
 	const { isLoadingSaveComunicacion, saveComunicacion } = useSelector(state => state.saveComunicacion);
 	
@@ -857,7 +880,6 @@ export const PreviewComunicacion = ({
 		</div>
 	);
 	}
-
 
 	const enviarCominicacion = async () => {
 
@@ -895,13 +917,31 @@ export const PreviewComunicacion = ({
 
 		
 		const respuesta = await dispatch(getSaveComunicacion(completeFormData));
-    	 
-	
 
+		console.log(respuesta);
+
+		if(respuesta.status == "OK"){
+			setStatusRespuesta("OK");
+			setMensajeRespuesta(respuesta.data.message);
+
+		}else{
+			setStatusRespuesta("ERROR");
+			setMensajeRespuesta(respuesta.data.message)
+		}
+    	
 	}
+
+	const modificarComunicacion = () => {
+		formulario(false);
+	}
+
+
 	return (
 		<div>
 			<div className='texto_14_500 text-bg_secondary'>{tipo == "general"?'Cominicación general': 'Comunicación de aumento	'}</div>
+
+		
+
 			<div className='flex items-center justify-between w-full'>
 				<div className='flex items-center gap-2 text-bg_secondary'>
 					<p className='text-primary texto_16_800'>{fechaIni}</p> |
@@ -937,15 +977,8 @@ export const PreviewComunicacion = ({
 						</div>
 					</a>
 					
-					{/* {renderListaDistribuccionPreview} */}
-					
-					{/* <div className='w-[34px] h-[34px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
-						<span className='material-symbols-outlined'>arrow_circle_down</span>
-					</div> */}
 				</div>
 			}
-
-			
 			
 			{lista2 && <>
 				<SeparadorH separador='8' />
@@ -966,37 +999,41 @@ export const PreviewComunicacion = ({
 			<div className='flex flex-col'></div>
 			<SeparadorH separador='8' />
 			
-
-			{isLoadingSaveComunicacion 
+			{statusRespuesta == null
+			
+			?isLoadingSaveComunicacion 
 			
 				?<>
 				
 					<div className='bg-bg_primary p-[8px] flex items-center justify-center rounded-[12px] gap-[8px]'>
 							<Loader color="#398AFF" size="34"/>
-							<p className='text-secondary texto_20_600'> CARGANDO... </p>
+							<p className='text-secondary texto_20_600'> Enviando comunicación, esperá por favor... </p>
 
 					</div>
 				</>
 				:<>
-					<div className='flex justify-end gap-[8px]'>
+					<div className='flex flex-col lg:flex-row mt-[16px] justify-end gap-[8px]'>
 						{/* BOTÓN BUSCAR */}
-						<ButtonPrimary
-							texto='MODIFICAR'
-							
-							
-						/>
-						<ButtonPrimary
-							texto='ENVIAR'
-							click={enviarCominicacion}
-							
-						/>
-							
+						<ButtonPrimary texto='MODIFICAR' click={modificarComunicacion}/>
+						<ButtonPrimary texto='ENVIAR' click={enviarCominicacion}/>
 					</div>
 					</>
-			}
+			
 
+			: statusRespuesta == "OK" 
+
+				?<div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#6FDD58] gap-[8px]'>
+					<span className='material-symbols-outlined text-white'>sentiment_satisfied</span> 
+					<p className='text-white texto_20_600'> {mensajeRespuesta} </p>
+				</div>
+				:<div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#FF8661] gap-[8px]'>
+					<span className='material-symbols-outlined text-white'>sentiment_sad</span> 
+					<p className='text-white texto_20_600'> Lo sentimos, no se pudo enviar la comunicación </p>
+				</div>
+				
 			
-			
+			}
+		
 		</div>
 	);
 };
