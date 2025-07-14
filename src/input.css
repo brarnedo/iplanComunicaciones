@@ -114,3 +114,9 @@ input:-webkit-autofill {
 .ql-toolbar.ql-snow {
     border-radius: 12px 12px 0px 0px;
 }
+
+
+/* En tu CSS global */
+html {
+  overflow-y: scroll;
+}
