@@ -1,13 +1,16 @@
 import { Notificacion } from 'components'
 import { useEffect } from 'react';
 import { useDispatch } from "react-redux";
-import { getNotificacionesArchivadas } from 'store';
+import { getNotificaciones } from 'store';
+import {useSelector} from 'react-redux';
 
 export const Archivadas = () => {
+    const { notificaciones, isLoadingNotificaciones } = useSelector((state) => state.notificaciones);
+    console.log("👀 - :9  - notificaciones:", notificaciones);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getNotificacionesArchivadas('archivadas'))
+        dispatch(getNotificaciones('archivadas'))
     }, []);
 
 	return (
