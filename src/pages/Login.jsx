@@ -13,9 +13,7 @@ export const Login = () => {
 	let navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const { isLoadingAuth, isAuthenticated, errorLogin } = useSelector(
-		state => state.auth,
-	);
+	const { isLoadingAuth, isAuthenticated, errorLogin } = useSelector(state => state.auth);
 
 	const [formValues, setFormValues] = useState({
 		user: '',
@@ -122,9 +120,6 @@ export const Login = () => {
                                         />
                                     )}
         
-                                    {/* errores */}
-                                    {/* <div className='texto_11_700 text-center text-white'><ErrorMessage name='user' /></div>
-                                    <div className='texto_11_700 text-center text-white'><ErrorMessage name='pass' /></div> */}
                                     {errorLogin && (<div className='texto_11_700 text-center text-white'>Error login</div>)}
                                 </Form>
                             )}

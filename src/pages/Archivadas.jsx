@@ -1,7 +1,15 @@
 import { Notificacion } from 'components'
+import { useEffect } from 'react';
+import { useDispatch } from "react-redux";
+import { getNotificacionesArchivadas } from 'store';
 
 export const Archivadas = () => {
-    
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getNotificacionesArchivadas())
+    }, []);
+
 	return (
 			<div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
             

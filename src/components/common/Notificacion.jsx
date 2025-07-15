@@ -19,20 +19,20 @@ export const Notificacion = ({
 					<p className='text-primary texto_16_800'>{fechaIni}</p> |
 					<p className='text-primary texto_16_800'>{fechaFin}</p> |
 					<p className='flex items-center gap-3'>
-						<span class='material-symbols-outlined'>id_card</span> {nombre}
+						<span className='material-symbols-outlined'>id_card</span> {nombre}
 					</p>
 				</div>
 
 				{/* iconos */}
 				<div className='flex gap-2'>
 					<div className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
-						<span class='material-symbols-outlined'>file_copy</span>
+						<span className='material-symbols-outlined'>file_copy</span>
 					</div>
 					<div className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
-						<span class='material-symbols-outlined'>edit</span>
+						<span className='material-symbols-outlined'>edit</span>
 					</div>
 					<div className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
-						<span class='material-symbols-outlined'>delete</span>
+						<span className='material-symbols-outlined'>delete</span>
 					</div>
 				</div>
 			</div>
@@ -68,7 +68,7 @@ export const Notificacion = ({
                         <p className='texto_16_500'>{lista2}</p>
                     </div>
                     <div className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
-                        <span class='material-symbols-outlined'>arrow_circle_down</span>
+                        <span className='material-symbols-outlined'>arrow_circle_down</span>
                     </div>
                 </div>
             }

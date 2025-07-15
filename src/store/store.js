@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authSlice  } from 'store';
+import { authSlice, archivadasSlice  } from 'store';
 import { saveComunicacionSlice } from "./slices/saveComunicacion";
 
 import './slices';
@@ -9,9 +9,7 @@ import './slices';
 export const store = configureStore({
 	reducer: {
 		auth: authSlice.reducer,
+		archivadas: archivadasSlice.reducer,
 		saveComunicacion: saveComunicacionSlice.reducer
-
-
-	
 	},
 });
