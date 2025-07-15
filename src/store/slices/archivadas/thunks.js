@@ -6,13 +6,13 @@ import {
 } from "./archivadasSlice";
 import Cookies from "js-cookie";
 
-export const getNotificacionesArchivadas = () => {
+export const getNotificacionesArchivadas = (param) => {
   return async (dispatch) => {
     dispatch(starLoadingNotificacionesArchivadas(true));
     let config = {
         method: 'get',
         maxBodyLength: Infinity,
-        url: `${BASE}${ARCHIVADAS}`,
+        url: `${BASE}${ARCHIVADAS}?type=${param}`,
         headers: { 
             'Authorization': `Bearer ${Cookies.get('token')}`, 
             'Cookie': 'PHPSESSID=59vv7otaq2vsqr2s786tm5ohqj; dev-postman=U1VQRVJfQk9SR1VFTExP'

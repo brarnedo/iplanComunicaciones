@@ -7,7 +7,7 @@ export const Archivadas = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getNotificacionesArchivadas())
+        dispatch(getNotificacionesArchivadas('archivadas'))
     }, []);
 
 	return (
