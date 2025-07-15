@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import * as Yup from 'yup';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { getSaveComunicacion } from '../store/slices/saveComunicacion/thunks';
 
@@ -32,7 +31,7 @@ export const NuevaComunicacion = () => {
 
 				{tipoComunicación != 0 && (
 					<span
-						class='material-symbols-outlined text-white bg-primary p-[5px] rounded-[555px] cursor-pointer'
+						className='material-symbols-outlined text-white bg-primary p-[5px] rounded-[555px] cursor-pointer'
 						onClick={btnVolver}>
 						delete_forever
 					</span>
@@ -80,6 +79,7 @@ export const NuevaComunicacion = () => {
 
 
 const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
+	const { seleccionada } = useSelector((state) => state.notificaciones);
 
 	if(tipoComunicacion == "masivo") return (
 
@@ -107,10 +107,10 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO" }) => {
 	// 🎯 VALORES INICIALES (como initialValues en Formik)
 	const initialValues = {
 		tituloInterno:'',
-		titulo: '',
+		titulo: seleccionada.titulo ? seleccionada.titulo : '',
 		fechaEnviar: '',
 		fechaArchivar: '',
-		contenidoComunicacion: '',
+		contenidoComunicacion: seleccionada.msj ? seleccionada.msj : '',
 		listadoDistribuccion:'',
 		listadoServicio:'',
 		imagen: '',
