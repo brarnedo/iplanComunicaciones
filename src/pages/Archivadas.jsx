@@ -1,10 +1,29 @@
 import { Notificacion } from 'components'
+import { getArchivadas } from '../store/slices/getArchivadas/thunks';
+import { useDispatch } from 'react-redux';
+import { ButtonPrimary } from '../ui/componentes';
 
 export const Archivadas = () => {
+
+    const dispatch = useDispatch();
+
+    const traerArchivadas = async () => {
+
+        const respuesta = await dispatch(getArchivadas());
+
+        console.log(respuesta);
+    }
     
 	return (
-			<div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
+		<>
+        <div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
             
+            <div className='flex flex-col lg:flex-row mt-[16px] justify-end gap-[8px]'>
+                                <ButtonPrimary 
+                                texto='TRAER NOTIFICACIONES' 
+                                click={traerArchivadas}
+                                />
+                            </div>
 
 			<div className='border-b-[1px] border-secondary'>
 				<p className='text-secondary texto_18_800'>Archivo de comunicaciones</p>
@@ -33,5 +52,6 @@ export const Archivadas = () => {
                 />
             </section>
 		</div>
+        </>
 	);
 };

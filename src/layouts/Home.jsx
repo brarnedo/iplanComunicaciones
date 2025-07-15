@@ -31,10 +31,10 @@ export const Home = () => {
 					<div className='bg-white h-[34px] w-[1px] md:flex'></div>
 
 					<button
-						className='pointer flex h-[36px] w-[36px] items-center justify-center rounded-full bg-bg_buttons'
+						className='pointer flex h-[36px] w-[36px] items-center justify-center rounded-full bg-white'
 						onClick={() => logout()}
 						type='button'>
-						<span className='material-symbols-outlined text-white'>
+						<span className='material-symbols-outlined text-primary'>
 							power_settings_new
 						</span>
 					</button>
@@ -51,9 +51,9 @@ export const Home = () => {
 						<Link
 							to='/home'
 							className={`cursor-pointer hover:opacity-80 ${
-							location.pathname === '/home' ? 'text-secondary texto_16_600' : 'text-tertiary texto_16_500'
+							location.pathname === '/home' ? 'text-secondary texto_16_600 uppercase' : 'text-tertiary texto_16_500'
 							}`}>
-							CARGAR COMUNICACIÓN
+							Cargar comunicación
 						</Link>
 
 						<div className='bg-bg_secondary h-[1px] w-full'></div>
@@ -61,18 +61,18 @@ export const Home = () => {
 						<Link
 							to='/programadas'
 							className={` cursor-pointer hover:opacity-80 ${
-							location.pathname === '/programadas' ? 'text-secondary texto_16_600' : 'text-tertiary texto_16_500'
+							location.pathname === '/programadas' ? 'text-secondary texto_16_600 uppercase' : 'text-tertiary texto_16_500'
 							}`}>
-							COMUNICACIÓN PROGRAMADAS
+							Comunicación programada
 						</Link>
 						<div className='bg-bg_secondary h-[1px] w-full'></div>
 
 						<Link
 							to='/archivadas'
 							className={` cursor-pointer hover:opacity-80 ${
-							location.pathname === '/archivadas' ? 'text-secondary texto_16_600' : 'text-tertiary texto_16_500'
+							location.pathname === '/archivadas' ? 'text-secondary texto_16_600 uppercase' : 'text-tertiary texto_16_500'
 							}`}>
-							ARCHIVOS DE COMUNICACIONES
+							Archivos de comunicaciones
 						</Link>
 					</div>
 				

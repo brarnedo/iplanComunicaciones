@@ -65,7 +65,7 @@ export const Login = () => {
                                     {/* input usuario */}
                                     <div
                                         className={`${isSubmitting ? 'bg-disabled' : 'bg-white'} relative flex h-[44px] w-[294px] items-center justify-start rounded-[6px] pl-4`}>
-                                        <label className='texto_12_500 texto-white absolute left-[8px] top-[-18px] rounded-xl bg-primary px-[1px] italic text-white'>
+                                        <label className='texto_12_500 texto-white absolute left-[8px] top-[-18px] rounded-xl bg-primary px-[1px] text-white'>
                                             Usuario
                                         </label>
 
@@ -105,6 +105,13 @@ export const Login = () => {
                                             type='password'
                                             value={formValues.pass}
                                         />
+                                        
+                                        <ErrorMessage 
+                                            name='pass' 
+                                            component='span' 
+                                            className='text-white text-sm mt-1 absolute left-[12px] bottom-[-20px]' 
+                                        />
+
                                     </div>
         
                                     {/* loader */}
