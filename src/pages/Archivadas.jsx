@@ -10,6 +10,10 @@ export const Archivadas = () => {
     console.log("👀 - :10 - Archivadas - notificaciones:", notificaciones);
     const dispatch = useDispatch();
 
+
+
+    
+
     useEffect(() => {
         dispatch(getNotificaciones('archivadas'))
     }, []);
@@ -32,5 +36,6 @@ export const Archivadas = () => {
                 }
             </section>
 		</div>
+        
 	);
 };
