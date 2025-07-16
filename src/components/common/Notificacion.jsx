@@ -61,7 +61,9 @@ export const Notificacion = ({
 					className="max-h-[1000px]"
 					src={isLocalhost ? `https://portal2-des.iplan.com.ar${img.url}` : img.url}
 				/>}
-				<p className='texto_14_500 text-tertiary'>{msj}</p>
+				<p className='texto_14_500 text-tertiary'>
+					<div dangerouslySetInnerHTML={{ __html: msj }} />
+				</p>
 			</div>
 
 			{lista1 && 

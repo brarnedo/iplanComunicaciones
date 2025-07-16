@@ -28,6 +28,22 @@ export const Archivadas = () => {
         <div className="flex items-center justify-center"><Loader color="#FF006E"/></div>
     </div>
 
+    if(notificaciones.length === 0) {
+        return <div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
+            <div className="flex items-center justify-center">
+                <p className='texto_16_800 text-subtitle'>No hay notificaciones archivadas</p>
+            </div>
+        </div>;
+    }
+
+    if(notificaciones === 'error') {
+        return <div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
+            <div className="flex items-center justify-center">
+                <p className='texto_16_800 text-subtitle'>Error al cargar las notificaciones archivadas</p>
+            </div>
+        </div>;
+    }
+
 	return (<div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
             
 			<div className='border-b-[1px] border-secondary'>
