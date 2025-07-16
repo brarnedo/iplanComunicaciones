@@ -55,7 +55,7 @@ export const Programadas = () => {
                         <Notificacion
                             index={index + 1}
                             origen = {"programadas"}
-                            tipo = {"automento"}
+                            tipo = {"aumento"}
                             titulo_interno = {notificacion.titulo_interno}
                             fechaIni={notificacion.Desde}
                             fechaFin={notificacion.Hasta}
