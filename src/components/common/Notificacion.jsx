@@ -1,6 +1,10 @@
 import {useState} from 'react';
 import { useSetState } from 'hooks';
+import { useNavigate, Link } from 'react-router-dom';
+
+
 export const Notificacion = ({
+	index,
 	tipo,//preguntar
 	fechaIni,
 	fechaFin,
@@ -20,7 +24,9 @@ export const Notificacion = ({
 		setSeleccionada({ titulo, msj });
 	}
 	return (
-		<>
+		<>	
+			{index > 1 && <div className='h-[1px] w-full bg-subtitle my-4'></div>}
+
 			<div className='texto_14_500'>{tipo}</div>
 			<div className='flex items-center justify-between w-full'>
 				<div className='flex items-center gap-2'>
@@ -33,12 +39,12 @@ export const Notificacion = ({
 
 				{/* iconos */}
 				<div className='flex gap-2'>
-					<button className={`${copy ? 'hidden' : 'flex'} w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} onClick={handleCopy}>
+					<Link className={`${copy ? 'hidden' : 'flex'} w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} to="/home" onClick={handleCopy}>
 						<span className='material-symbols-outlined'>file_copy</span>
-					</button>
-					<button className={`${copy ? 'flex' : 'hidden'} w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} onClick={handleCopy}>
+					</Link>
+					{/* <Link className={`${copy ? 'flex' : 'hidden'} w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} to="/home">
 						<span className='material-symbols-outlined'>check</span>
-					</button>
+					</Link> */}
 					{/* <div className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
 						<span className='material-symbols-outlined'>edit</span>
 					</div>
@@ -53,27 +59,29 @@ export const Notificacion = ({
 				{img &&<img
 					alt='notificacion'
 					className="max-h-[1000px]"
-					src={isLocalhost ? `https://portal2-des.iplan.com.ar/${img.url}` : img.url}
+					src={isLocalhost ? `https://portal2-des.iplan.com.ar${img.url}` : img.url}
 				/>}
 				<p className='texto_14_500 text-tertiary'>{msj}</p>
 			</div>
 
 			{lista1 && 
-                <div className='flex items-center justify-between'>
-                    <div className='text-tertiary mt-3'>
-                        <span className='texto_14_500'>Lista de distribución</span>
-                        <p className='texto_14_500'>{isLocalhost ? `https://portal2-des.iplan.com.ar/${lista1.url}` : lista1.url}</p>
-                    </div>
-                    <a className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer' href={isLocalhost ? `https://portal2-des.iplan.com.ar/${lista1.url}` : lista1.url} target="_blank">
-                        <span className='material-symbols-outlined'>arrow_circle_down</span>
-                    </a>
-                </div>
+				<div className='flex items-center justify-between'>
+					<div className='text-tertiary mt-3'>
+						<span className='texto_14_500'>Lista de distribución</span>
+						<p className='texto_14_500'>{isLocalhost ? `https://portal2-des.iplan.com.ar/${lista1.url}` : lista1.url}</p>
+					</div>
+					<a className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer' href={isLocalhost ? `https://portal2-des.iplan.com.ar/${lista1.url}` : lista1.url} target="_blank">
+						<span className='material-symbols-outlined'>arrow_circle_down</span>
+					</a>
+				</div>
             }
 
-			<div className='h-[1px] w-full bg-bg_secondary my-4'></div>
             
             {lista2 && 
-                <div className='flex items-center justify-between'>
+				<>
+					<div className='h-[1px] w-full bg-bg_secondary my-4'></div>
+
+                	<div className='flex items-center justify-between'>
                     <div className='text-tertiary mt-3'>
                         <p className='texto_14_500'>Lista de servicios afectados</p>
                         <p className='texto_14_500'>{isLocalhost ? `https://portal2-des.iplan.com.ar/${lista2.url}` : lista2.url}</p>
@@ -81,7 +89,8 @@ export const Notificacion = ({
                     <a className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer' href={isLocalhost ? `https://portal2-des.iplan.com.ar/${lista2.url}` : lista2.url} target="_blank">
                         <span className='material-symbols-outlined'>arrow_circle_down</span>
                     </a>
-                </div>
+                	</div>
+				</>
             }
 			
 		</>

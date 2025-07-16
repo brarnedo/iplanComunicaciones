@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
 	let navigate = useNavigate();
-	 const location = useLocation();
+	const location = useLocation();
 
 	const { user = '' } = useSelector(state => state.auth);
 	const { setIsAuthenticated } = useSetState();

@@ -44,10 +44,8 @@ export const Login = () => {
 
 	return (
 		<>  
-
 		    <nav className='bg-primary'>
                 <div className='flex h-auto w-full max-w-[1360px] mx-auto flex-col items-center gap-4  px-6 py-6 xl:h-[93px] xl:flex-row'>
-                  
                     <p className='text-white texto_18_600'> ACCEDER:</p>
         
                     <Formik
@@ -132,7 +130,6 @@ export const Login = () => {
                             )}
                     </Formik>
                 </div>
-
     		</nav>
     
             <section className="m-auto mt-12">
