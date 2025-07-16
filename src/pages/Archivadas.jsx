@@ -4,20 +4,21 @@ import { useDispatch } from "react-redux";
 import { getNotificaciones } from 'store';
 import {useSelector} from 'react-redux';
 import { Loader } from 'componentesUI';
+import ReactPaginate from 'react-paginate';
 import { useState } from 'react';
-
-
 
 export const Archivadas = () => {
     const dispatch = useDispatch();
     const { notificaciones, isLoadingNotificaciones } = useSelector((state) => state.notificaciones);
+
+    // Tamaño de página y estado de página actual
+    const [paginaActual, setPaginaActual] = useState(0);
+    const notificacionesPorPagina = 10; // Cambiá este valor si querés más/menos por página
     
-    const [paginaActual, setPaginaActual] = useState(1);
-    let ITEMS_POR_PAGINA = 5;
-    const indiceUltimo = paginaActual * ITEMS_POR_PAGINA;
-    const indicePrimero = indiceUltimo - ITEMS_POR_PAGINA;
-    const notificacionesPagina = notificaciones.slice(indicePrimero, indiceUltimo);
-    const totalPaginas = Math.ceil(notificaciones.length / ITEMS_POR_PAGINA);
+    // Calcular las notificaciones a mostrar en la página actual
+    const offset = paginaActual * notificacionesPorPagina;
+    const notificacionesPagina = notificaciones.slice(offset, offset + notificacionesPorPagina);
+    const pageCount = Math.ceil(notificaciones.length / notificacionesPorPagina);
 
     useEffect(() => {
         dispatch(getNotificaciones('archivadas'))
@@ -47,39 +48,31 @@ export const Archivadas = () => {
                             msj={notificacion.mensaje_personalizado}
                             lista1={notificacion.archivos ? notificacion.archivos.csv_clientes : ''}
                             lista2={notificacion.archivos ? notificacion.archivos.csv_precios : ''}
-                            key={indicePrimero + index} />
+                            key={offset + index}
+                        />
                     ))
                 }
             </section>
 
-             {/* Paginador */}
-            <div className="flex gap-2 justify-center mt-4">
-                <button
-                    onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
-                    disabled={paginaActual === 1}
-                    className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50 texto_16_500 text-subtitle"
-                >
-                    Anterior
-                </button>
-                {
-                    Array.from({ length: totalPaginas }, (_, i) => (
-                        <button
-                            key={i + 1}
-                            onClick={() => setPaginaActual(i + 1)}
-                            className={`texto_16_500 px-3 py-1 rounded ${paginaActual === i + 1 ? 'bg-primary text-white' : 'bg-gray-200'}`}
-                        >
-                            {i + 1}
-                        </button>
-                    ))
-                }
-                <button
-                    onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
-                    disabled={paginaActual === totalPaginas}
-                    className="px-3 py-1 rounded bg-gray-200 disabled:opacity-50 texto_16_500 text-subtitle"
-                >
-                    Siguiente
-                </button>
-            </div>
+            {/* Paginador */}
+            {pageCount > 1 && (
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel="Siguiente >"
+                    previousLabel="< Anterior"
+                    onPageChange={event => setPaginaActual(event.selected)}
+                    pageRangeDisplayed={2}
+                    marginPagesDisplayed={1}
+                    pageCount={pageCount}
+                    forcePage={paginaActual}
+                    containerClassName="flex gap-2 justify-center mt-4 flex-wrap"
+                    activeClassName="bg-[#FF006E] text-white rounded"
+                    pageClassName="px-3 py-1 rounded bg-gray-200 texto_16_800 text-subtitle"
+                    previousClassName="px-3 py-1 rounded bg-gray-200 texto_16_800 text-subtitle"
+                    nextClassName="px-3 py-1 rounded bg-gray-200 texto_16_800 text-subtitle"
+                    breakClassName="px-2 py-1 texto_16_800 text-subtitle"
+                />
+            )}
 		</div>
         
 	);
