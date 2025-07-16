@@ -21,7 +21,10 @@ export { ButtonPrimary } from '../ui/componentes/ButtonPrimary';
 import { useNavigate } from 'react-router-dom';
 
 export const NuevaComunicacion = () => {
+	
 	const [tipoComunicacion, setTipoComunicacion] = useState(0);
+
+	
 
 	const btnVolver = () => {
 		setTipoComunicacion(0);
