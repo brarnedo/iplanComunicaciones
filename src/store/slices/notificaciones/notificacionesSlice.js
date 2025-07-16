@@ -3,7 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isLoadingNotificaciones: false,
     notificaciones: [],
-    seleccionada: false
+    seleccionada: {
+        titulo: '',
+        msj: '',
+        tipo: 0 //
+    }
 };
 
 export const notificacionesSlice = createSlice({

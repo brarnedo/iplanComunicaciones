@@ -21,13 +21,12 @@ export { ButtonPrimary } from '../ui/componentes/ButtonPrimary';
 import { useNavigate } from 'react-router-dom';
 
 export const NuevaComunicacion = () => {
-	
-	const [tipoComunicacion, setTipoComunicacion] = useState(0);
-
+	const { seleccionada } = useSelector((state) => state.notificaciones);
+	const [tipoComunicacion, setTipoComunicacion] = useState(seleccionada.tipo);
 	
 
 	const btnVolver = () => {
-		setTipoComunicacion(0);
+		setTipoComunicacion(seleccionada.tipo);
 	};
 
 	return (
@@ -81,8 +80,6 @@ export const NuevaComunicacion = () => {
 		</div>
 	);
 };
-
-
 
 const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}) => {
 	const { seleccionada } = useSelector((state) => state.notificaciones);

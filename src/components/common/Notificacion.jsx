@@ -33,7 +33,7 @@ export const Notificacion = ({
 
 	const handleCopy = () => {
 		setCopy(true);
-		setSeleccionada({ titulo, msj });
+		setSeleccionada({ titulo, msj, tipo});
 	}
 
 	const handleDelete = () => {
@@ -117,21 +117,17 @@ export const Notificacion = ({
 					{origen == "programadas"
 					
 						?<>
-						<button className={`w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} onClick={handleUpdate}>
-							<span className='material-symbols-outlined'>edit</span>
-						</button>
-						<button className={`w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} onClick={handleDelete}>
-							<span className='material-symbols-outlined'>delete</span>
-						</button>
-						
+							<button className={`w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} onClick={handleUpdate}>
+								<span className='material-symbols-outlined'>edit</span>
+							</button>
+							<button className={`w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} onClick={handleDelete}>
+								<span className='material-symbols-outlined'>delete</span>
+							</button>
 						</>
 						
-						:<>
-						<Link className={`${copy ? 'hidden' : 'flex'} w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} to="/home" onClick={handleCopy}>
+						:<Link className={`${copy ? 'hidden' : 'flex'} w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer`} to="/home" onClick={handleCopy}>
 							<span className='material-symbols-outlined'>file_copy</span>
 						</Link>
-						
-						</>
 					}
 
 								

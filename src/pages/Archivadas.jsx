@@ -26,16 +26,7 @@ export const Archivadas = () => {
 
 
 	if (isLoadingNotificaciones)
-		return (
-			<div className='bg-white h-[150px] flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
-				<div className='p-[8px] flex flex-col items-center justify-center rounded-[12px] gap-[8px]'>
-					<Loader color='#FF006E' />
-					<p className='text-primary texto_20_600'> Cargando... </p>
-				</div>
-			</div>
-		);
-
-    
+		return <Loader color='#FF006E' />
 
     if(notificaciones.length === 0) {
         return <div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
@@ -65,7 +56,7 @@ export const Archivadas = () => {
                         <Notificacion
                             index={index + 1}
                             origen={"archivadas"}
-                            tipo = {""}
+                            tipo = {1}
                             titulo_interno = {notificacion.titulo_interno}
                             fechaIni={notificacion.Desde}
                             fechaFin={notificacion.Hasta}
