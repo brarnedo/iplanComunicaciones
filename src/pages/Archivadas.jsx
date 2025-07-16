@@ -11,11 +11,9 @@ export const Archivadas = () => {
     const dispatch = useDispatch();
     const { notificaciones, isLoadingNotificaciones } = useSelector((state) => state.notificaciones);
 
-    // Tamaño de página y estado de página actual
     const [paginaActual, setPaginaActual] = useState(0);
     const notificacionesPorPagina = 10; // Cambiá este valor si querés más/menos por página
     
-    // Calcular las notificaciones a mostrar en la página actual
     const offset = paginaActual * notificacionesPorPagina;
     const notificacionesPagina = notificaciones.slice(offset, offset + notificacionesPorPagina);
     const pageCount = Math.ceil(notificaciones.length / notificacionesPorPagina);
@@ -56,7 +54,7 @@ export const Archivadas = () => {
                         <Notificacion
                             index={index + 1}
                             origen={"archivadas"}
-                            tipo = {1}
+                            tipo = {"aumento"}
                             titulo_interno = {notificacion.titulo_interno}
                             fechaIni={notificacion.Desde}
                             fechaFin={notificacion.Hasta}
@@ -84,7 +82,7 @@ export const Archivadas = () => {
                     pageCount={pageCount}
                     forcePage={paginaActual}
                     containerClassName="flex gap-2 justify-center mt-4 flex-wrap"
-                    activeClassName="bg-[#FF006E] text-white rounded"
+                    activeClassName="bg-primary text-white rounded"
                     pageClassName="px-3 py-1 rounded bg-gray-200 texto_16_800 text-subtitle"
                     previousClassName="px-3 py-1 rounded bg-gray-200 texto_16_800 text-subtitle"
                     nextClassName="px-3 py-1 rounded bg-gray-200 texto_16_800 text-subtitle"

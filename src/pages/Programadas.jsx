@@ -55,7 +55,7 @@ export const Programadas = () => {
                         <Notificacion
                             index={index + 1}
                             origen = {"programadas"}
-                            tipo = {1}
+                            tipo = {"automento"}
                             titulo_interno = {notificacion.titulo_interno}
                             fechaIni={notificacion.Desde}
                             fechaFin={notificacion.Hasta}
@@ -83,7 +83,7 @@ export const Programadas = () => {
                     pageCount={pageCount}
                     forcePage={paginaActual}
                     containerClassName="flex gap-2 justify-center mt-4 flex-wrap"
-                    activeClassName="bg-[#FF006E] text-white rounded"
+                    activeClassName="bg-primary text-white rounded"
                     pageClassName="px-3 py-1 rounded bg-gray-200 texto_16_800 text-subtitle"
                     previousClassName="px-3 py-1 rounded bg-gray-200 texto_16_800 text-subtitle"
                     nextClassName="px-3 py-1 rounded bg-gray-200 texto_16_800 text-subtitle"

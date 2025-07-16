@@ -26,7 +26,7 @@ export const NuevaComunicacion = () => {
 	
 
 	const btnVolver = () => {
-		setTipoComunicacion(seleccionada.tipo);
+		setTipoComunicacion(0);
 	};
 
 	return (
