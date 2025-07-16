@@ -9,7 +9,7 @@ export const ButtonPrimary = ({
 }) => {
   return (
     <button
-      className={`flex cursor-pointer items-center justify-center gap-2 rounded-[25px] bg-primary py-[8px] px-[24px]  ${hover ? "hover:bg-bg_secondary" : ""}`}
+      className={`flex cursor-pointer items-center justify-center gap-2 rounded-[25px] bg-primary py-[8px] px-[24px] hover:bg-bg_secondary`}
       disabled={disabled}
       style={{ width: `${width}px` }}
       type={type}

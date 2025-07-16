@@ -23,7 +23,7 @@ export const getNotificaciones = (param) => {
             "estado": "inactivo",
             "ultimo_usuario_ldap": "CONSULTORA_ezense",
             "ultima_actualizacion": "2025-07-08 12:10:17",
-            "titulo_interno": "notifica test 1",
+            "titulo_interno": "notifica titulo interno",
             "id_Tabla": null,
             "archivos": {
                 "imagen": {
