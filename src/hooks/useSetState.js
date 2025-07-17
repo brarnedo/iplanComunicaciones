@@ -9,7 +9,7 @@ export const useSetState = () => {
   return {
     setIsAuthenticated: (value) =>
       dispatch(setIsAuthenticated({ isAuthenticated: value })),
-    setSeleccionada: (value) =>
+      setSeleccionada: (value) =>
       dispatch(setSeleccionada({ seleccionada: value })),
   };
 };
