@@ -79,6 +79,7 @@ export const NuevaComunicacion = () => {
 };
 
 const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}) => {
+	const { user = '' } = useSelector(state => state.auth);
 	const { seleccionada } = useSelector((state) => state.notificaciones);
 
 	if(tipoComunicacion == "masivo") return (
@@ -800,7 +801,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 							tipo = {tipoComunicacion}
 							fechaIni={values.fechaEnviar || 'Sin fecha'}
 							fechaFin={values.fechaArchivar || 'Sin fecha'}
-							nombre="Braian agregar"
+							nombre={user || 'Sin nombre'}
 							titulo={values.titulo || 'Sin título'}
 							tituloInterno = {values.tituloInterno }
 							msj={values.contenidoComunicacion || 'Sin contenido'}
