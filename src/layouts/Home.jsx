@@ -72,7 +72,7 @@ export const Home = () => {
 							className={` cursor-pointer hover:opacity-80 ${
 							location.pathname === '/archivadas' ? 'text-secondary texto_16_600 uppercase' : 'text-tertiary texto_16_500'
 							}`}>
-							Archivos de comunicaciones
+							Comunicaciones enviadas
 						</Link>
 					</div>
 				

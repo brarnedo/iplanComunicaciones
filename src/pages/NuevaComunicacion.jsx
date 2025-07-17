@@ -23,7 +23,6 @@ import { useNavigate } from 'react-router-dom';
 export const NuevaComunicacion = () => {
 	const { seleccionada } = useSelector((state) => state.notificaciones);
 	const [tipoComunicacion, setTipoComunicacion] = useState(seleccionada.tipo);
-	
 
 	const btnVolver = () => {
 		setTipoComunicacion(0);
@@ -75,17 +74,15 @@ export const NuevaComunicacion = () => {
 
 			{/** Fomulario Aumento  */}
 			{tipoComunicacion != 0 && <FormularioGeneral tipoComunicacion={tipoComunicacion} setTipoComunicacion={setTipoComunicacion}/>}
-			
-
 		</div>
 	);
 };
 
 const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}) => {
+	const { user = '' } = useSelector(state => state.auth);
 	const { seleccionada } = useSelector((state) => state.notificaciones);
 
 	if(tipoComunicacion == "masivo") return (
-
 		<div className='bg-bg_primary p-[8px] flex items-center justify-center rounded-[12px] gap-[8px]'>
 			<p className='text-secondary texto_20_600'> AÚN NO DISPONIBLE </p>
 		</div>
@@ -191,13 +188,11 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 		};
 	}, [imagePreviewUrl]);
 
-	const triggerFileSelect = () => {
-		
+	const triggerFileSelect = () => {	
 		fileInputRef.current?.click();
 	};
 
 	const handleFileSelect = (event, setFieldValue) => {
-		console.log("HANDLE");
 		const file = event.target.files[0];
 		
 		if (!file) return;
@@ -239,11 +234,9 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 		setFieldValue('imagen', file.name);
 
 		setErrorImagen("");
-
 	};
 
 	const eliminarImagen = () => {
-		
 		setSelectedFile("");
 		  // Limpiar también el valor del input file
 		if (fileInputRef.current) {
@@ -269,12 +262,10 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 
 
 	const triggerListaDistribuccion = () => {
-		
 		listaDistribuccionInputRef.current?.click();
 	};
 
 	const handleListaDistribuccion = (event, setFieldValue) => {
-		
 		const file = event.target.files[0];
 		
 		if (!file) return;
@@ -284,16 +275,13 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 		if (listaDistribuccionPreviewUrl) {
 			URL.revokeObjectURL(listaDistribuccionPreviewUrl);  // ← Limpiar URL anterior
 		}
-		
 		// Validar tipo
-
 		// Validar que sea CSV
 		if (!file.name.endsWith('.csv') && file.type !== 'text/csv') {
 			setErrorListaDistribuccion("Tipo de archivo no permitido. Solo: CSV");
 			setSelectedListaDistribuccion("");
 			return;
 		}
-
 		
 		// Validar tamaño (15MB = 15 * 1024 * 1024 bytes)
 		const maxSize = 15 * 1024 * 1024;
@@ -305,7 +293,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 		
 		// Guardar archivo
 		setSelectedListaDistribuccion(file);
-
 		// Solo crear preview si es imagen
         //if (file.type.startsWith('csv/')) {
             const imageUrl = URL.createObjectURL(file);
@@ -318,7 +305,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 		setFieldValue('listadoDistribuccion', file.name);
 
 		setErrorListaDistribuccion("");
-
 	};
 	
 	/** LISTA DE SERVICIO */
@@ -392,32 +378,31 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 	};
 
 	const onSubmit = async (values, { setSubmitting, resetForm }) => {
-			
-		// Crear FormData completo al momento del envío
-		const completeFormData = new FormData();
-		
-		// Agregar TODOS los datos del formulario
-		completeFormData.append('tituloInterno', values.tituloInterno);
-		completeFormData.append('titulo', values.titulo);
-		completeFormData.append('notification_type ', 'general');
-		completeFormData.append('fechaEnviar', values.fechaEnviar);
-		completeFormData.append('fechaArchivar', values.fechaArchivar);
-		completeFormData.append('contenidoComunicacion', values.contenidoComunicacion);
-		completeFormData.append('esPush', isOn);
-		completeFormData.append('listadoDistribuccion', values.listadoDistribuccion);
-		
-		// Agregar archivo si existe
-		if (selectedFile) {
-			completeFormData.append('imagen', selectedFile);
-		}
-		
-		// // DEBUG
-		// console.log('=== FORMDATA COMPLETO ===');
-		// for (let [key, value] of completeFormData) {
-		// 	console.log(key, ':', value);
-		// }
-
 		setPreviewComunicacion(true);
+
+		//const completeFormData = new FormData();
+		//Agregar TODOS los datos del formulario
+		// completeFormData.append('tituloInterno', values.tituloInterno);
+		// completeFormData.append('titulo', values.titulo);
+		// completeFormData.append('desde', values.fechaEnviar);
+		// completeFormData.append('hasta', values.fechaArchivar);
+		// completeFormData.append('mensaje', values.contenidoComunicacion);
+		// completeFormData.append('type', tipoComunicacion);//aumento - general
+		// completeFormData.append('fileData', values.listadoDistribuccion);
+		// // Agregar archivo si existe
+		// if (selectedFile) {
+		// 	completeFormData.append('imagenData', selectedFile);
+		// }
+		// completeFormData.append('fileText', values.listadoServicio);
+		// completeFormData.append('esPush', isOn);
+		
+		// //DEBUG consolelog formdata
+		// const formdataJSON = {};
+		// for (let [key, value] of completeFormData.entries()) {
+		// formdataJSON[key] = value;
+		// }
+		// console.log(formdataJSON);
+
 		//const respuesta = await dispatch(getSaveComunicacion(completeFormData));
     	 
 		// setTimeout(() => {
@@ -429,8 +414,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 			
 		// 	}, 1000);
 	};
-	
-	//if (previewComunicacion) return <Loader color={primary}/>;
+		
 	
 	return (		
 		<Formik
@@ -753,48 +737,47 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 							{/** ARCHIVO DE SERVICIO */}
 							{ tipoComunicacion == "aumento" && (
 								<>
-								<div className='flex flex-col'></div>
-								{/** ARCHIVO DE DISTRIBUCCIÓN */}
-								<div className='flex flex-col'>
-									<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-										Lista de servicios afectados
-									</label>
-									<input
-												type="file"
-												ref={listaServicioInputRef} // ← Necesitas crear este ref
-												style={{ display: 'none' }}
-												accept=".csv"
-												onChange={(event) => handleListaServicio(event, setFieldValue)}
-									/>
+									<div className='flex flex-col'></div>
+									{/** ARCHIVO DE DISTRIBUCCIÓN */}
+									<div className='flex flex-col'>
+										<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
+											Lista de servicios afectados
+										</label>
+										<input
+													type="file"
+													ref={listaServicioInputRef} // ← Necesitas crear este ref
+													style={{ display: 'none' }}
+													accept=".csv"
+													onChange={(event) => handleListaServicio(event, setFieldValue)}
+										/>
 
-									<div className='flex flex-col xl:flex-row gap-2'>
-										{/* INPUT */}
-										<div className='relative w-full'>
-											<Field
-												type='text'
-												placeholder={'Nombre del archivo..'}
-												readOnly
-												name='listadoServicio'
-												className='texto_16_500 text-tertiary pl-[12px] pr-[40px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 cursor-default'
-												onFocus={e => e.target.blur()} // ← Quita el focus inmediatamente
-												style={{ caretColor: 'transparent' }} // ← Oculta el cursor de texto
-											/>
-											<span className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]' >{errorListaServicio}</span>
-											<ErrorMessage
-												name='listadoServicio'
-												component='span'
-												className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]'
-											/>
+										<div className='flex flex-col xl:flex-row gap-2'>
+											{/* INPUT */}
+											<div className='relative w-full'>
+												<Field
+													type='text'
+													placeholder={'Nombre del archivo..'}
+													readOnly
+													name='listadoServicio'
+													className='texto_16_500 text-tertiary pl-[12px] pr-[40px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 cursor-default'
+													onFocus={e => e.target.blur()} // ← Quita el focus inmediatamente
+													style={{ caretColor: 'transparent' }} // ← Oculta el cursor de texto
+												/>
+												<span className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]' >{errorListaServicio}</span>
+												<ErrorMessage
+													name='listadoServicio'
+													component='span'
+													className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]'
+												/>
+											</div>
+
+											{/* BOTÓN BUSCAR */}
+											<ButtonPrimary texto='BUSCAR'  click={triggerListaServicio}  />
 										</div>
-
-										{/* BOTÓN BUSCAR */}
-										<ButtonPrimary texto='BUSCAR'  click={triggerListaServicio}  />
 									</div>
-								</div>
 								</>
 								)
 							}
-							
 
 							<div className='flex flex-col'></div>
 							<SeparadorH separador='0' />
@@ -815,29 +798,25 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 
 						// COMPONENTE PREVIEW
 						<PreviewComunicacion 
-
 							tipo = {tipoComunicacion}
 							fechaIni={values.fechaEnviar || 'Sin fecha'}
 							fechaFin={values.fechaArchivar || 'Sin fecha'}
-							nombre="Braian"
+							nombre={user || 'Sin nombre'}
 							titulo={values.titulo || 'Sin título'}
 							tituloInterno = {values.tituloInterno }
-							img={selectedFile ? selectedFile.name : 'Sin imagen'}
 							msj={values.contenidoComunicacion || 'Sin contenido'}
 							esPush={isOn}
+							img={selectedFile ? selectedFile.name : 'Sin imagen'}
 							selectedFile={selectedFile || ''}        // ← El archivo completo para FormData
     						imagePreviewUrl={imagePreviewUrl || ''}  // ← La URL para mostrar
-							
 							lista1 = {selectedListaDistribuccion.name}
 							selectedListaDistribuccion={selectedListaDistribuccion}        // ← El archivo completo para FormData
     						listaDistribuccionPreviewUrl={listaDistribuccionPreviewUrl}  // ← La URL para mostrar
-							
 							lista2 = {selectedListaServicio?.name || ''}
 							selectedListaServicio={selectedListaServicio?selectedListaServicio:''}        // ← El archivo completo para FormData
     						listaServicioPreviewUrl={listaServicioPreviewUrl?listaServicioPreviewUrl:''} 
 							formulario = {setPreviewComunicacion} // ← La URL para mostrar
 							setTipoComunicacion = {setTipoComunicacion}
-							
 						/>
 					)}
 
@@ -853,63 +832,61 @@ export const PreviewComunicacion = ({
 	tipo = "",
 	fechaIni = "",
 	fechaFin = "",
-	nombre = "",
+	nombre = "",//usuario falta agregar
 	titulo = "",
 	tituloInterno = "",
 	msj = "",
 	esPush = "",
-	lista1 = "",
-	lista2 = "",
+	selectedFileName = null,//img name
 	selectedFile = null,
     imagePreviewUrl = null,
+	lista1 = "",//name
 	selectedListaDistribuccion = null,      // ← El archivo completo para FormData
     listaDistribuccionPreviewUrl = null,  // ← La URL para m
-
+	lista2 = "",
 	selectedListaServicio = null,      // ← El archivo completo para FormData
     listaServicioPreviewUrl = null,  // ← La URL para m
 	formulario,
 	setTipoComunicacion
 }) => {
-
-
 	const dispatch = useDispatch();
-	let navigate = useNavigate();
 
 	const [statusRespuesta, setStatusRespuesta]=useState(null);
 	const [mensajeRespuesta, setMensajeRespuesta]=useState("");
+	console.log("👀 - :855 - mensajeRespuesta:", mensajeRespuesta);
 
 	const { isLoadingSaveComunicacion, saveComunicacion } = useSelector(state => state.saveComunicacion);
 	
 	const renderFilePreview = () => {
-	if (!selectedFile) return null;
-	
-	// Si es imagen, mostrar preview
-	if (selectedFile.type.startsWith('image/') && imagePreviewUrl) {
+		if (!selectedFile) return null;
+		
+		// Si es imagen, mostrar preview
+		if (selectedFile.type.startsWith('image/') && imagePreviewUrl) {
+			return (
+				<>
+				<div>
+					<img
+						alt='Vista previa de imagen'
+						src={imagePreviewUrl}
+					/>
+				</div>
+				</>
+			);
+		}
+			// Si es PDF u otro archivo, mostrar info
 		return (
-			<>
-			<div>
-				<img
-					alt='Vista previa de imagen'
-					src={imagePreviewUrl}
-				/>
+			<div className="bg-gray-100 border border-gray-300 rounded-[8px] p-4 my-4 flex items-center gap-3">
+				<span className="material-symbols-outlined text-gray-600">
+					{selectedFile.type === 'application/pdf' ? 'picture_as_pdf' : 'attach_file'}
+				</span>
+				<div>
+					<p className="texto_14_600 text-gray-800">{selectedFile.name}</p>
+					<p className="texto_12_400 text-gray-600">
+						{(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+					</p>
+				</div>
 			</div>
-			</>
 		);
-	}
-		// Si es PDF u otro archivo, mostrar info
-	return (
-		<div className="bg-gray-100 border border-gray-300 rounded-[8px] p-4 my-4 flex items-center gap-3">
-			<span className="material-symbols-outlined text-gray-600">
-				{selectedFile.type === 'application/pdf' ? 'picture_as_pdf' : 'attach_file'}
-			</span>
-			<div>
-				<p className="texto_14_600 text-gray-800">{selectedFile.name}</p>
-				<p className="texto_12_400 text-gray-600">
-					{(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-				</p>
-			</div>
-		</div>
-	);
 	}
 
 	const enviarCominicacion = async () => {
@@ -918,46 +895,43 @@ export const PreviewComunicacion = ({
 		const completeFormData = new FormData();
 		
 		// Agregar TODOS los datos del formulario
-		completeFormData.append('tituloInterno', tituloInterno);
+		completeFormData.append('titulo_interno', tituloInterno);
 		completeFormData.append('titulo', tituloInterno);
-		completeFormData.append('notification_type ', tipo);
-		completeFormData.append('fechaEnviar', fechaIni);
-		completeFormData.append('fechaArchivar', fechaFin);
-		completeFormData.append('contenidoComunicacion',msj);
-		completeFormData.append('esPush', esPush);
+		completeFormData.append('desde', fechaIni);
+		completeFormData.append('hasta', fechaFin);
+		completeFormData.append('mensaje',msj);
+		completeFormData.append('type', tipo);
 		
-		
-		// Agregar archivo si existe
-		if (selectedFile) {
-			completeFormData.append('imagenData', selectedFile);
-		}
-
 		if (selectedListaDistribuccion) {
 			completeFormData.append('fileData', selectedListaDistribuccion);
 		}
 
-		if (selectedFile) {
-			completeFormData.append('fileText', selectedFile);
+		// Agregar archivo si existe
+		if (selectedListaServicio) {
+			completeFormData.append('fileText', selectedListaServicio);
 		}
+
+		if (selectedFile) {
+			completeFormData.append('imagenData', selectedFile);
+		}
+		completeFormData.append('esPush', esPush);
+
 		
-		// // DEBUG
+		// DEBUG
 		// console.log('=== FORMDATA COMPLETO ===');
 		// for (let [key, value] of completeFormData) {
 		// 	console.log(key, ':', value);
 		// }
 
-		
 		const respuesta = await dispatch(getSaveComunicacion(completeFormData));
-
-
-
+		console.log("👀 - :926 - enviarCominicacion - respuesta:", respuesta);
 		if(respuesta.status == "OK"){
 			setStatusRespuesta("OK");
-			setMensajeRespuesta(respuesta.data.message);
+			setMensajeRespuesta(respuesta.data);
 
 		}else{
 			setStatusRespuesta("ERROR");
-			setMensajeRespuesta(respuesta.data.message)
+			setMensajeRespuesta(respuesta.data)
 		}
     	
 	}

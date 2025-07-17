@@ -48,7 +48,7 @@ export const Notificacion = ({
 
 	const handleCopy = () => {
 		setCopy(true);
-		setSeleccionada({ titulo, msj, tipo});
+		setSeleccionada({ titulo, msj, tipo:(lista2 ? "aumento" : "general")});
 	}
 
 	const handleDelete = () => {
@@ -166,15 +166,19 @@ export const Notificacion = ({
 					<div className='bg-bg_primary flex flex-col p-4 mt-4 rounded-[8px]'>
 						<h2 className='texto_16_800 text-subtitle'>{titulo}</h2>
 						{img && (
+
+						
+							<div>
 							<img
 								alt='notificacion'
-								className='max-h-[1000px]'
+								
 								src={
 									isLocalhost
 										? `https://portal2-des.iplan.com.ar/${img.url}`
 										: img.url
 								}
 							/>
+							</div>
 						)}
 						<div
 							className='text-tertiary'

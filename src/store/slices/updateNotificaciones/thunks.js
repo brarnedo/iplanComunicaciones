@@ -15,10 +15,10 @@ export const updateNotificaciones = (id, estado, valores) => {
 
     return async (dispatch) => {
 
-        console.log("UPDATE NOTIFICACIONES");
-        console.log("id: ", id);
-        console.log("estado: ", estado);
-        console.log("valores", valores);
+        // console.log("UPDATE NOTIFICACIONES");
+        // console.log("id: ", id);
+        // console.log("estado: ", estado);
+        // console.log("valores", valores);
 
         
 
@@ -60,8 +60,8 @@ export const updateNotificaciones = (id, estado, valores) => {
 
         try {
             
-            //const response = await fetch (url, requestConfig);
-            //const respuesta = await response.json();
+            const response = await fetch (url, requestConfig);
+            const respuesta = await response.json();
             //console.log(respuesta);
 
 
@@ -76,36 +76,36 @@ export const updateNotificaciones = (id, estado, valores) => {
             // // }
 
             //exito
-            const respuesta =
-            {
-                "success": true,
-                "message": "Notificación actualizada exitosamente",
-                "timestamp": "2025-07-16 17:35:39",
-                "data": {
-                    "id": "216",
-                    "updated_fields": [
-                        "titulo",
-                        "mensaje"
-                    ],
-                    "status": "updated",
-                    "notification": {
-                        "id": 216,
-                        "titulo": "TESTEO func CREACIÓN CON PUSH",
-                        "mensaje": "<p><strong>Prueba de funcionamiento creacion con push<\/strong><\/p>",
-                        "estado": "activo",
-                        "ultimo_usuario_ldap": "CONSULTORA_ezense",
-                        "ultima_actualizacion": "2025-07-16 17:45:35"
-                    }
-                }
-            }
+            // const respuesta =
+            // {
+            //     "success": true,
+            //     "message": "Notificación actualizada exitosamente",
+            //     "timestamp": "2025-07-16 17:35:39",
+            //     "data": {
+            //         "id": "216",
+            //         "updated_fields": [
+            //             "titulo",
+            //             "mensaje"
+            //         ],
+            //         "status": "updated",
+            //         "notification": {
+            //             "id": 216,
+            //             "titulo": "TESTEO func CREACIÓN CON PUSH",
+            //             "mensaje": "<p><strong>Prueba de funcionamiento creacion con push<\/strong><\/p>",
+            //             "estado": "activo",
+            //             "ultimo_usuario_ldap": "CONSULTORA_ezense",
+            //             "ultima_actualizacion": "2025-07-16 17:45:35"
+            //         }
+            //     }
+            // }
 
 
-            console.log('🕐 Iniciando envío... (5 segundos)');
+            // console.log('🕐 Iniciando envío... (5 segundos)');
             
-            // ⏰ SIMULAR DEMORA DE 5 SEGUNDOS
-            await new Promise(resolve => setTimeout(resolve, 5000));
+            // // ⏰ SIMULAR DEMORA DE 5 SEGUNDOS
+            // await new Promise(resolve => setTimeout(resolve, 5000));
             
-            console.log('✅ Simulación completada después de 5 segundos');
+            // console.log('✅ Simulación completada después de 5 segundos');
 
 
             
@@ -117,7 +117,7 @@ export const updateNotificaciones = (id, estado, valores) => {
 
             
             //return {"Respuesta":"ERROR", "data":null}
-            return {"Respuesta":"OK", "data": respuesta}
+            //return {"Respuesta":"OK", "data": respuesta}
             
 
 
