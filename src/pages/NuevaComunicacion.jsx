@@ -928,7 +928,7 @@ export const PreviewComunicacion = ({
 		completeFormData.append('desde', fechaIni);
 		completeFormData.append('hasta', fechaFin);
 		completeFormData.append('mensaje', msj);
-		completeFormData.append('mensaje_push', esPush ? msjPush : null);
+		completeFormData.append('mensajePush', esPush ? msjPush : null);
 		completeFormData.append('type', tipo);
 		
 		if (selectedListaDistribuccion) {
