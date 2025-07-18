@@ -93,7 +93,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 
 	const [previewComunicacion, setPreviewComunicacion] = useState(false);
 
-	const [isOn, setIsOn] = useState(0);
+	const [isOn, setIsOn] = useState(0);//0 no push - 1 push
 	
 
 	const onToggle = () => {
@@ -422,13 +422,49 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 										className='text-red-500 text-sm absolute left-[12px]'
 									/>
 								</div>
+
+								{/* PUSH */}
+								{
+									tipoComunicacion == "general" && 
+									(<>
+										<SeparadorV
+											height='60'
+											separador='0'
+										/>
+
+										<div className='flex justify-center items-center gap-4 w-[30%] pb-[6px]'>
+											<label className='texto_12_500 text-tertiary pb-[5px]'>
+												¿Es push?
+											</label>
+											{/* 🔘 SWITCH BUTTON */}
+											<button
+												type='button'
+												onClick={onToggle}
+												//disabled={disabled}
+												className={`
+													relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none 
+													${isOn ? 'bg-primary' : 'bg-gray-300'}
+										
+												`}>
+												{/* CÍRCULO QUE SE MUEVE CON TEXTO DENTRO */}
+												<span
+													className={`
+														inline-flex items-center justify-center h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-lg text-xs font-bold
+														${isOn ? 'translate-x-7 text-primary' : 'translate-x-1 text-gray-500'}
+													`}>
+													{isOn ? 'SÍ' : 'NO'}
+												</span>
+											</button>
+										</div>
+									</>)
+								}
 							</div>
 
 							<div className='flex flex-col'></div>
 							
 							<SeparadorH separador='0' />
 
-							{/* TITULO  / ENVIAR / ARCHIVAR / PUSH */}
+							{/* TITULO / PUSH / ENVIAR / ARCHIVAR */}
 							<div className='flex flex-col xl:flex-row items-center xl:items-end gap-[12px] '>
 
 								{/** TÍTULO */}
@@ -451,39 +487,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 									height='60'
 									separador='0'
 								/>
-
-								{/* PUSH */}
-								<div className='flex items-end gap-3 w-[40%] pb-[6px]'>
-									<label className='texto_12_500 text-tertiary pb-[5px]'>
-										¿Es push?
-									</label>
-									{/* 🔘 SWITCH BUTTON */}
-									<button
-										type='button'
-										onClick={onToggle}
-										//disabled={disabled}
-										className={`
-											relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none 
-											${isOn ? 'bg-primary' : 'bg-gray-300'}
-								
-										`}>
-										{/* CÍRCULO QUE SE MUEVE CON TEXTO DENTRO */}
-										<span
-											className={`
-												inline-flex items-center justify-center h-6 w-6 transform rounded-full bg-white transition-transform duration-300 shadow-lg text-xs font-bold
-												${isOn ? 'translate-x-7 text-primary' : 'translate-x-1 text-gray-500'}
-											`}>
-											{isOn ? 'SÍ' : 'NO'}
-										</span>
-									</button>
-								</div>
-								
-								<SeparadorV
-									height='60'
-									separador='0'
-								/>
-								
-
+																
 								<SeparadorV
 									height='0'
 									separador='-6'
@@ -668,12 +672,10 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 								)} */}
 							</div>
 							<div className='flex flex-col'></div>
-
+							
 							{isOn ? (<>
 								<div className='flex items-end gap-[12px]'>
-									
 									<div className='w-[100%] relative'>
-									
 										<Field
 											name='mensajePush'
 											component={Input}
@@ -816,8 +818,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 							msjPush={values.mensajePush}
 						/>
 					)}
-
-
 				</Form>
 			)}
 
