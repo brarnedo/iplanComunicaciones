@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSaveComunicacion } from '../store/slices/saveComunicacion/thunks';
+import { useSetState } from 'hooks';
 
 
 import {
@@ -23,9 +24,11 @@ import { useNavigate } from 'react-router-dom';
 export const NuevaComunicacion = () => {
 	const { seleccionada } = useSelector((state) => state.notificaciones);
 	const [tipoComunicacion, setTipoComunicacion] = useState(seleccionada.tipo);
+	const { setSeleccionada } = useSetState();
 
 	const btnVolver = () => {
 		setTipoComunicacion(0);
+		setSeleccionada({ titulo: '', contenido: '', tipo: ''});
 	};
 
 	return (
@@ -90,14 +93,14 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 
 	const [previewComunicacion, setPreviewComunicacion] = useState(false);
 
-	const [isOn, setIsOn] = useState(false);
+	const [isOn, setIsOn] = useState(0);
 	
 
 	const onToggle = () => {
 		if (isOn) {
-			setIsOn(false);
+			setIsOn(0);
 		} else {
-			setIsOn(true);
+			setIsOn(1);
 		}
 	};
 
@@ -914,7 +917,7 @@ export const PreviewComunicacion = ({
 		if (selectedFile) {
 			completeFormData.append('imagenData', selectedFile);
 		}
-		completeFormData.append('esPush', esPush);
+		completeFormData.append('is_push', esPush);
 
 		
 		// DEBUG

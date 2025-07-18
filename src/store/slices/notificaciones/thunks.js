@@ -2403,7 +2403,7 @@ export const getNotificaciones = (param) => {
                 return "OK";
               }
         } catch (error) {
-            // console.log("👀 - return - error:", error);
+            console.log("👀 - return - error:", error);
             dispatch(starLoadingNotificaciones(false));
             dispatch(setNotificaciones({ notificaciones: 'error' }));
         }
