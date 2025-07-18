@@ -432,8 +432,8 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 											separador='0'
 										/>
 
-										<div className='flex justify-center items-center gap-4 w-[30%] pb-[6px]'>
-											<label className='texto_12_500 text-tertiary pb-[5px]'>
+										<div className='flex justify-center items-center gap-4 w-[20%] pb-[6px]'>
+											<label className='texto_12_500 text-tertiary '>
 												¿Es push?
 											</label>
 											{/* 🔘 SWITCH BUTTON */}
@@ -442,7 +442,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 												onClick={onToggle}
 												//disabled={disabled}
 												className={`
-													relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none 
+													relative inline-flex h-8 w-[58px] items-center rounded-full transition-colors duration-300 focus:outline-none 
 													${isOn ? 'bg-primary' : 'bg-gray-300'}
 										
 												`}>
@@ -846,6 +846,7 @@ export const PreviewComunicacion = ({
 	formulario,
 	setTipoComunicacion,
 	msjPush = "",
+	
 }) => {
 	const dispatch = useDispatch();
 
@@ -897,7 +898,7 @@ export const PreviewComunicacion = ({
 		completeFormData.append('desde', fechaIni);
 		completeFormData.append('hasta', fechaFin);
 		completeFormData.append('mensaje', msj);
-		completeFormData.append('mensajePush', esPush ? msjPush : null);
+		completeFormData.append('mensaje_push', esPush ? msjPush : null);
 		completeFormData.append('type', tipo);
 		
 		if (selectedListaDistribuccion) {
