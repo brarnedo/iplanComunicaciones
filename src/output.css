@@ -684,6 +684,10 @@ video {
   bottom: -23px;
 }
 
+.bottom-\[-2px\] {
+  bottom: -2px;
+}
+
 .left-\[12px\] {
   left: 12px;
 }
@@ -694,6 +698,10 @@ video {
 
 .top-\[-18px\] {
   top: -18px;
+}
+
+.bottom-\[-1px\] {
+  bottom: -1px;
 }
 
 .m-auto {

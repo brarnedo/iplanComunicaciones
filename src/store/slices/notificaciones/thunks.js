@@ -2395,7 +2395,7 @@ export const getNotificaciones = (param) => {
             // dispatch(starLoadingNotificaciones(false));
             // dispatch(setNotificaciones({ notificaciones: notificacionesMock }));
 
-            //prod
+            prod
             const response = await axios.request(config);
               if (response.status == 200) {
                 dispatch(starLoadingNotificaciones(false));
