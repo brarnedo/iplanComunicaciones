@@ -806,10 +806,6 @@ video {
   height: 100%;
 }
 
-.max-h-\[1000px\] {
-  max-height: 1000px;
-}
-
 .min-h-screen {
   min-height: 100vh;
 }
@@ -910,6 +906,10 @@ video {
 
 .flex-wrap {
   flex-wrap: wrap;
+}
+
+.items-start {
+  align-items: flex-start;
 }
 
 .items-end {
@@ -1035,6 +1035,11 @@ video {
 .bg-\[\#6FDD58\] {
   --tw-bg-opacity: 1;
   background-color: rgb(111 221 88 / var(--tw-bg-opacity, 1));
+}
+
+.bg-\[\#FF006E\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 0 110 / var(--tw-bg-opacity, 1));
 }
 
 .bg-\[\#FF8661\] {

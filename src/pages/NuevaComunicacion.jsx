@@ -100,6 +100,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 		if (isOn) {
 			setIsOn(0);
 		} else {
+			//input = getTodayDate();
 			setIsOn(1);
 		}
 	};
@@ -382,40 +383,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 
 	const onSubmit = async (values, { setSubmitting, resetForm }) => {
 		setPreviewComunicacion(true);
-
-		//const completeFormData = new FormData();
-		//Agregar TODOS los datos del formulario
-		// completeFormData.append('tituloInterno', values.tituloInterno);
-		// completeFormData.append('titulo', values.titulo);
-		// completeFormData.append('desde', values.fechaEnviar);
-		// completeFormData.append('hasta', values.fechaArchivar);
-		// completeFormData.append('mensaje', values.contenidoComunicacion);
-		// completeFormData.append('type', tipoComunicacion);//aumento - general
-		// completeFormData.append('fileData', values.listadoDistribuccion);
-		// // Agregar archivo si existe
-		// if (selectedFile) {
-		// 	completeFormData.append('imagenData', selectedFile);
-		// }
-		// completeFormData.append('fileText', values.listadoServicio);
-		// completeFormData.append('esPush', isOn);
-		
-		// //DEBUG consolelog formdata
-		// const formdataJSON = {};
-		// for (let [key, value] of completeFormData.entries()) {
-		// formdataJSON[key] = value;
-		// }
-		// console.log(formdataJSON);
-
-		//const respuesta = await dispatch(getSaveComunicacion(completeFormData));
-    	 
-		// setTimeout(() => {
-		// 	alert('¡Formulario enviado con Formik!');
-		// 	setSubmitting(false);
-		// 	resetForm();
-		// 	// Limpiar estados de archivo
-		// 	setSelectedFile(null);
-			
-		// 	}, 1000);
 	};
 		
 	
@@ -446,7 +413,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 									<Field
 										name='tituloInterno'
 										component={Input}
-										label='Título Interno'
+										label='Nombre Interno'
 										placeholder='Ingresá...'
 									/>
 									<ErrorMessage
@@ -455,8 +422,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 										className='text-red-500 text-sm absolute left-[12px]'
 									/>
 								</div>
-
-							
 							</div>
 
 							<div className='flex flex-col'></div>
@@ -472,7 +437,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 									<Field
 										name='titulo'
 										component={Input}
-										label='Título'
+										label='Título comunicación'
 										placeholder='Ingresá...'
 									/>
 									<ErrorMessage
@@ -480,63 +445,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 										component='span'
 										className='text-red-500 text-sm absolute left-[12px]'
 									/>
-								</div>
-
-								<SeparadorV
-									height='60'
-									separador='0'
-								/>
-
-								{/** ENVIAR */}
-								<div className='relative w-full xl:w-auto'>
-
-									<div className='flex flex-col '>
-										<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-											Desde:
-										</label>
-
-										<Field
-											
-											type='date'
-											name='fechaEnviar'
-											className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full xl:w-[160px]'
-										/>
-									</div>
-
-									<ErrorMessage
-										name='fechaEnviar'
-										component='span'
-										className='text-red-500 text-sm  absolute left-[12px]'
-									/>
-
-								</div>
-
-								<SeparadorV
-									height='0'
-									separador='-6'
-								/>
-
-								{/** ARCHIVAR */}
-								<div className='relative w-full xl:w-auto'>
-									<div className='flex flex-col'>
-										
-										<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-											Hasta:
-										</label>
-
-										<Field
-											type='date'
-											name='fechaArchivar'
-											className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full xl:w-[160px]'
-										/>
-
-									</div>
-
-									<ErrorMessage
-											name='fechaArchivar'
-											component='span'
-											className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
-										/>
 								</div>
 
 								<SeparadorV
@@ -569,6 +477,70 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 										</span>
 									</button>
 								</div>
+								
+								<SeparadorV
+									height='60'
+									separador='0'
+								/>
+								
+
+								<SeparadorV
+									height='0'
+									separador='-6'
+								/>
+
+{/** DESDE */}
+								<div className='relative w-full xl:w-auto'>
+
+									<div className='flex flex-col '>
+										<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
+											Desde:
+										</label>
+
+										<Field
+											type='date'
+											name='fechaEnviar'
+											className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full xl:w-[160px]'
+											disabled={isOn ? true : false}
+											value={isOn ? getTodayDate() : values.fechaEnviar}
+										/>
+									</div>
+
+									<ErrorMessage
+										name='fechaEnviar'
+										component='span'
+										className='text-red-500 text-sm  absolute left-[12px]'
+									/>
+
+								</div>
+
+								
+
+								
+								{/** HASTA */}
+								<div className='relative w-full xl:w-auto'>
+									<div className='flex flex-col'>
+										
+										<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
+											Hasta:
+										</label>
+
+										<Field
+											type='date'
+											name='fechaArchivar'
+											className='calendar-primary texto_16_500 text-secondary pl-[12px] pr-[12px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full xl:w-[160px]'
+										/>
+
+									</div>
+
+									<ErrorMessage
+											name='fechaArchivar'
+											component='span'
+											className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
+										/>
+								</div>
+
+								
 
 							</div>
 
@@ -696,6 +668,27 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 								)} */}
 							</div>
 							<div className='flex flex-col'></div>
+
+							{isOn ? (<>
+								<div className='flex items-end gap-[12px]'>
+									
+									<div className='w-[100%] relative'>
+									
+										<Field
+											name='mensajePush'
+											component={Input}
+											label='Contenido comunicación push'
+											placeholder='Ingresá...'
+										/>
+										<ErrorMessage
+											name='mensajePush'
+											component='span'
+											className='text-red-500 text-sm absolute left-[12px]'
+										/>
+									</div>
+								</div>
+								<div className='flex flex-col'></div>
+							</> ) : ''}
 							
 							<SeparadorH separador='0' />
 
@@ -789,7 +782,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 							<div className='flex justify-end'>
 								{/* BOTÓN BUSCAR */}
 								<ButtonPrimary
-									texto='PREVISUALIZAR'
+									texto='VISTA PREVIA'
 									type='submit'
 								/>
 								{isSubmitting && <p> Cargando </p>}
@@ -820,6 +813,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
     						listaServicioPreviewUrl={listaServicioPreviewUrl?listaServicioPreviewUrl:''} 
 							formulario = {setPreviewComunicacion} // ← La URL para mostrar
 							setTipoComunicacion = {setTipoComunicacion}
+							msjPush={values.mensajePush}
 						/>
 					)}
 
@@ -850,13 +844,13 @@ export const PreviewComunicacion = ({
 	selectedListaServicio = null,      // ← El archivo completo para FormData
     listaServicioPreviewUrl = null,  // ← La URL para m
 	formulario,
-	setTipoComunicacion
+	setTipoComunicacion,
+	msjPush = "",
 }) => {
 	const dispatch = useDispatch();
 
 	const [statusRespuesta, setStatusRespuesta]=useState(null);
 	const [mensajeRespuesta, setMensajeRespuesta]=useState("");
-	console.log("👀 - :855 - mensajeRespuesta:", mensajeRespuesta);
 
 	const { isLoadingSaveComunicacion, saveComunicacion } = useSelector(state => state.saveComunicacion);
 	
@@ -902,7 +896,8 @@ export const PreviewComunicacion = ({
 		completeFormData.append('titulo', tituloInterno);
 		completeFormData.append('desde', fechaIni);
 		completeFormData.append('hasta', fechaFin);
-		completeFormData.append('mensaje',msj);
+		completeFormData.append('mensaje', msj);
+		completeFormData.append('mensajePush', esPush ? msjPush : null);
 		completeFormData.append('type', tipo);
 		
 		if (selectedListaDistribuccion) {
@@ -927,7 +922,6 @@ export const PreviewComunicacion = ({
 		// }
 
 		const respuesta = await dispatch(getSaveComunicacion(completeFormData));
-		console.log("👀 - :926 - enviarCominicacion - respuesta:", respuesta);
 		if(respuesta.status == "OK"){
 			setStatusRespuesta("OK");
 			setMensajeRespuesta(respuesta.data);
@@ -942,7 +936,6 @@ export const PreviewComunicacion = ({
 	const modificarComunicacion = () => {
 		formulario(false);
 	}
-
 
 
 	return (
