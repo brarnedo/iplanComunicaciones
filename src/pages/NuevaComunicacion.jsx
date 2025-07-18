@@ -593,7 +593,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 									<div className='relative w-full'>
 										<Field
 											type='text'
-											placeholder={'Nombre de la imágen..'}
+											placeholder={'Subir imágen..'}
 											value={selectedFile ? selectedFile.name : ''}
 											readOnly
 											name='imagen'
@@ -714,7 +714,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 									<div className='relative w-full'>
 										<Field
 											type='text'
-											placeholder={'Nombre del archivo..'}
+											placeholder={'Subir archivo..'}
 											readOnly
 											name='listadoDistribuccion'
 											className='texto_16_500 text-tertiary pl-[12px] pr-[40px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 cursor-default'
@@ -756,7 +756,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 											<div className='relative w-full'>
 												<Field
 													type='text'
-													placeholder={'Nombre del archivo..'}
+													placeholder={'Subir archivo..'}
 													readOnly
 													name='listadoServicio'
 													className='texto_16_500 text-tertiary pl-[12px] pr-[40px] rounded-[8px] h-[44px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 cursor-default'

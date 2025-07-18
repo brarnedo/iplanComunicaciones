@@ -63,18 +63,22 @@ export const Programadas = () => {
     }
 
     if(notificaciones.length === 0) {
-        return <div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
-            <div className="flex items-center justify-center">
-                <p className='texto_16_800 text-subtitle'>No hay notificaciones programadas</p>
-            </div>
+        return  <div className='bg-white h-[150px] flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
+            <div className='bg-bg_primary p-[8px] flex items-center justify-center rounded-[12px] gap-[8px]'>
+			    <p className='text-secondary texto_20_600'> No tenés notificaciones programadas </p>
+		    </div>
         </div>;
     }
 
     if(notificaciones === 'error') {
-        return <div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
-            <div className="flex items-center justify-center">
-                <p className='texto_16_800 text-subtitle'>Error al cargar las notificaciones programadas</p>
-            </div>
+        return <div className='bg-white h-[150px] flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
+            
+          
+            <div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#FF8661] gap-[8px]'>
+                <span className='material-symbols-outlined text-white'>sentiment_satisfied</span> 
+			    <p className='text-white texto_20_600'> Error al cargar las notificaciones programadas </p>
+		    </div>
+        
         </div>;
     }
 
@@ -168,7 +172,7 @@ export const Programadas = () => {
 
     if(eliminando != ''){
 
-        if(eliminando == "OK"){
+        if(eliminando.Respuesta == "OK"){
 
             return(
                 <div className='bg-white flex-1 p-[16px] rounded-[12px] mr-0 xl:mr-[124px] flex flex-col gap-[16px]'>
