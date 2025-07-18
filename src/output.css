@@ -696,6 +696,10 @@ video {
   top: -18px;
 }
 
+.bottom-\[-1px\] {
+  bottom: -1px;
+}
+
 .m-auto {
   margin: auto;
 }

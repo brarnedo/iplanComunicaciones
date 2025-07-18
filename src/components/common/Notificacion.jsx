@@ -67,6 +67,15 @@ export const Notificacion = ({
 	};
 
 
+	const [charCount, setCharCount] = useState(0);
+	const maxLength = 900;
+	const getPlainText = (html) => {
+		if (!html) return '';
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(html, 'text/html');
+		return doc.body.textContent || doc.body.innerText || '';
+	};
+
 
 	// 🎯 VALORES INICIALES (como initialValues en Formik)
 	const initialValues = {
@@ -86,7 +95,10 @@ export const Notificacion = ({
 				return textContent && textContent.length > 0;
 			})
 			.test('max-length', 'Máximo 900 caracteres', function (value) {
-				const textContent = value?.replace(/<[^>]*>/g, '') || '';
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(value, 'text/html');
+					const textContent = doc.body.textContent || doc.body.innerText || '';
+				
 				return textContent.length <= 900;
 			}),
 	});
@@ -319,20 +331,38 @@ export const Notificacion = ({
 															],
 														}}
 														value={field.value}
-														onChange={value =>
-															form.setFieldValue(field.name, value)
-														}
+														onChange={(value) => {
+												const text = getPlainText(value);
+												  const textLength = text.length;
+											
+													setCharCount(textLength);
+													form.setFieldValue(field.name, value);
+												
+											}}
 														placeholder='Escribe el contenido...'
 														className='bg-white text-black texto_16_500 pl-[12px] pr-[12px] pt-[12px] pb-[12px] rounded-[8px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 resize-none'
 													/>
 												)}
 											</Field>
 
-											<ErrorMessage
+
+												{/* CONTADOR DE CARACTERES */}
+
+							
+
+											<div className='flex justify-end mt-1 pr-[12px]'>
+												<ErrorMessage
 												name='contenidoComunicacion'
 												component='span'
-												className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]'
+												className='text-red-500 text-sm absolute bottom-[-1px] left-[12px]'
 											/>
+
+												<span className={`texto_12_500 ${
+													charCount > maxLength ? 'text-red-500' : 'text-tertiary'
+												}`}>
+													{charCount}/{maxLength}
+												</span>
+								</div>
 										</div>
 
 										<div className='flex flex-col'></div>
