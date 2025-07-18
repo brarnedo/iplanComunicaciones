@@ -26,6 +26,8 @@ export const NuevaComunicacion = () => {
 	const [tipoComunicacion, setTipoComunicacion] = useState(seleccionada.tipo);
 	const { setSeleccionada } = useSetState();
 
+	const [btnVolverVisible, setBtnVolverVisible] = useState(true);
+
 	const btnVolver = () => {
 		setTipoComunicacion(0);
 		setSeleccionada({ titulo: '', contenido: '', tipo: ''});
@@ -36,7 +38,7 @@ export const NuevaComunicacion = () => {
 			<div className='pb-[12px] border-b-[1px] border-secondary flex justify-between'>
 				<p className='text-secondary texto_18_800'> Nueva comunicación </p>
 
-				{tipoComunicacion != 0 && (
+				{(tipoComunicacion != 0 && btnVolverVisible) && (
 					<span
 						className='material-symbols-outlined text-white bg-primary p-[5px] rounded-[555px] cursor-pointer'
 						onClick={btnVolver}>
@@ -76,12 +78,12 @@ export const NuevaComunicacion = () => {
 			)}
 
 			{/** Fomulario Aumento  */}
-			{tipoComunicacion != 0 && <FormularioGeneral tipoComunicacion={tipoComunicacion} setTipoComunicacion={setTipoComunicacion}/>}
+			{tipoComunicacion != 0 && <FormularioGeneral tipoComunicacion={tipoComunicacion} setTipoComunicacion={setTipoComunicacion} setBtnVolverVisible={setBtnVolverVisible}/>}
 		</div>
 	);
 };
 
-const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}) => {
+const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion, setBtnVolverVisible}) => {
 	const { user = '' } = useSelector(state => state.auth);
 	const { seleccionada } = useSelector((state) => state.notificaciones);
 
@@ -95,6 +97,15 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 
 	const [isOn, setIsOn] = useState(0);//0 no push - 1 push
 	
+
+	const [charCount, setCharCount] = useState(0);
+	const maxLength = 900;
+	const getPlainText = (html) => {
+		if (!html) return '';
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(html, 'text/html');
+		return doc.body.textContent || doc.body.innerText || '';
+	};
 
 	const onToggle = () => {
 		if (isOn) {
@@ -126,6 +137,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 		tituloInterno: Yup.string()
 			.min(2, 'Mínimo 2 caracteres')
 			.required('Ingresá un título interno'),
+			
 		titulo: Yup.string()
 			.min(2, 'Mínimo 2 caracteres')
 			.required('Ingresa un título'),
@@ -151,7 +163,11 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 				return textContent && textContent.length > 0;
 			})
 			.test('max-length', 'Máximo 900 caracteres', function (value) {
-				const textContent = value?.replace(/<[^>]*>/g, '') || '';
+			
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(value, 'text/html');
+					const textContent = doc.body.textContent || doc.body.innerText || '';
+				
 				return textContent.length <= 900;
 			}),
 		//listadoDistribuccion: Yup.string().required('Debés adjuntar un archivo'),
@@ -297,14 +313,10 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 		
 		// Guardar archivo
 		setSelectedListaDistribuccion(file);
-		// Solo crear preview si es imagen
-        //if (file.type.startsWith('csv/')) {
-            const imageUrl = URL.createObjectURL(file);
-            setListaDistribuccionPreviewUrl(imageUrl);
-        //} else {
-          //  setListaDistribuccionPreviewUrl(null);  // PDFs no se muestran como imagen
-        //}
 		
+        const imageUrl = URL.createObjectURL(file);
+        setListaDistribuccionPreviewUrl(imageUrl);
+     
 		// Actualizar Formik con el nombre
 		setFieldValue('listadoDistribuccion', file.name);
 
@@ -432,8 +444,8 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 											separador='0'
 										/>
 
-										<div className='flex justify-center items-center gap-4 w-[30%] pb-[6px]'>
-											<label className='texto_12_500 text-tertiary pb-[5px]'>
+										<div className='flex justify-center items-center gap-4 w-[20%] pb-[6px]'>
+											<label className='texto_12_500 text-tertiary '>
 												¿Es push?
 											</label>
 											{/* 🔘 SWITCH BUTTON */}
@@ -442,7 +454,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 												onClick={onToggle}
 												//disabled={disabled}
 												className={`
-													relative inline-flex h-8 w-14 items-center rounded-full transition-colors duration-300 focus:outline-none 
+													relative inline-flex h-8 w-[58px] items-center rounded-full transition-colors duration-300 focus:outline-none 
 													${isOn ? 'bg-primary' : 'bg-gray-300'}
 										
 												`}>
@@ -550,7 +562,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 
 							<div className='flex flex-col xl:flex-row'></div>
 							
-							<SeparadorH separador='0' />
+							
 
 							{/* IMAGEN */}
 							<div className='flex flex-col'>
@@ -591,7 +603,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 
 									{/* BOTÓN BUSCAR */}
 									{ selectedFile && (
-
+										<>
 										<button
 											className='pointer flex h-[44px] w-[55px] items-center justify-center rounded-full bg-primary'
 											onClick={()=>{eliminarImagen()}}
@@ -601,12 +613,18 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 												close
 											</span>
 										</button>
-									)
+
+											<SeparadorV
+											height='40'
+											separador='0'
+										/>
+										</>
+											)
 										
 									}
 									
 
-									<ButtonPrimary texto='BUSCAR'  click={triggerFileSelect}  />
+									<ButtonPrimary texto={selectedFile?'REEMPLAZAR':'BUSCAR'}  click={triggerFileSelect}  />
 
 								
 								</div>
@@ -614,7 +632,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 
 							<div className='flex flex-col'></div>
 
-							<SeparadorH separador='0' />
+						
 
 							{/**  MENSAJE */}
 							<div className='flex flex-col relative'>
@@ -640,9 +658,17 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 												],
 											}}
 											value={field.value}
-											onChange={value => form.setFieldValue(field.name, value)}
+											 onChange={(value) => {
+												const text = getPlainText(value);
+												  const textLength = text.length;
+											
+													setCharCount(textLength);
+													form.setFieldValue(field.name, value);
+												
+											}}
 											placeholder='Escribe el contenido...'
 											className='bg-white texto_16_500 pl-[12px] pr-[12px] pt-[12px] pb-[12px] rounded-[8px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 resize-none'
+											
 										/>
 										
 									)}
@@ -650,29 +676,29 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 							
 								</Field>
 
-								<ErrorMessage
-									name='contenidoComunicacion'
-									component='span'
-									className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-20px]'
-								/>
+									
 
 								{/* CONTADOR DE CARACTERES */}
 
-								{/* <div className='flex justify-end mt-1 pr-[12px]'>
-									<span className={`texto_12_500 text-tertiary`}>máximo 900 caracteres</span>
-								</div> */}
-
-								{/* {maxLength && (
-									<div className='flex justify-end mt-1 pr-[12px]'>
-										<span
-											className={`texto_11_400 ${charCount > maxLength * 0.9 ? 'text-red-500' : 'text-tertiary'}`}>
-											{charCount}/{maxLength}
-										</span>
-									</div>
-								)} */}
-							</div>
-							<div className='flex flex-col'></div>
 							
+
+								<div className='flex justify-end mt-1 pr-[12px]'>
+									<ErrorMessage
+									name='contenidoComunicacion'
+									component='span'
+									className='text-red-500 text-sm absolute bottom-[-1px] left-[12px]'
+								/>
+
+									<span className={`texto_12_500 ${
+										charCount > maxLength ? 'text-red-500' : 'text-tertiary'
+									}`}>
+										{charCount}/{maxLength}
+									</span>
+								</div>
+							</div>
+							
+							
+
 							{isOn ? (<>
 								<div className='flex items-end gap-[12px]'>
 									<div className='w-[100%] relative'>
@@ -728,7 +754,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 									</div>
 
 									{/* BOTÓN BUSCAR */}
-									<ButtonPrimary texto='BUSCAR'  click={triggerListaDistribuccion}  />
+									<ButtonPrimary texto= {values.listadoDistribuccion == ""?'BUSCAR':"REEMPLAZAR"}  click={triggerListaDistribuccion}  />
 								</div>
 							</div>
 							
@@ -738,7 +764,9 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 									<div className='flex flex-col'></div>
 									{/** ARCHIVO DE DISTRIBUCCIÓN */}
 									<div className='flex flex-col'>
-										<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
+										<label className={`texto_12_500 pl-[12px] px-[1px] ${
+              								  values.listadoServicio === "" ? 'text-secondary' : 'text-secondary'
+          								  }`}>
 											Lista de servicios afectados
 										</label>
 										<input
@@ -770,7 +798,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 											</div>
 
 											{/* BOTÓN BUSCAR */}
-											<ButtonPrimary texto='BUSCAR'  click={triggerListaServicio}  />
+											<ButtonPrimary texto={values.listadoServicio == "" ?'BUSCAR':'REEMPLAZAR'}  click={triggerListaServicio}  />
 										</div>
 									</div>
 								</>
@@ -787,7 +815,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 									texto='VISTA PREVIA'
 									type='submit'
 								/>
-								{isSubmitting && <p> Cargando </p>}
+							
 							</div>
 							
 						</div>
@@ -816,6 +844,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion}
 							formulario = {setPreviewComunicacion} // ← La URL para mostrar
 							setTipoComunicacion = {setTipoComunicacion}
 							msjPush={values.mensajePush}
+							setBtnVolverVisible={setBtnVolverVisible}
 						/>
 					)}
 				</Form>
@@ -846,6 +875,7 @@ export const PreviewComunicacion = ({
 	formulario,
 	setTipoComunicacion,
 	msjPush = "",
+	setBtnVolverVisible,
 }) => {
 	const dispatch = useDispatch();
 
@@ -886,6 +916,7 @@ export const PreviewComunicacion = ({
 		);
 	}
 
+	
 	const enviarCominicacion = async () => {
 
 		// Crear FormData completo al momento del envío
@@ -897,7 +928,7 @@ export const PreviewComunicacion = ({
 		completeFormData.append('desde', fechaIni);
 		completeFormData.append('hasta', fechaFin);
 		completeFormData.append('mensaje', msj);
-		completeFormData.append('mensajePush', esPush ? msjPush : null);
+		completeFormData.append('mensaje_push', esPush ? msjPush : null);
 		completeFormData.append('type', tipo);
 		
 		if (selectedListaDistribuccion) {
@@ -920,8 +951,13 @@ export const PreviewComunicacion = ({
 		// for (let [key, value] of completeFormData) {
 		// 	console.log(key, ':', value);
 		// }
+		
+			setBtnVolverVisible(false);
 
 		const respuesta = await dispatch(getSaveComunicacion(completeFormData));
+
+		
+
 		if(respuesta.status == "OK"){
 			setStatusRespuesta("OK");
 			setMensajeRespuesta(respuesta.data);
@@ -1047,17 +1083,26 @@ export const PreviewComunicacion = ({
 				</div>
 				<div className='flex flex-col lg:flex-row mt-[16px] justify-end gap-[8px]'>
 					<ButtonPrimary 
-					texto='VOLVER' 
+					texto='TERMINAR' 
 					click={() => {setTipoComunicacion(0)}}
 					/>
 				</div>
 			</>
 
-			:<div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#FF8661] gap-[8px]'>
+			:
+			<><div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#FF8661] gap-[8px]'>
 				<span className='material-symbols-outlined text-white'>sentiment_sad</span> 
 				<p className='text-white texto_20_600'> Lo sentimos, no se pudo enviar la comunicación </p>
+				
 			</div>
-			
+
+				<div className='flex flex-col lg:flex-row mt-[16px] justify-end gap-[8px]'>
+					<ButtonPrimary 
+					texto='TERMINAR' 
+					click={() => {setTipoComunicacion(0)}}
+					/>
+				</div>
+			</>
 		}
 		</>
 	);

@@ -2390,13 +2390,16 @@ export const getNotificaciones = (param) => {
         };
 
         try {
-            //dev
+            ////dev
             // await new Promise(res => setTimeout(res, 2000));
             // dispatch(starLoadingNotificaciones(false));
             // dispatch(setNotificaciones({ notificaciones: notificacionesMock }));
 
-            //prod
+            ////prod
             const response = await axios.request(config);
+
+            console.log(response);
+
               if (response.status == 200) {
                 dispatch(starLoadingNotificaciones(false));
                 dispatch(setNotificaciones({ notificaciones: response.data.data }));
