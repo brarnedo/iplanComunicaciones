@@ -47,7 +47,7 @@ export const Archivadas = () => {
             
           
             <div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#FF8661] gap-[8px]'>
-                <span className='material-symbols-outlined text-white'>sentiment_satisfied</span> 
+                <span className='material-symbols-outlined text-white'>sentiment_sad</span> 
 			    <p className='text-white texto_20_600'> Error al cargar las notificaciones archivadas </p>
 		    </div>
         
