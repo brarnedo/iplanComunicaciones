@@ -140,12 +140,12 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			
 		titulo: Yup.string()
 			.min(2, 'Mínimo 2 caracteres')
-			.required('Ingresa un título'),
+			.required('Ingresá un título'),
 		fechaEnviar: Yup.date()
-			  .min(new Date(new Date().setHours(0, 0, 0, 0)), 'Fecha invalida')
+			  .min(new Date(new Date().setHours(0, 0, 0, 0)), 'Fecha inválida')
 			.required('Fecha requerida'),
 		fechaArchivar: Yup.date()
-			.min(new Date(), 'Fecha invalida')
+			.min(new Date(), 'Fecha inválida')
 			.test(
 				'fecha-posterior',
 				'Fecha invalida',
@@ -412,7 +412,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 							<div className='pb-[12px] border-b-[1px] border-tertiary'>
 								<p className='text-primary texto_20_500'>
-									{tipoComunicacion == "general" ?"Comunicación General":"Comunicación de aumento"}
+									{tipoComunicacion == "general" ?"Comunicación general":"Comunicación de aumento"}
 									
 								</p>
 							</div>
@@ -505,7 +505,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									separador='-6'
 								/>
 
-{/** DESDE */}
+								{/** DESDE */}
 								<div className='relative w-full xl:w-auto'>
 
 									<div className='flex flex-col '>
@@ -568,7 +568,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 							<div className='flex flex-col'>
 
 								<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-									Imágen
+									Imagen
 								</label>
 
 								<input
@@ -584,7 +584,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									<div className='relative w-full'>
 										<Field
 											type='text'
-											placeholder={'Subir imágen..'}
+											placeholder={'Subir imagen..'}
 											value={selectedFile ? selectedFile.name : ''}
 											readOnly
 											name='imagen'
@@ -638,7 +638,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 							<div className='flex flex-col relative'>
 
 								<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-									Contenido Comunicación
+									Contenido comunicación
 								</label>
 											
 
@@ -666,7 +666,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 													form.setFieldValue(field.name, value);
 												
 											}}
-											placeholder='Escribe el contenido...'
+											placeholder='Escribí el contenido...'
 											className='bg-white texto_16_500 pl-[12px] pr-[12px] pt-[12px] pb-[12px] rounded-[8px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 resize-none'
 											
 										/>
@@ -723,7 +723,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 							{/** ARCHIVO DE DISTRIBUCCIÓN */}
 							<div className='flex flex-col'>
 								<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
-									Lista de distribucción
+									Lista de distribución
 								</label>
 								<input
 											type="file"
