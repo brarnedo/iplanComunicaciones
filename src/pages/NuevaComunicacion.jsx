@@ -943,7 +943,7 @@ export const PreviewComunicacion = ({
 		if (selectedFile) {
 			completeFormData.append('imagenData', selectedFile);
 		}
-		completeFormData.append('is_push', esPush);
+		// completeFormData.append('is_push', esPush);
 
 		
 		// DEBUG
