@@ -142,18 +142,26 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			.min(2, 'Mínimo 2 caracteres')
 			.required('Ingresá un título'),
 		fechaEnviar: Yup.date()
-			  .min(new Date(new Date().setHours(0, 0, 0, 0)), 'Fecha inválida')
+			.min(new Date(new Date().setHours(0, 0, 0, 0)), 'Fecha inválida')
 			.required('Fecha requerida'),
 		fechaArchivar: Yup.date()
-			.min(new Date(), 'Fecha inválida')
+			.min(new Date(new Date().setHours(0, 0, 0, 0)), 'Fecha inválida')
 			.test(
 				'fecha-posterior',
-				'Fecha invalida',
+				'Fecha inválida',
 				function(value) {
-					const { fechaEnviar } = this.parent; // ← Acceder a fechaEnviar
-					if (!fechaEnviar || !value) return true; // Si alguna está vacía, no validar
-					return new Date(value) >= new Date(fechaEnviar);
-				}
+					const { fechaEnviar } = this.parent;
+					if (!fechaEnviar || !value) return true; // Si alguna está vacía, no validar esta condición
+					
+					// Convertir a fecha sin hora para comparar solo fechas
+					const fechaDesde = new Date(fechaEnviar);
+					const fechaHasta = new Date(value);
+					
+					fechaDesde.setHours(0, 0, 0, 0);
+					fechaHasta.setHours(0, 0, 0, 0);
+					
+					return fechaHasta >= fechaDesde; // Mayor o IGUAL
+            	}
 			)
 			.required('Ingresá una fecha'),
 		contenidoComunicacion: Yup.string()
