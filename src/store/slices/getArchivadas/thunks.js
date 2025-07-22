@@ -26,8 +26,13 @@ export const getArchivadas = () => {
 
             
         } catch (error) {
-            console.log(error);
-            return {status:"ERROR", data:null}
+             if(error.response.data.error_type == "session_expired"){
+                Cookies.remove('token');
+                window.location.href = '/comunicaciones/#/error';
+            }else{
+                console.log(error);
+                return {status:"ERROR", data:null}
+            }
         }
 
     }

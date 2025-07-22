@@ -134,7 +134,12 @@ export const updateNotificaciones = (id, estado, valores) => {
 
         } catch (error) {
             console.log("FALLO");
-            return {"Respuesta":"ERROR", "data":null}
+            if(error.response.data.error_type == "session_expired"){
+                Cookies.remove('token');
+                window.location.href = '/comunicaciones/#/error';
+            }else{
+                return {"Respuesta":"ERROR", "data":null}
+            }
         }
 
     }

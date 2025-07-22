@@ -1,5 +1,5 @@
 import { RouterProvider, createHashRouter } from "react-router-dom";
-import { Login, Archivadas, Programadas, NuevaComunicacion} from 'pages';
+import { Login, Archivadas, Programadas, NuevaComunicacion, SessionExpirada} from 'pages';
 import { Home, Layout } from "layouts";
 import { PrivateRoutes } from "router";
 
@@ -11,6 +11,10 @@ const router = createHashRouter([
       {
         index: true,
         element: <Login />,  // ← URL: /
+      },
+      {
+        path: "error",
+        element: <SessionExpirada />,  // ← URL: /error
       },
       {
         element: <PrivateRoutes><Home /></PrivateRoutes>,   // ← URL: /home

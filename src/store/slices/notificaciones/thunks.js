@@ -2397,8 +2397,8 @@ export const getNotificaciones = (param) => {
 
             ////prod
             const response = await axios.request(config);
+            console.log("👀 - :2400 - return - response:", response);
 
-            console.log(response);
 
               if (response.status == 200) {
                 dispatch(starLoadingNotificaciones(false));
@@ -2406,9 +2406,13 @@ export const getNotificaciones = (param) => {
                 return "OK";
               }
         } catch (error) {
-            console.log("👀 - return - error:", error);
-            dispatch(starLoadingNotificaciones(false));
-            dispatch(setNotificaciones({ notificaciones: 'error' }));
+            if(error.response.data.error_type == "session_expired"){
+                Cookies.remove('token');
+                window.location.href = '/comunicaciones/#/error';
+            }else{
+                dispatch(starLoadingNotificaciones(false));
+                dispatch(setNotificaciones({ notificaciones: 'error' }));
+            }
         }
   };
 };

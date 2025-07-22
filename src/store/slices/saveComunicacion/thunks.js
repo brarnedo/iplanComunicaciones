@@ -66,8 +66,13 @@ export const getSaveComunicacion = (formDataComunicacion) => {
         }
         catch(error){
             console.log(error);            
-            dispatch(setLoadingSaveComunicacion(false))
-            return {status:"ERROR", data:null}
+            if(error.response.data.error_type == "session_expired"){
+                Cookies.remove('token');
+                window.location.href = '/comunicaciones/#/error';
+            }else{
+                dispatch(setLoadingSaveComunicacion(false))
+                return {status:"ERROR", data:null}
+            }
         }
 
     }
