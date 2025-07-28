@@ -4,6 +4,8 @@ export const getArchivadas = () => {
    
     return async (dispatch, getState) => {
          
+        //const urlBase = 'https://portal2-des.iplan.com.ar/'; // DESA
+        const urlBase = 'https://iplan.com.ar/'; // PROD
        
         try {
 
@@ -19,7 +21,7 @@ export const getArchivadas = () => {
                 body:myBody
             }
 
-            const response = await fetch ("https://portal2-des.iplan.com.ar/comunicaciones/notificaciones_new/api/notifications/get.php?type=programadas", configRequest);
+            const response = await fetch (`${urlBase}comunicaciones/notificaciones_new/api/notifications/get.php?type=programadas`, configRequest);
             const respuesta = await response.json();
 
             console.log(respuesta);

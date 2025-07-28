@@ -16,6 +16,8 @@ import {
 	Loader
 } from '../../ui/componentes';
 
+
+
 export const Notificacion = ({
 	id,
 	index,
@@ -35,6 +37,11 @@ export const Notificacion = ({
 	eliminando,
 	setEliminando
 }) => {
+
+
+	//const urlImagen = 'https://portal2-des.iplan.com.ar/'; //DESA
+	const urlImagen = 'https://iplan.com.ar/'; //PROD
+
 	const dispatch = useDispatch();
 
 	const { setSeleccionada } = useSetState();
@@ -186,7 +193,7 @@ export const Notificacion = ({
 								
 								src={
 									isLocalhost
-										? `https://portal2-des.iplan.com.ar/${img.url}`
+										? `${urlImagen}${img.url}`
 										: img.url
 								}
 							/>
@@ -205,7 +212,7 @@ export const Notificacion = ({
 									<span className='texto_14_500'>Lista de distribución</span>
 									<p className='texto_14_500'>
 										{isLocalhost
-											? `https://portal2-des.iplan.com.ar/${lista1.url}`
+											? `${urlImagen}${img.url}`
 											: lista1.url}
 									</p>
 								</div>
@@ -213,7 +220,7 @@ export const Notificacion = ({
 									className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'
 									href={
 										isLocalhost
-											? `https://portal2-des.iplan.com.ar/${lista1.url}`
+											? `${urlImagen}${img.url}`
 											: lista1.url
 									}
 									target='_blank'>
@@ -233,7 +240,7 @@ export const Notificacion = ({
 									<p className='texto_14_500'>Lista de servicios afectados</p>
 									<p className='texto_14_500'>
 										{isLocalhost
-											? `https://portal2-des.iplan.com.ar/${lista2.url}`
+											? `${urlImagen}${img.url}`
 											: lista2.url}
 									</p>
 								</div>
@@ -241,7 +248,7 @@ export const Notificacion = ({
 									className='w-[40px] h-[40px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'
 									href={
 										isLocalhost
-											? `https://portal2-des.iplan.com.ar/${lista2.url}`
+											? `${urlImagen}${img.url}`
 											: lista2.url
 									}
 									target='_blank'>

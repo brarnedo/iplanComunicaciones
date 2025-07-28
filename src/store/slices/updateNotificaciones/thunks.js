@@ -21,6 +21,8 @@ export const updateNotificaciones = (id, estado, valores) => {
         // console.log("valores", valores);
 
         
+        //const urlBase = 'https://portal2-des.iplan.com.ar/'; // DESA
+        const urlBase = 'https://iplan.com.ar/'; // PROD
 
         const myHeader = {
             'Authorization': `Bearer ${Cookies.get('token')}`,
@@ -37,7 +39,7 @@ export const updateNotificaciones = (id, estado, valores) => {
                 id:id
             });
 
-            url="https://portal2-des.iplan.com.ar/comunicaciones/notificaciones_new/api/notifications/status.php";
+            url=`${urlBase}comunicaciones/notificaciones_new/api/notifications/status.php`;
 
         }else{
 
@@ -48,7 +50,7 @@ export const updateNotificaciones = (id, estado, valores) => {
                 mensaje: valores.contenidoComunicacion
             });
 
-            url="https://portal2-des.iplan.com.ar/comunicaciones/notificaciones_new/api/notifications/update.php";
+            url=`${urlBase}comunicaciones/notificaciones_new/api/notifications/update.php`;
         }
 
         const requestConfig = {

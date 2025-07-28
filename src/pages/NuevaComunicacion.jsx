@@ -67,7 +67,7 @@ export const NuevaComunicacion = () => {
 								</option>{' '}
 								{/* ← disabled para que no se pueda volver a seleccionar */}
 								<option value='aumento'>Notificación de aumento</option>
-								<option value='masivo'>Evento Masivo</option>
+								{/* <option value='masivo'>Evento Masivo</option> */}
 								<option value='general'>Comunicación General</option>
 							</select>
 						</div>
@@ -820,7 +820,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 							<div className='flex justify-end'>
 								{/* BOTÓN BUSCAR */}
 								<ButtonPrimary
-									texto='VISTA PREVIA'
+									texto='RESUMEN'
 									type='submit'
 								/>
 							
@@ -992,7 +992,7 @@ export const PreviewComunicacion = ({
 
 				<div className='pb-[8px]  mb-[8px]'>
 					<p className='text-primary texto_20_500'>
-						Vista previa: {tipo == "general" ?"Comunicación General":"Comunicación de aumento"}
+						Resumen: {tipo == "general" ?"Comunicación General":"Comunicación de aumento"}
 					</p>
 				</div>
 				
