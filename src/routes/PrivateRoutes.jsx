@@ -11,5 +11,5 @@ export const PrivateRoutes = ({ children }) => {
   const { isAuthenticated } = useSelector((state) => state.auth);
 
   return isAuthenticated ? children : <Navigate to="/" />;//PROD
-  //  return isAuthenticated || cookieLogin ? children : <Navigate to="/" />;//DEV
+  //return isAuthenticated || cookieLogin ? children : <Navigate to="/" />;//DEV
 };

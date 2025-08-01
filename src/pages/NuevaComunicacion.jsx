@@ -15,6 +15,7 @@ import {
 	Loader,
 	SeparadorH,
 	SeparadorV,
+	Textarea
 } from '../ui/componentes';
 
 export { ButtonPrimary } from '../ui/componentes/ButtonPrimary';
@@ -100,6 +101,18 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 	const [charCount, setCharCount] = useState(0);
 	const maxLength = 900;
+
+
+	const [charCountTituloInterno, setCharCountTituloInterno] = useState(0);
+	const maxLengthTituloInterno = 45;
+
+	const [charCountTitulo, setCharCountTitulo] = useState(0);
+	const maxLengthTitulo = 45;
+
+	const [charCountMensajePush, setCharCountMensajePush] = useState(0);
+	const maxLengthMensajePush = 120;
+
+
 	const getPlainText = (html) => {
 		if (!html) return '';
 		const parser = new DOMParser();
@@ -131,15 +144,17 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 		listadoDistribuccion:'',
 		listadoServicio:'',
 		imagen: '',
+		mensajePush: '',
 	};
 
 	const validationSchema = Yup.object({
 		tituloInterno: Yup.string()
 			.min(2, 'Mínimo 2 caracteres')
-			.required('Ingresá un título interno'),
-			
+			.max(45, 'Máximo 45 caracteres')
+			.required('Ingresá un título interno'),			
 		titulo: Yup.string()
 			.min(2, 'Mínimo 2 caracteres')
+			.max(45, 'Máximo 45 caracteres')
 			.required('Ingresá un título'),
 		fechaEnviar: Yup.date()
 			.min(new Date(new Date().setHours(0, 0, 0, 0)), 'Fecha inválida')
@@ -198,8 +213,25 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			return value && value.length > 0;
 			}
 			return true; // Si NO es "aumento", siempre válido (porque el campo no existe)
-		})
-		//listadoServicio: Yup.string().required('Debés adjuntar un archivo'),
+		}),
+		    mensajePush: Yup.string()
+        .test('conditional-validation', 'Ingresá un contenido', function (value) {
+            // Solo validar si isOn es true
+            if (isOn) {
+                // Si está visible, aplicar todas las validaciones
+                if (!value || value.length < 2) {
+                    return this.createError({ message: 'Mínimo 2 caracteres' });
+                }
+                if (value.length > 120) {
+                    return this.createError({ message: 'Máximo 120 caracteres' });
+                }
+                return true;
+            }
+            // Si isOn es false, siempre es válido
+            return true;
+        })
+
+		
 	});
 
 	const [selectedFile, setSelectedFile] = useState(null);
@@ -430,17 +462,37 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 								
 								<div className='w-[100%] relative'>
 								
-									<Field
-										name='tituloInterno'
-										component={Input}
-										label='Nombre Interno'
-										placeholder='Ingresá...'
-									/>
-									<ErrorMessage
-										name='tituloInterno'
-										component='span'
-										className='text-red-500 text-sm absolute left-[12px]'
-									/>
+									<Field name='tituloInterno'>
+										{({ field, form }) => (
+											<Input
+												field={field}
+												label='Nombre Interno'
+												placeholder='Ingresá...'
+												onChange={(e) => {
+													const textLength = e.target.value.length;
+													setCharCountTituloInterno(textLength);
+													form.setFieldValue(field.name, e.target.value);
+												}}
+											/>
+										)}
+									</Field>
+
+									
+										<ErrorMessage
+											name='tituloInterno'
+											component='span'
+											className='text-red-500 text-sm absolute'
+										/>
+
+									<div className='flex justify-end pr-[8px] pt-[4px] items-end  w-full absolute'>
+										<span className={`texto_12_500 ${
+											charCountTituloInterno > maxLengthTituloInterno ? 'text-red-500' : 'text-tertiary'
+										}`}>
+											{charCountTituloInterno}/{maxLengthTituloInterno}
+										</span>
+									</div>
+
+
 								</div>
 
 								{/* PUSH */}
@@ -488,19 +540,37 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 							<div className='flex flex-col xl:flex-row items-center xl:items-end gap-[12px] '>
 
 								{/** TÍTULO */}
-								<div className='w-[100%] relative'>
-								
-									<Field
-										name='titulo'
-										component={Input}
-										label='Título comunicación'
-										placeholder='Ingresá...'
-									/>
+								<div className='w-[100%] relative'>	
+
+									<Field name='titulo'>
+										{({ field, form }) => (
+											<Input
+												field={field}
+												label='Título comunicación'
+												placeholder='Ingresá...'
+												onChange={(e) => {
+													const textLength = e.target.value.length;
+													setCharCountTitulo(textLength);
+													form.setFieldValue(field.name, e.target.value);
+												}}
+											/>
+										)}
+									</Field>
+
+									
 									<ErrorMessage
 										name='titulo'
 										component='span'
 										className='text-red-500 text-sm absolute left-[12px]'
 									/>
+
+									<div className='flex justify-end pr-[8px] pt-[4px] items-end absolute w-full'>
+										<span className={`texto_12_500 ${
+											charCountTitulo > maxLengthTitulo ? 'text-red-500' : 'text-tertiary'
+										}`}>
+											{charCountTitulo}/{maxLengthTitulo}
+										</span>
+									</div>
 								</div>
 
 								<SeparadorV
@@ -710,17 +780,39 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 							{isOn ? (<>
 								<div className='flex items-end gap-[12px]'>
 									<div className='w-[100%] relative'>
-										<Field
-											name='mensajePush'
-											component={Input}
-											label='Contenido comunicación push'
-											placeholder='Ingresá...'
-										/>
+										
+									
+										<Field name='mensajePush'>
+											{({ field, form }) => (
+												<Textarea
+													field={field}
+													label='Contenido comunicación push'
+													placeholder='Ingresá...'
+													rows={2} // ← 2 líneas
+													onChange={(e) => {
+														const textLength = e.target.value.length;
+														setCharCountMensajePush(textLength);
+														form.setFieldValue(field.name, e.target.value);
+													}}
+												/>
+											)}
+										</Field>
+
 										<ErrorMessage
 											name='mensajePush'
 											component='span'
 											className='text-red-500 text-sm absolute left-[12px]'
 										/>
+
+											
+										<div className='flex justify-end pr-[8px] pt-[4px] items-end  w-full'>
+											<span className={`texto_12_500 ${
+												charCountMensajePush > maxLengthMensajePush ? 'text-red-500' : 'text-tertiary'
+											}`}>
+												{charCountMensajePush}/{maxLengthMensajePush}
+											</span>
+										</div>
+
 									</div>
 								</div>
 								<div className='flex flex-col'></div>

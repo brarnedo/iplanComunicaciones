@@ -22,7 +22,7 @@ export const updateNotificaciones = (id, estado, valores) => {
 
         
         //const urlBase = 'https://portal2-des.iplan.com.ar/'; // DESA
-        const urlBase = 'https://iplan.com.ar/'; // PROD
+        const urlBase = 'https://www.iplan.com.ar/'; // PROD
 
         const myHeader = {
             'Authorization': `Bearer ${Cookies.get('token')}`,

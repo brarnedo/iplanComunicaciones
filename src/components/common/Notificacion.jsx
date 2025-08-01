@@ -40,7 +40,7 @@ export const Notificacion = ({
 
 
 	//const urlImagen = 'https://portal2-des.iplan.com.ar/'; //DESA
-	const urlImagen = 'https://iplan.com.ar/'; //PROD
+	const urlImagen = 'https://www.iplan.com.ar/'; //PROD
 
 	const dispatch = useDispatch();
 

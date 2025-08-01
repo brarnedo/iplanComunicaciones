@@ -35,8 +35,8 @@ export const Login = () => {
 
 	useEffect(() => {
 		//MODO DEV
-        //   const cookieLogin = Cookies.get("LOGIN");
-        //   if (isAuthenticated || cookieLogin) navigate("/home");
+          // const cookieLogin = Cookies.get("LOGIN");
+          // if (isAuthenticated || cookieLogin) navigate("/home");
         
         //MODO PROD
 		if (isAuthenticated) navigate('/home');//prod

@@ -5,7 +5,7 @@ export const getArchivadas = () => {
     return async (dispatch, getState) => {
          
         //const urlBase = 'https://portal2-des.iplan.com.ar/'; // DESA
-        const urlBase = 'https://iplan.com.ar/'; // PROD
+        const urlBase = 'https://www.iplan.com.ar/'; // PROD
        
         try {
 
