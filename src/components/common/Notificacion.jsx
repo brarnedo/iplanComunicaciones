@@ -8,6 +8,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { updateNotificaciones } from 'store';
 import * as Yup from 'yup';
 
+
+import Cookies from "js-cookie";
+
 import {
 	ButtonPrimary,
 	Input,
@@ -30,8 +33,10 @@ export const Notificacion = ({
 	titulo,
 	img, //
 	msj,
+	msjPush,
 	lista1, //
 	lista2, //
+
 	editando,
 	setEditando,
 	eliminando,
@@ -43,6 +48,7 @@ export const Notificacion = ({
 	const urlImagen = 'https://www.iplan.com.ar/'; //PROD
 
 	const dispatch = useDispatch();
+	let navigate = useNavigate();
 
 	const { setSeleccionada } = useSetState();
 	const [copy, setCopy] = useState(false);
@@ -124,11 +130,75 @@ export const Notificacion = ({
 	const onSubmit = async (values, { setSubmitting, resetForm }) => {
 		
 		const respuesta = await dispatch(updateNotificaciones(id, false, values));
-		console.log("onSubmit", respuesta);
+		//console.log("onSubmit", respuesta);
 		setEditando(respuesta);
 			
 	};
 	
+	const [descargarPush, setDescargarPush] = useState(false);
+	
+	const traerReporte = async () => {
+			
+      
+    const urlBase = 'https://www.iplan.com.ar/'; // PROD
+    
+    const myHeader = {
+        'Authorization': `Bearer ${Cookies.get('token')}`,
+        'Content-Type': 'application/json'
+    };
+    
+    const url = `${urlBase}comunicaciones/notificaciones_new/api/notifications/push-results.php?notification_id=${id}`;
+    
+    const requestConfig = {
+        method: "GET",
+        headers: myHeader,
+        credentials: 'include',
+    };
+    
+    try {
+      
+		const response = await fetch(url, requestConfig);
+        
+        if (!response.ok) {
+            console.log("FALLO - Response no OK");
+			setDescargarPush(true);
+            return {"Respuesta":"ERROR", "data":null}
+        }
+        
+        const blob = await response.blob();
+              
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = `reporte_push_${id}_${new Date().toISOString().split('T')[0]}.csv`; // Nombre del archivo
+        
+        // AGREGAR AL DOM, HACER CLICK Y REMOVER
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        // LIMPIAR URL TEMPORAL
+        window.URL.revokeObjectURL(blobUrl);
+        
+		setDescargarPush(false);
+        return { "Respuesta": "OK", "data": "Descarga iniciada" };
+        
+    } catch (error) {
+        console.error("Error en catch:", error);
+		setDescargarPush(true)
+        
+        // Manejo de sesión expirada
+        if (error.response?.data?.error_type === "session_expired") {
+            Cookies.remove('token');
+            window.location.href = '/comunicaciones/#/error';
+        } else {
+            return {"Respuesta": "ERROR", "data": null };
+        }
+    }
+  
+
+	}
 
 	return (
 		<>
@@ -257,6 +327,23 @@ export const Notificacion = ({
 									</span>
 								</a>
 							</div>
+						</>
+					)}
+
+					{msjPush && (
+						<>
+							<div className='h-[1px] w-full bg-bg_secondary my-4'></div>
+							<div className='flex flex-col items-end justify-end'>
+								
+								<ButtonPrimary texto= {"REPORTE"}  click={traerReporte}  />	
+								
+								{descargarPush && (
+									<span className='text-red-500 text-sm'> No se pudo descargar el reporte </span>
+								)}
+								
+							</div>
+
+							
 						</>
 					)}
 				</>

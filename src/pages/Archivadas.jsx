@@ -64,7 +64,9 @@ export const Archivadas = () => {
                 {
                     notificacionesPagina.map((notificacion, index) => (
                         <Notificacion
+                            id={notificacion.id}
                             index={index + 1}
+                            
                             origen={"archivadas"}
                             tipo = {"aumento"}
                             titulo_interno = {notificacion.titulo_interno}
@@ -74,6 +76,7 @@ export const Archivadas = () => {
                             titulo={notificacion.Titulo}
                             img={notificacion.archivos ? notificacion.archivos.imagen : ''}
                             msj={notificacion.mensaje_personalizado}
+                            msjPush = {notificacion.mensaje_push}
                             lista1={notificacion.archivos ? notificacion.archivos.csv_clientes : ''}
                             lista2={notificacion.archivos ? notificacion.archivos.csv_precios : ''}
                             key={offset + index}

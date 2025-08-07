@@ -8,10 +8,10 @@ export const getSaveComunicacion = (formDataComunicacion) => {
         dispatch(setLoadingSaveComunicacion(true))
         
         // DEBUG
-		console.log('=== FORMDATA COMPLETO ===');
-		for (let [key, value] of formDataComunicacion) {
-			console.log(key, ':', value);
-		}
+		// console.log('=== FORMDATA COMPLETO ===');
+		// for (let [key, value] of formDataComunicacion) {
+		// 	console.log(key, ':', value);
+		// }
 
         let config = {
             method: "post",
@@ -25,12 +25,15 @@ export const getSaveComunicacion = (formDataComunicacion) => {
 
         try{
             const response = await axios.request(config);
-            console.log("👀 - :28 - return - response:", response);
+
+            //console.log("👀 - :28 - return - response:", response);
+
             if (response.status == 200 || response.status == 201) {
+
                 dispatch(setSaveComunicacion(response.data));
                 dispatch(setLoadingSaveComunicacion(false));
                 if(response.data.success){
-                    return {status: "OK", data: response.data.data}
+                    return {status: "OK", data: response.data}
                 }else{
                     return {status: "ERROR", data: null}
                 }

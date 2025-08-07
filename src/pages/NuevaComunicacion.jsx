@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSaveComunicacion } from '../store/slices/saveComunicacion/thunks';
 import { useSetState } from 'hooks';
 
+import Cookies from "js-cookie";
+
 
 import {
 	ButtonPrimary,
@@ -979,8 +981,8 @@ export const PreviewComunicacion = ({
 }) => {
 	const dispatch = useDispatch();
 
-	const [statusRespuesta, setStatusRespuesta]=useState(null);
-	const [mensajeRespuesta, setMensajeRespuesta]=useState("");
+	const [statusRespuesta, setStatusRespuesta] = useState(null);
+	const [mensajeRespuesta, setMensajeRespuesta] = useState("");
 
 	const { isLoadingSaveComunicacion, saveComunicacion } = useSelector(state => state.saveComunicacion);
 	
@@ -1017,6 +1019,8 @@ export const PreviewComunicacion = ({
 	}
 
 	
+	const [idNotiPush, setIdNotiPush] = useState(0);
+
 	const enviarCominicacion = async () => {
 
 		// Crear FormData completo al momento del envío
@@ -1043,23 +1047,21 @@ export const PreviewComunicacion = ({
 		if (selectedFile) {
 			completeFormData.append('imagenData', selectedFile);
 		}
-		// completeFormData.append('is_push', esPush);
-
-		
-		// DEBUG
-		// console.log('=== FORMDATA COMPLETO ===');
-		// for (let [key, value] of completeFormData) {
-		// 	console.log(key, ':', value);
-		// }
-		
-			setBtnVolverVisible(false);
+			
+	
+		setBtnVolverVisible(false);
 
 		const respuesta = await dispatch(getSaveComunicacion(completeFormData));
 
-		
+		// setStatusRespuesta("OK");
+		// setMensajeRespuesta("Notificación creada exitosamente");
+
 
 		if(respuesta.status == "OK"){
+			//console.log(respuesta);
 			setStatusRespuesta("OK");
+			//console.log("Id de la noti Creada: ", respuesta.data.message.id);
+			setIdNotiPush(respuesta.data.message.id);
 			setMensajeRespuesta(respuesta.data);
 
 		}else{
@@ -1071,6 +1073,71 @@ export const PreviewComunicacion = ({
 
 	const modificarComunicacion = () => {
 		formulario(false);
+	}
+
+	const [descargarPush, setDescargarPush] = useState(false);
+		
+	const traerReporte = async () => {
+			
+		
+		const urlBase = 'https://www.iplan.com.ar/'; // PROD
+		
+		const myHeader = {
+			'Authorization': `Bearer ${Cookies.get('token')}`,
+			'Content-Type': 'application/json'
+		};
+		
+		const url = `${urlBase}comunicaciones/notificaciones_new/api/notifications/push-results.php?notification_id=${idNotiPush}`;
+		
+		const requestConfig = {
+			method: "GET",
+			headers: myHeader,
+			credentials: 'include',
+		};
+		
+		try {
+			
+			const response = await fetch(url, requestConfig);
+			
+			if (!response.ok) {
+				console.log("FALLO - Response no OK");
+				setDescargarPush(true);
+				return {"Respuesta":"ERROR", "data":null}
+			}
+			
+			const blob = await response.blob();
+					
+			const blobUrl = window.URL.createObjectURL(blob);
+			
+			const link = document.createElement('a');
+			link.href = blobUrl;
+			link.download = `reporte_push_${idNotiPush}_${new Date().toISOString().split('T')[0]}.csv`; // Nombre del archivo
+			
+			// AGREGAR AL DOM, HACER CLICK Y REMOVER
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			
+			// LIMPIAR URL TEMPORAL
+			window.URL.revokeObjectURL(blobUrl);
+			
+			setDescargarPush(false);
+			return { "Respuesta": "OK", "data": "Descarga iniciada" };
+			
+		} catch (error) {
+			console.error("Error en catch:", error);
+			setDescargarPush(true)
+			
+			// Manejo de sesión expirada
+			if (error.response?.data?.error_type === "session_expired") {
+				Cookies.remove('token');
+				window.location.href = '/comunicaciones/#/error';
+			} else {
+				return {"Respuesta": "ERROR", "data": null };
+			}
+		}
+	
+
 	}
 
 
@@ -1179,13 +1246,32 @@ export const PreviewComunicacion = ({
 			<>
 				<div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#6FDD58] gap-[8px]'>
 					<span className='material-symbols-outlined text-white'>sentiment_satisfied</span> 
-					<p className='text-white texto_20_600'> {mensajeRespuesta} </p>
+					<p className='text-white texto_20_600'> {mensajeRespuesta.data} </p>
 				</div>
-				<div className='flex flex-col lg:flex-row mt-[16px] justify-end gap-[8px]'>
-					<ButtonPrimary 
-					texto='TERMINAR' 
-					click={() => {setTipoComunicacion(0)}}
-					/>
+
+
+				<div className={`flex flex-col lg:flex-row mt-[16px] gap-[8px] ${esPush ? 'justify-between' : 'justify-end'}`}>
+
+					{!!esPush && (
+						<div className='flex flex-col items-start justify-center'>
+								
+							<ButtonPrimary texto= {"REPORTE"}  click={traerReporte}  />	
+							
+							{descargarPush && (
+								<span className='text-red-500 text-sm'> No se pudo descargar el reporte </span>
+							)}
+						
+						</div>
+
+					)}
+				
+					<div>
+						<ButtonPrimary 
+							texto='TERMINAR' 
+							click={() => {setTipoComunicacion(0)}}
+						/>
+					</div>
+
 				</div>
 			</>
 
