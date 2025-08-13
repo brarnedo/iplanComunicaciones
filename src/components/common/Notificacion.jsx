@@ -215,7 +215,15 @@ export const Notificacion = ({
 					<p className='text-primary texto_16_800'>{fechaFin}</p> |
 					<p className='flex items-center gap-3'>
 						<span className='material-symbols-outlined'>id_card</span> {nombre}
-					</p>
+					</p> 
+					{msjPush && (
+						<>
+							| <p className='text-secondary texto_16_800'> PUSH </p>
+						</>
+						
+					)}
+
+
 				</div>
 
 				{/* iconos */}

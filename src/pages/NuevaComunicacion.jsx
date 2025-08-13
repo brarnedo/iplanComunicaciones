@@ -199,7 +199,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 		imagen: Yup.mixed()
 			.test('fileType', 'Tipo de archivo no permitido', function(value) {
 				if (!selectedFile) return true; // Si no hay archivo, no validar aquí
-				const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
+				const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 				return allowedTypes.includes(selectedFile.type);
 			})
 			.test('fileSize', 'Archivo muy grande. Máximo 15MB', function(value) {
@@ -266,9 +266,9 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 		}
 		
 		// Validar tipo
-		const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
+		const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 		if (!allowedTypes.includes(file.type)) {
-			setErrorImagen("Tipo de archivo no permitido. Solo: JPG, PNG, GIF, PDF");
+			setErrorImagen("Tipo de archivo no permitido. Solo: JPG, PNG");
 			setSelectedFile("");
 			return;
 		}
@@ -1170,6 +1170,9 @@ export const PreviewComunicacion = ({
 						
 					</div>
 
+				
+
+
 					<div className='flex flex-col mt-4 gap-[8px] rounded-[8px]'>
 
 						<h2 className='texto_16_800 text-subtitle'>{titulo}</h2>
@@ -1181,6 +1184,18 @@ export const PreviewComunicacion = ({
 							className='texto_14_500 text-tertiary'
 							dangerouslySetInnerHTML={{ __html: msj }}
 						/>
+
+						{!!esPush && (
+							<>
+							<div className='flex flex-col'></div>
+							<SeparadorH separador='8' />
+							
+								<p className='texto_16_500 text-secondary'> Contenido comunicación push</p>
+								<p className='texto_14_500 text-tertiary'> {msjPush}</p>
+						
+
+							</>
+						)}	
 					</div>
 				</div>
 
