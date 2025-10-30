@@ -1,12 +1,12 @@
 import { BASE, NOTIFICACIONES } from "env";
 import {
-  setStatusUpdate,
-  starLoadingUpdateNotificaciones,
+    setStatusUpdate,
+    starLoadingUpdateNotificaciones,
 } from "./updateNotificacionesSlice";
 
 import {
-  
-  starLoadingDeleteNotificaciones,
+
+    starLoadingDeleteNotificaciones,
 } from "./deleteNotificacionesSlice";
 
 import Cookies from "js-cookie";
@@ -20,49 +20,51 @@ export const updateNotificaciones = (id, estado, valores) => {
         // console.log("estado: ", estado);
         // console.log("valores", valores);
 
-        
+
         //const urlBase = 'https://portal2-des.iplan.com.ar/'; // DESA
-        const urlBase = 'https://www.iplan.com.ar/'; // PROD
+        // const urlBase = 'https://www.iplan.com.ar/'; // PROD
+        const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // nuevo server
+
 
         const myHeader = {
             'Authorization': `Bearer ${Cookies.get('token')}`,
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
         }
 
         let myBody;
         let url;
 
-        if (estado){
+        if (estado) {
 
             dispatch(starLoadingDeleteNotificaciones(true));
             myBody = JSON.stringify({
-                id:id
+                id: id
             });
 
-            url=`${urlBase}comunicaciones/notificaciones_new/api/notifications/status.php`;
+            url = `${urlBase}webService/notificaciones/notifications/status.php`;
 
-        }else{
+        } else {
 
             dispatch(starLoadingUpdateNotificaciones(true));
             myBody = JSON.stringify({
-                id:id,
+                id: id,
                 titulo: valores.titulo,
                 mensaje: valores.contenidoComunicacion
             });
 
-            url=`${urlBase}comunicaciones/notificaciones_new/api/notifications/update.php`;
+            url = `${urlBase}webService/notificaciones/notifications/update.php`;
         }
 
         const requestConfig = {
-            method:"PUT",
-            headers:myHeader,
-            body:myBody,
-            credentials: 'include', 
+            method: "PUT",
+            headers: myHeader,
+            body: myBody,
+            credentials: 'include',
         }
 
         try {
-            
-            const response = await fetch (url, requestConfig);
+
+            const response = await fetch(url, requestConfig);
             const respuesta = await response.json();
             //console.log(respuesta);
 
@@ -103,44 +105,44 @@ export const updateNotificaciones = (id, estado, valores) => {
 
 
             // console.log('🕐 Iniciando envío... (5 segundos)');
-            
+
             // // ⏰ SIMULAR DEMORA DE 5 SEGUNDOS
             // await new Promise(resolve => setTimeout(resolve, 5000));
-            
+
             // console.log('✅ Simulación completada después de 5 segundos');
 
 
-            
+
 
             dispatch(starLoadingUpdateNotificaciones(false));
-           
-            dispatch(starLoadingDeleteNotificaciones(false));
-          
 
-            
+            dispatch(starLoadingDeleteNotificaciones(false));
+
+
+
             //return {"Respuesta":"ERROR", "data":null}
             //return {"Respuesta":"OK", "data": respuesta}
-            
+
 
 
 
             if (!response.ok) {
                 console.log("FALLO");
-                return {"Respuesta":"ERROR", "data":null}
+                return { "Respuesta": "ERROR", "data": null }
             }
 
             console.log("EXITO");
-            return {"Respuesta":"OK", "data":respuesta}
-            
+            return { "Respuesta": "OK", "data": respuesta }
+
 
 
         } catch (error) {
             console.log("FALLO");
-            if(error.response.data.error_type == "session_expired"){
+            if (error.response.data.error_type == "session_expired") {
                 Cookies.remove('token');
                 window.location.href = '/comunicaciones/#/error';
-            }else{
-                return {"Respuesta":"ERROR", "data":null}
+            } else {
+                return { "Respuesta": "ERROR", "data": null }
             }
         }
 

@@ -27,7 +27,6 @@ export const getAuth = (numero, contrasena) => {
 
     try {
       const response = await axios.request(config);
-      // console.log("👀 - :30 - return - response:", response);
 
       if (response.status == 200) {
         dispatch(starLoadingLogin(false));

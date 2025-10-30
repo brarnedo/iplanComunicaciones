@@ -33,7 +33,7 @@ export const NuevaComunicacion = () => {
 
 	const btnVolver = () => {
 		setTipoComunicacion(0);
-		setSeleccionada({ titulo: '', contenido: '', tipo: ''});
+		setSeleccionada({ titulo: '', contenido: '', tipo: '' });
 	};
 
 	return (
@@ -58,9 +58,8 @@ export const NuevaComunicacion = () => {
 								Tipo de comunicación
 							</label>
 							<select
-								className={`texto_16_500 text-tertiary focus:outline-none disabled:bg-disabled rounded-[8px] py-[8px] px-[12px] xl:w-[400px] border border-tertiary ${
-									tipoComunicacion === '0' ? 'text-gray-400' : 'text-tertiary'
-								}`}
+								className={`texto_16_500 text-tertiary focus:outline-none disabled:bg-disabled rounded-[8px] py-[8px] px-[12px] xl:w-[400px] border border-tertiary ${tipoComunicacion === '0' ? 'text-gray-400' : 'text-tertiary'
+									}`}
 								value={tipoComunicacion}
 								onChange={e => setTipoComunicacion(e.target.value)}>
 								<option
@@ -81,16 +80,16 @@ export const NuevaComunicacion = () => {
 			)}
 
 			{/** Fomulario Aumento  */}
-			{tipoComunicacion != 0 && <FormularioGeneral tipoComunicacion={tipoComunicacion} setTipoComunicacion={setTipoComunicacion} setBtnVolverVisible={setBtnVolverVisible}/>}
+			{tipoComunicacion != 0 && <FormularioGeneral tipoComunicacion={tipoComunicacion} setTipoComunicacion={setTipoComunicacion} setBtnVolverVisible={setBtnVolverVisible} />}
 		</div>
 	);
 };
 
-const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion, setBtnVolverVisible}) => {
+const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion, setBtnVolverVisible }) => {
 	const { user = '' } = useSelector(state => state.auth);
 	const { seleccionada } = useSelector((state) => state.notificaciones);
 
-	if(tipoComunicacion == "masivo") return (
+	if (tipoComunicacion == "masivo") return (
 		<div className='bg-bg_primary p-[8px] flex items-center justify-center rounded-[12px] gap-[8px]'>
 			<p className='text-secondary texto_20_600'> AÚN NO DISPONIBLE </p>
 		</div>
@@ -99,7 +98,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 	const [previewComunicacion, setPreviewComunicacion] = useState(false);
 
 	const [isOn, setIsOn] = useState(0);//0 no push - 1 push
-	
+
 
 	const [charCount, setCharCount] = useState(0);
 	const maxLength = 900;
@@ -138,13 +137,13 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 	// 🎯 VALORES INICIALES (como initialValues en Formik)
 	const initialValues = {
-		tituloInterno:'',
+		tituloInterno: '',
 		titulo: seleccionada.titulo ? seleccionada.titulo : '',
-		fechaEnviar:getTodayDate(),
+		fechaEnviar: getTodayDate(),
 		fechaArchivar: '',
 		contenidoComunicacion: seleccionada.msj ? seleccionada.msj : '',
-		listadoDistribuccion:'',
-		listadoServicio:'',
+		listadoDistribuccion: '',
+		listadoServicio: '',
 		imagen: '',
 		mensajePush: '',
 	};
@@ -153,7 +152,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 		tituloInterno: Yup.string()
 			.min(2, 'Mínimo 2 caracteres')
 			.max(45, 'Máximo 45 caracteres')
-			.required('Ingresá un título interno'),			
+			.required('Ingresá un título interno'),
 		titulo: Yup.string()
 			.min(2, 'Mínimo 2 caracteres')
 			.max(45, 'Máximo 45 caracteres')
@@ -166,19 +165,19 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			.test(
 				'fecha-posterior',
 				'Fecha inválida',
-				function(value) {
+				function (value) {
 					const { fechaEnviar } = this.parent;
 					if (!fechaEnviar || !value) return true; // Si alguna está vacía, no validar esta condición
-					
+
 					// Convertir a fecha sin hora para comparar solo fechas
 					const fechaDesde = new Date(fechaEnviar);
 					const fechaHasta = new Date(value);
-					
+
 					fechaDesde.setHours(0, 0, 0, 0);
 					fechaHasta.setHours(0, 0, 0, 0);
-					
+
 					return fechaHasta >= fechaDesde; // Mayor o IGUAL
-            	}
+				}
 			)
 			.required('Ingresá una fecha'),
 		contenidoComunicacion: Yup.string()
@@ -188,57 +187,57 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 				return textContent && textContent.length > 0;
 			})
 			.test('max-length', 'Máximo 900 caracteres', function (value) {
-			
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(value, 'text/html');
-					const textContent = doc.body.textContent || doc.body.innerText || '';
-				
+
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(value, 'text/html');
+				const textContent = doc.body.textContent || doc.body.innerText || '';
+
 				return textContent.length <= 900;
 			}),
 		//listadoDistribuccion: Yup.string().required('Debés adjuntar un archivo'),
 		imagen: Yup.mixed()
-			.test('fileType', 'Tipo de archivo no permitido', function(value) {
+			.test('fileType', 'Tipo de archivo no permitido', function (value) {
 				if (!selectedFile) return true; // Si no hay archivo, no validar aquí
 				const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 				return allowedTypes.includes(selectedFile.type);
 			})
-			.test('fileSize', 'Archivo muy grande. Máximo 15MB', function(value) {
+			.test('fileSize', 'Archivo muy grande. Máximo 15MB', function (value) {
 				if (!selectedFile) return true;
 				return selectedFile.size <= 15 * 1024 * 1024;
 			}),
 		// 	.required('Debés adjuntar una imágen'),
 		listadoDistribuccion: Yup.string().required('Debés adjuntar un archivo'),
-		listadoServicio:Yup.string()
-		 .test('conditional-required', 'Debés adjuntar un archivo', function (value) {
-			// Solo es requerido si tipoComunicacion ES "aumento"
-			if (tipoComunicacion === "aumento") {
-			return value && value.length > 0;
-			}
-			return true; // Si NO es "aumento", siempre válido (porque el campo no existe)
-		}),
-		    mensajePush: Yup.string()
-        .test('conditional-validation', 'Ingresá un contenido', function (value) {
-            // Solo validar si isOn es true
-            if (isOn) {
-                // Si está visible, aplicar todas las validaciones
-                if (!value || value.length < 2) {
-                    return this.createError({ message: 'Mínimo 2 caracteres' });
-                }
-                if (value.length > 120) {
-                    return this.createError({ message: 'Máximo 120 caracteres' });
-                }
-                return true;
-            }
-            // Si isOn es false, siempre es válido
-            return true;
-        })
+		listadoServicio: Yup.string()
+			.test('conditional-required', 'Debés adjuntar un archivo', function (value) {
+				// Solo es requerido si tipoComunicacion ES "aumento"
+				if (tipoComunicacion === "aumento") {
+					return value && value.length > 0;
+				}
+				return true; // Si NO es "aumento", siempre válido (porque el campo no existe)
+			}),
+		mensajePush: Yup.string()
+			.test('conditional-validation', 'Ingresá un contenido', function (value) {
+				// Solo validar si isOn es true
+				if (isOn) {
+					// Si está visible, aplicar todas las validaciones
+					if (!value || value.length < 2) {
+						return this.createError({ message: 'Mínimo 2 caracteres' });
+					}
+					if (value.length > 120) {
+						return this.createError({ message: 'Máximo 120 caracteres' });
+					}
+					return true;
+				}
+				// Si isOn es false, siempre es válido
+				return true;
+			})
 
-		
+
 	});
 
 	const [selectedFile, setSelectedFile] = useState(null);
 	const fileInputRef = useRef(null);
-	const [errorImagen, setErrorImagen] = useState ("");
+	const [errorImagen, setErrorImagen] = useState("");
 	const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
 	// Limpiar URL cuando se desmonte el componente:
@@ -250,21 +249,21 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 		};
 	}, [imagePreviewUrl]);
 
-	const triggerFileSelect = () => {	
+	const triggerFileSelect = () => {
 		fileInputRef.current?.click();
 	};
 
 	const handleFileSelect = (event, setFieldValue) => {
 		const file = event.target.files[0];
-		
+
 		if (!file) return;
 
-		 // Limpiar errores y URL previa
+		// Limpiar errores y URL previa
 		//setFieldError('imagen', '');
 		if (imagePreviewUrl) {
 			URL.revokeObjectURL(imagePreviewUrl);  // ← Limpiar URL anterior
 		}
-		
+
 		// Validar tipo
 		const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
 		if (!allowedTypes.includes(file.type)) {
@@ -272,7 +271,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			setSelectedFile("");
 			return;
 		}
-		
+
 		// Validar tamaño (15MB = 15 * 1024 * 1024 bytes)
 		const maxSize = 15 * 1024 * 1024;
 		if (file.size > maxSize) {
@@ -280,18 +279,18 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			setSelectedFile("");
 			return;
 		}
-		
+
 		// Guardar archivo
 		setSelectedFile(file);
 
 		// Solo crear preview si es imagen
-        if (file.type.startsWith('image/')) {
-            const imageUrl = URL.createObjectURL(file);
-            setImagePreviewUrl(imageUrl);
-        } else {
-            setImagePreviewUrl(null);  // PDFs no se muestran como imagen
-        }
-		
+		if (file.type.startsWith('image/')) {
+			const imageUrl = URL.createObjectURL(file);
+			setImagePreviewUrl(imageUrl);
+		} else {
+			setImagePreviewUrl(null);  // PDFs no se muestran como imagen
+		}
+
 		// Actualizar Formik con el nombre
 		setFieldValue('imagen', file.name);
 
@@ -300,7 +299,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 	const eliminarImagen = () => {
 		setSelectedFile("");
-		  // Limpiar también el valor del input file
+		// Limpiar también el valor del input file
 		if (fileInputRef.current) {
 			fileInputRef.current.value = "";
 		}
@@ -310,7 +309,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 	/** LISTA DE DISTRIBUCCIÓN */
 	const [selectedListaDistribuccion, setSelectedListaDistribuccion] = useState(null);
 	const listaDistribuccionInputRef = useRef(null);
-	const [errorListaDistribuccion, setErrorListaDistribuccion] = useState ("");
+	const [errorListaDistribuccion, setErrorListaDistribuccion] = useState("");
 	const [listaDistribuccionPreviewUrl, setListaDistribuccionPreviewUrl] = useState(null);
 
 	// Limpiar URL cuando se desmonte el componente:
@@ -329,10 +328,10 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 	const handleListaDistribuccion = (event, setFieldValue) => {
 		const file = event.target.files[0];
-		
+
 		if (!file) return;
 
-		 // Limpiar errores y URL previa
+		// Limpiar errores y URL previa
 		//setFieldError('imagen', '');
 		if (listaDistribuccionPreviewUrl) {
 			URL.revokeObjectURL(listaDistribuccionPreviewUrl);  // ← Limpiar URL anterior
@@ -344,7 +343,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			setSelectedListaDistribuccion("");
 			return;
 		}
-		
+
 		// Validar tamaño (15MB = 15 * 1024 * 1024 bytes)
 		const maxSize = 15 * 1024 * 1024;
 		if (file.size > maxSize) {
@@ -352,24 +351,24 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			setSelectedListaDistribuccion("");
 			return;
 		}
-		
+
 		// Guardar archivo
 		setSelectedListaDistribuccion(file);
-		
-        const imageUrl = URL.createObjectURL(file);
-        setListaDistribuccionPreviewUrl(imageUrl);
-     
+
+		const imageUrl = URL.createObjectURL(file);
+		setListaDistribuccionPreviewUrl(imageUrl);
+
 		// Actualizar Formik con el nombre
 		setFieldValue('listadoDistribuccion', file.name);
 
 		setErrorListaDistribuccion("");
 	};
-	
+
 	/** LISTA DE SERVICIO */
 
 	const [selectedListaServicio, setSelectedListaServicio] = useState(null);
 	const listaServicioInputRef = useRef(null);
-	const [errorListaServicio, setErrorListaServicio] = useState ("");
+	const [errorListaServicio, setErrorListaServicio] = useState("");
 	const [listaServicioPreviewUrl, setListaServicioPreviewUrl] = useState(null);
 
 	// Limpiar URL cuando se desmonte el componente:
@@ -380,25 +379,25 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			}
 		};
 	}, [setListaServicioPreviewUrl]);
-	
+
 
 	const triggerListaServicio = () => {
-		
+
 		listaServicioInputRef.current?.click();
 	};
 
 	const handleListaServicio = (event, setFieldValue) => {
-		
+
 		const file = event.target.files[0];
-		
+
 		if (!file) return;
 
-		 // Limpiar errores y URL previa
+		// Limpiar errores y URL previa
 		//setFieldError('imagen', '');
 		if (listaServicioPreviewUrl) {
 			URL.revokeObjectURL(listaServicioPreviewUrl);  // ← Limpiar URL anterior
 		}
-		
+
 		// Validar tipo
 
 		// Validar que sea CSV
@@ -408,7 +407,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			return;
 		}
 
-		
+
 		// Validar tamaño (15MB = 15 * 1024 * 1024 bytes)
 		const maxSize = 15 * 1024 * 1024;
 		if (file.size > maxSize) {
@@ -416,18 +415,18 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			setSelectedListaServicio("");
 			return;
 		}
-		
+
 		// Guardar archivo
 		setSelectedListaServicio(file);
 
 		// Solo crear preview si es imagen
-        //if (file.type.startsWith('csv/')) {
-            const imageUrl = URL.createObjectURL(file);
-            setListaServicioPreviewUrl(imageUrl);
-        //} else {
-          //  setListaDistribuccionPreviewUrl(null);  // PDFs no se muestran como imagen
-        //}
-		
+		//if (file.type.startsWith('csv/')) {
+		const imageUrl = URL.createObjectURL(file);
+		setListaServicioPreviewUrl(imageUrl);
+		//} else {
+		//  setListaDistribuccionPreviewUrl(null);  // PDFs no se muestran como imagen
+		//}
+
 		// Actualizar Formik con el nombre
 		setFieldValue('listadoServicio', file.name);
 
@@ -438,32 +437,32 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 	const onSubmit = async (values, { setSubmitting, resetForm }) => {
 		setPreviewComunicacion(true);
 	};
-		
-	
-	return (		
+
+
+	return (
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
 			onSubmit={onSubmit}>
 			{({ values, setFieldValue, handleSubmit, isSubmitting }) => (
 
-				
+
 				<Form>
 					{!previewComunicacion ? (
 						<div className='bg-bg_primary flex flex-1 flex-col p-[16px] rounded-[12px] pt-[16px] gap-[16px]'>
 
 							<div className='pb-[12px] border-b-[1px] border-tertiary'>
 								<p className='text-primary texto_20_500'>
-									{tipoComunicacion == "general" ?"Comunicación general":"Comunicación de aumento"}
-									
+									{tipoComunicacion == "general" ? "Comunicación general" : "Comunicación de aumento"}
+
 								</p>
 							</div>
 
-							{/* TITULO INTERNO */}										
+							{/* TITULO INTERNO */}
 							<div className='flex items-end gap-[12px]'>
-								
+
 								<div className='w-[100%] relative'>
-								
+
 									<Field name='tituloInterno'>
 										{({ field, form }) => (
 											<Input
@@ -479,17 +478,16 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 										)}
 									</Field>
 
-									
-										<ErrorMessage
-											name='tituloInterno'
-											component='span'
-											className='text-red-500 text-sm absolute'
-										/>
+
+									<ErrorMessage
+										name='tituloInterno'
+										component='span'
+										className='text-red-500 text-sm absolute'
+									/>
 
 									<div className='flex justify-end pr-[8px] pt-[4px] items-end  w-full absolute'>
-										<span className={`texto_12_500 ${
-											charCountTituloInterno > maxLengthTituloInterno ? 'text-red-500' : 'text-tertiary'
-										}`}>
+										<span className={`texto_12_500 ${charCountTituloInterno > maxLengthTituloInterno ? 'text-red-500' : 'text-tertiary'
+											}`}>
 											{charCountTituloInterno}/{maxLengthTituloInterno}
 										</span>
 									</div>
@@ -499,7 +497,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 								{/* PUSH */}
 								{
-									tipoComunicacion == "general" && 
+									tipoComunicacion == "general" &&
 									(<>
 										<SeparadorV
 											height='60'
@@ -535,14 +533,14 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 							</div>
 
 							<div className='flex flex-col'></div>
-							
+
 							<SeparadorH separador='0' />
 
 							{/* TITULO / PUSH / ENVIAR / ARCHIVAR */}
 							<div className='flex flex-col xl:flex-row items-center xl:items-end gap-[12px] '>
 
 								{/** TÍTULO */}
-								<div className='w-[100%] relative'>	
+								<div className='w-[100%] relative'>
 
 									<Field name='titulo'>
 										{({ field, form }) => (
@@ -559,7 +557,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 										)}
 									</Field>
 
-									
+
 									<ErrorMessage
 										name='titulo'
 										component='span'
@@ -567,9 +565,8 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									/>
 
 									<div className='flex justify-end pr-[8px] pt-[4px] items-end absolute w-full'>
-										<span className={`texto_12_500 ${
-											charCountTitulo > maxLengthTitulo ? 'text-red-500' : 'text-tertiary'
-										}`}>
+										<span className={`texto_12_500 ${charCountTitulo > maxLengthTitulo ? 'text-red-500' : 'text-tertiary'
+											}`}>
 											{charCountTitulo}/{maxLengthTitulo}
 										</span>
 									</div>
@@ -579,7 +576,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									height='60'
 									separador='0'
 								/>
-																
+
 								<SeparadorV
 									height='0'
 									separador='-6'
@@ -610,13 +607,13 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 								</div>
 
-								
 
-								
+
+
 								{/** HASTA */}
 								<div className='relative w-full xl:w-auto'>
 									<div className='flex flex-col'>
-										
+
 										<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
 											Hasta:
 										</label>
@@ -630,19 +627,19 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									</div>
 
 									<ErrorMessage
-											name='fechaArchivar'
-											component='span'
-											className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
-										/>
+										name='fechaArchivar'
+										component='span'
+										className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
+									/>
 								</div>
 
-								
+
 
 							</div>
 
 							<div className='flex flex-col xl:flex-row'></div>
-							
-							
+
+
 
 							{/* IMAGEN */}
 							<div className='flex flex-col'>
@@ -656,7 +653,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									ref={fileInputRef} // ← Necesitas crear este ref
 									style={{ display: 'none' }}
 									accept=".jpg,.jpeg,.png,.gif,.pdf"
-									onChange={(event) => handleFileSelect(event, setFieldValue, )}
+									onChange={(event) => handleFileSelect(event, setFieldValue,)}
 								/>
 
 								<div className='flex flex-col xl:flex-row gap-2'>
@@ -682,37 +679,37 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									</div>
 
 									{/* BOTÓN BUSCAR */}
-									{ selectedFile && (
+									{selectedFile && (
 										<>
-										<button
-											className='pointer flex h-[44px] w-[55px] items-center justify-center rounded-full bg-primary'
-											onClick={()=>{eliminarImagen()}}
-											type='button'>
-												
-											<span className='material-symbols-outlined text-white'>
-												close
-											</span>
-										</button>
+											<button
+												className='pointer flex h-[44px] w-[55px] items-center justify-center rounded-full bg-primary'
+												onClick={() => { eliminarImagen() }}
+												type='button'>
+
+												<span className='material-symbols-outlined text-white'>
+													close
+												</span>
+											</button>
 
 											<SeparadorV
-											height='40'
-											separador='0'
-										/>
+												height='40'
+												separador='0'
+											/>
 										</>
-											)
-										
+									)
+
 									}
-									
 
-									<ButtonPrimary texto={selectedFile?'REEMPLAZAR':'BUSCAR'}  click={triggerFileSelect}  />
 
-								
+									<ButtonPrimary texto={selectedFile ? 'REEMPLAZAR' : 'BUSCAR'} click={triggerFileSelect} />
+
+
 								</div>
 							</div>
 
 							<div className='flex flex-col'></div>
 
-						
+
 
 							{/**  MENSAJE */}
 							<div className='flex flex-col relative'>
@@ -720,7 +717,7 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 								<label className='texto_12_500 text-secondary pl-[12px] px-[1px]'>
 									Contenido comunicación
 								</label>
-											
+
 
 								<Field name='contenidoComunicacion'>
 									{({ field, form }) => (
@@ -733,57 +730,56 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 													['link'],
 													[{ color: [] }], // ← Color de texto
 													['clean'],
-													
-													
+
+
 												],
 											}}
 											value={field.value}
-											 onChange={(value) => {
+											onChange={(value) => {
 												const text = getPlainText(value);
-												  const textLength = text.length;
-											
-													setCharCount(textLength);
-													form.setFieldValue(field.name, value);
-												
+												const textLength = text.length;
+
+												setCharCount(textLength);
+												form.setFieldValue(field.name, value);
+
 											}}
 											placeholder='Escribí el contenido...'
 											className='bg-white texto_16_500 pl-[12px] pr-[12px] pt-[12px] pb-[12px] rounded-[8px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 resize-none'
-											
+
 										/>
-										
+
 									)}
 
-							
+
 								</Field>
 
-									
+
 
 								{/* CONTADOR DE CARACTERES */}
 
-							
+
 
 								<div className='flex justify-end mt-1 pr-[12px]'>
 									<ErrorMessage
-									name='contenidoComunicacion'
-									component='span'
-									className='text-red-500 text-sm absolute bottom-[-1px] left-[12px]'
-								/>
+										name='contenidoComunicacion'
+										component='span'
+										className='text-red-500 text-sm absolute bottom-[-1px] left-[12px]'
+									/>
 
-									<span className={`texto_12_500 ${
-										charCount > maxLength ? 'text-red-500' : 'text-tertiary'
-									}`}>
+									<span className={`texto_12_500 ${charCount > maxLength ? 'text-red-500' : 'text-tertiary'
+										}`}>
 										{charCount}/{maxLength}
 									</span>
 								</div>
 							</div>
-							
-							
+
+
 
 							{isOn ? (<>
 								<div className='flex items-end gap-[12px]'>
 									<div className='w-[100%] relative'>
-										
-									
+
+
 										<Field name='mensajePush'>
 											{({ field, form }) => (
 												<Textarea
@@ -806,11 +802,10 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 											className='text-red-500 text-sm absolute left-[12px]'
 										/>
 
-											
+
 										<div className='flex justify-end pr-[8px] pt-[4px] items-end  w-full'>
-											<span className={`texto_12_500 ${
-												charCountMensajePush > maxLengthMensajePush ? 'text-red-500' : 'text-tertiary'
-											}`}>
+											<span className={`texto_12_500 ${charCountMensajePush > maxLengthMensajePush ? 'text-red-500' : 'text-tertiary'
+												}`}>
 												{charCountMensajePush}/{maxLengthMensajePush}
 											</span>
 										</div>
@@ -818,8 +813,8 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									</div>
 								</div>
 								<div className='flex flex-col'></div>
-							</> ) : ''}
-							
+							</>) : ''}
+
 							<SeparadorH separador='0' />
 
 							{/** ARCHIVO DE DISTRIBUCCIÓN */}
@@ -828,11 +823,11 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									Lista de distribución
 								</label>
 								<input
-											type="file"
-											ref={listaDistribuccionInputRef} // ← Necesitas crear este ref
-											style={{ display: 'none' }}
-											accept=".csv"
-											onChange={(event) => handleListaDistribuccion(event, setFieldValue)}
+									type="file"
+									ref={listaDistribuccionInputRef} // ← Necesitas crear este ref
+									style={{ display: 'none' }}
+									accept=".csv"
+									onChange={(event) => handleListaDistribuccion(event, setFieldValue)}
 								/>
 
 								<div className='flex flex-col xl:flex-row gap-2'>
@@ -856,27 +851,26 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									</div>
 
 									{/* BOTÓN BUSCAR */}
-									<ButtonPrimary texto= {values.listadoDistribuccion == ""?'BUSCAR':"REEMPLAZAR"}  click={triggerListaDistribuccion}  />
+									<ButtonPrimary texto={values.listadoDistribuccion == "" ? 'BUSCAR' : "REEMPLAZAR"} click={triggerListaDistribuccion} />
 								</div>
 							</div>
-							
+
 							{/** ARCHIVO DE SERVICIO */}
-							{ tipoComunicacion == "aumento" && (
+							{tipoComunicacion == "aumento" && (
 								<>
 									<div className='flex flex-col'></div>
 									{/** ARCHIVO DE DISTRIBUCCIÓN */}
 									<div className='flex flex-col'>
-										<label className={`texto_12_500 pl-[12px] px-[1px] ${
-              								  values.listadoServicio === "" ? 'text-secondary' : 'text-secondary'
-          								  }`}>
+										<label className={`texto_12_500 pl-[12px] px-[1px] ${values.listadoServicio === "" ? 'text-secondary' : 'text-secondary'
+											}`}>
 											Lista de servicios afectados
 										</label>
 										<input
-													type="file"
-													ref={listaServicioInputRef} // ← Necesitas crear este ref
-													style={{ display: 'none' }}
-													accept=".csv"
-													onChange={(event) => handleListaServicio(event, setFieldValue)}
+											type="file"
+											ref={listaServicioInputRef} // ← Necesitas crear este ref
+											style={{ display: 'none' }}
+											accept=".csv"
+											onChange={(event) => handleListaServicio(event, setFieldValue)}
 										/>
 
 										<div className='flex flex-col xl:flex-row gap-2'>
@@ -900,11 +894,11 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 											</div>
 
 											{/* BOTÓN BUSCAR */}
-											<ButtonPrimary texto={values.listadoServicio == "" ?'BUSCAR':'REEMPLAZAR'}  click={triggerListaServicio}  />
+											<ButtonPrimary texto={values.listadoServicio == "" ? 'BUSCAR' : 'REEMPLAZAR'} click={triggerListaServicio} />
 										</div>
 									</div>
 								</>
-								)
+							)
 							}
 
 							<div className='flex flex-col'></div>
@@ -917,38 +911,38 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 									texto='RESUMEN'
 									type='submit'
 								/>
-							
+
 							</div>
-							
+
 						</div>
 					)
-					:(
+						: (
 
-						// COMPONENTE PREVIEW
-						<PreviewComunicacion 
-							tipo = {tipoComunicacion}
-							fechaIni={values.fechaEnviar || 'Sin fecha'}
-							fechaFin={values.fechaArchivar || 'Sin fecha'}
-							nombre={user || 'Sin nombre'}
-							titulo={values.titulo || 'Sin título'}
-							tituloInterno = {values.tituloInterno }
-							msj={values.contenidoComunicacion || 'Sin contenido'}
-							esPush={isOn}
-							img={selectedFile ? selectedFile.name : 'Sin imagen'}
-							selectedFile={selectedFile || ''}        // ← El archivo completo para FormData
-    						imagePreviewUrl={imagePreviewUrl || ''}  // ← La URL para mostrar
-							lista1 = {selectedListaDistribuccion.name}
-							selectedListaDistribuccion={selectedListaDistribuccion}        // ← El archivo completo para FormData
-    						listaDistribuccionPreviewUrl={listaDistribuccionPreviewUrl}  // ← La URL para mostrar
-							lista2 = {selectedListaServicio?.name || ''}
-							selectedListaServicio={selectedListaServicio?selectedListaServicio:''}        // ← El archivo completo para FormData
-    						listaServicioPreviewUrl={listaServicioPreviewUrl?listaServicioPreviewUrl:''} 
-							formulario = {setPreviewComunicacion} // ← La URL para mostrar
-							setTipoComunicacion = {setTipoComunicacion}
-							msjPush={values.mensajePush}
-							setBtnVolverVisible={setBtnVolverVisible}
-						/>
-					)}
+							// COMPONENTE PREVIEW
+							<PreviewComunicacion
+								tipo={tipoComunicacion}
+								fechaIni={values.fechaEnviar || 'Sin fecha'}
+								fechaFin={values.fechaArchivar || 'Sin fecha'}
+								nombre={user || 'Sin nombre'}
+								titulo={values.titulo || 'Sin título'}
+								tituloInterno={values.tituloInterno}
+								msj={values.contenidoComunicacion || 'Sin contenido'}
+								esPush={isOn}
+								img={selectedFile ? selectedFile.name : 'Sin imagen'}
+								selectedFile={selectedFile || ''}        // ← El archivo completo para FormData
+								imagePreviewUrl={imagePreviewUrl || ''}  // ← La URL para mostrar
+								lista1={selectedListaDistribuccion.name}
+								selectedListaDistribuccion={selectedListaDistribuccion}        // ← El archivo completo para FormData
+								listaDistribuccionPreviewUrl={listaDistribuccionPreviewUrl}  // ← La URL para mostrar
+								lista2={selectedListaServicio?.name || ''}
+								selectedListaServicio={selectedListaServicio ? selectedListaServicio : ''}        // ← El archivo completo para FormData
+								listaServicioPreviewUrl={listaServicioPreviewUrl ? listaServicioPreviewUrl : ''}
+								formulario={setPreviewComunicacion} // ← La URL para mostrar
+								setTipoComunicacion={setTipoComunicacion}
+								msjPush={values.mensajePush}
+								setBtnVolverVisible={setBtnVolverVisible}
+							/>
+						)}
 				</Form>
 			)}
 
@@ -967,13 +961,13 @@ export const PreviewComunicacion = ({
 	esPush = "",
 	selectedFileName = null,//img name
 	selectedFile = null,
-    imagePreviewUrl = null,
+	imagePreviewUrl = null,
 	lista1 = "",//name
 	selectedListaDistribuccion = null,      // ← El archivo completo para FormData
-    listaDistribuccionPreviewUrl = null,  // ← La URL para m
+	listaDistribuccionPreviewUrl = null,  // ← La URL para m
 	lista2 = "",
 	selectedListaServicio = null,      // ← El archivo completo para FormData
-    listaServicioPreviewUrl = null,  // ← La URL para m
+	listaServicioPreviewUrl = null,  // ← La URL para m
 	formulario,
 	setTipoComunicacion,
 	msjPush = "",
@@ -985,24 +979,24 @@ export const PreviewComunicacion = ({
 	const [mensajeRespuesta, setMensajeRespuesta] = useState("");
 
 	const { isLoadingSaveComunicacion, saveComunicacion } = useSelector(state => state.saveComunicacion);
-	
+
 	const renderFilePreview = () => {
 		if (!selectedFile) return null;
-		
+
 		// Si es imagen, mostrar preview
 		if (selectedFile.type.startsWith('image/') && imagePreviewUrl) {
 			return (
 				<>
-				<div>
-					<img
-						alt='Vista previa de imagen'
-						src={imagePreviewUrl}
-					/>
-				</div>
+					<div>
+						<img
+							alt='Vista previa de imagen'
+							src={imagePreviewUrl}
+						/>
+					</div>
 				</>
 			);
 		}
-			// Si es PDF u otro archivo, mostrar info
+		// Si es PDF u otro archivo, mostrar info
 		return (
 			<div className="bg-gray-100 border border-gray-300 rounded-[8px] p-4 my-4 flex items-center gap-3">
 				<span className="material-symbols-outlined text-gray-600">
@@ -1018,14 +1012,14 @@ export const PreviewComunicacion = ({
 		);
 	}
 
-	
+
 	const [idNotiPush, setIdNotiPush] = useState(0);
 
 	const enviarCominicacion = async () => {
 
 		// Crear FormData completo al momento del envío
 		const completeFormData = new FormData();
-		
+
 		// Agregar TODOS los datos del formulario
 		completeFormData.append('titulo_interno', tituloInterno);
 		completeFormData.append('titulo', tituloInterno);
@@ -1034,7 +1028,7 @@ export const PreviewComunicacion = ({
 		completeFormData.append('mensaje', msj);
 		completeFormData.append('mensajePush', esPush ? msjPush : null);
 		completeFormData.append('type', tipo);
-		
+
 		if (selectedListaDistribuccion) {
 			completeFormData.append('fileData', selectedListaDistribuccion);
 		}
@@ -1047,8 +1041,8 @@ export const PreviewComunicacion = ({
 		if (selectedFile) {
 			completeFormData.append('imagenData', selectedFile);
 		}
-			
-	
+
+
 		setBtnVolverVisible(false);
 
 		const respuesta = await dispatch(getSaveComunicacion(completeFormData));
@@ -1057,18 +1051,18 @@ export const PreviewComunicacion = ({
 		// setMensajeRespuesta("Notificación creada exitosamente");
 
 
-		if(respuesta.status == "OK"){
+		if (respuesta.status == "OK") {
 			//console.log(respuesta);
 			setStatusRespuesta("OK");
 			//console.log("Id de la noti Creada: ", respuesta.data.message.id);
 			setIdNotiPush(respuesta.data.message.id);
 			setMensajeRespuesta(respuesta.data);
 
-		}else{
+		} else {
 			setStatusRespuesta("ERROR");
 			setMensajeRespuesta(respuesta.data)
 		}
-    	
+
 	}
 
 	const modificarComunicacion = () => {
@@ -1076,67 +1070,68 @@ export const PreviewComunicacion = ({
 	}
 
 	const [descargarPush, setDescargarPush] = useState(false);
-		
+
 	const traerReporte = async () => {
-			
-		
-		const urlBase = 'https://www.iplan.com.ar/'; // PROD
-		
+
+
+		// const urlBase = 'https://www.iplan.com.ar/'; // PROD
+		const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // NUEVO SERVER
+
 		const myHeader = {
 			'Authorization': `Bearer ${Cookies.get('token')}`,
 			'Content-Type': 'application/json'
 		};
-		
+
 		const url = `${urlBase}comunicaciones/notificaciones_new/api/notifications/push-results.php?notification_id=${idNotiPush}`;
-		
+
 		const requestConfig = {
 			method: "GET",
 			headers: myHeader,
 			credentials: 'include',
 		};
-		
+
 		try {
-			
+
 			const response = await fetch(url, requestConfig);
-			
+
 			if (!response.ok) {
 				console.log("FALLO - Response no OK");
 				setDescargarPush(true);
-				return {"Respuesta":"ERROR", "data":null}
+				return { "Respuesta": "ERROR", "data": null }
 			}
-			
+
 			const blob = await response.blob();
-					
+
 			const blobUrl = window.URL.createObjectURL(blob);
-			
+
 			const link = document.createElement('a');
 			link.href = blobUrl;
 			link.download = `reporte_push_${idNotiPush}_${new Date().toISOString().split('T')[0]}.csv`; // Nombre del archivo
-			
+
 			// AGREGAR AL DOM, HACER CLICK Y REMOVER
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
-			
+
 			// LIMPIAR URL TEMPORAL
 			window.URL.revokeObjectURL(blobUrl);
-			
+
 			setDescargarPush(false);
 			return { "Respuesta": "OK", "data": "Descarga iniciada" };
-			
+
 		} catch (error) {
 			console.error("Error en catch:", error);
 			setDescargarPush(true)
-			
+
 			// Manejo de sesión expirada
 			if (error.response?.data?.error_type === "session_expired") {
 				Cookies.remove('token');
 				window.location.href = '/comunicaciones/#/error';
 			} else {
-				return {"Respuesta": "ERROR", "data": null };
+				return { "Respuesta": "ERROR", "data": null };
 			}
 		}
-	
+
 
 	}
 
@@ -1144,167 +1139,167 @@ export const PreviewComunicacion = ({
 	return (
 		<>
 
-		{statusRespuesta == null
-		?
-		
-			<div>
+			{statusRespuesta == null
+				?
 
-				<div className='pb-[8px]  mb-[8px]'>
-					<p className='text-primary texto_20_500'>
-						Resumen: {tipo == "general" ?"Comunicación General":"Comunicación de aumento"}
-					</p>
-				</div>
-				
-				<div className='bg-bg_primary p-[16px] rounded-[12px]'>
-					{/* 			
+				<div>
+
+					<div className='pb-[8px]  mb-[8px]'>
+						<p className='text-primary texto_20_500'>
+							Resumen: {tipo == "general" ? "Comunicación General" : "Comunicación de aumento"}
+						</p>
+					</div>
+
+					<div className='bg-bg_primary p-[16px] rounded-[12px]'>
+						{/* 			
 					<div className='texto_14_500 text-bg_secondary'>{tipo == "general"?'Cominicación general': 'Comunicación de aumento	'}</div> */}
 
-					<div className='flex items-center justify-between w-full'>
-						<div className='flex items-center gap-2 text-bg_secondary'>
-							<p className='text-secondary texto_16_800'>{fechaIni}</p> |
-							<p className='text-secondary texto_16_800'>{fechaFin}</p> |
-							<p className='flex items-center gap-3 text-tertiary texto_16_600'>
-								<span className='material-symbols-outlined'>id_card</span> {nombre}
-							</p>
-						</div>
-						
-					</div>
-
-				
-
-
-					<div className='flex flex-col mt-4 gap-[8px] rounded-[8px]'>
-
-						<h2 className='texto_16_800 text-subtitle'>{titulo}</h2>
-						
-						{/* PREVIEW DEL ARCHIVO */}
-						{renderFilePreview()}
-						
-						<div 
-							className='texto_14_500 text-tertiary'
-							dangerouslySetInnerHTML={{ __html: msj }}
-						/>
-
-						{!!esPush && (
-							<>
-							<div className='flex flex-col'></div>
-							<SeparadorH separador='8' />
-							
-								<p className='texto_16_500 text-secondary'> Contenido comunicación push</p>
-								<p className='texto_14_500 text-tertiary'> {msjPush}</p>
-						
-
-							</>
-						)}	
-					</div>
-				</div>
-
-				{lista1 && 
-					<div className='flex items-center justify-between  mt-3'>
-						<div className='text-tertiary'>
-							<p className='texto_14_500'>Lista de distribución</p>
-							<p className='texto_16_500'>{lista1}</p>
-						</div>
-						<a href={listaDistribuccionPreviewUrl}> 
-							<div className='w-[34px] h-[34px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
-								<span className='material-symbols-outlined'>arrow_circle_down</span> 
+						<div className='flex items-center justify-between w-full'>
+							<div className='flex items-center gap-2 text-bg_secondary'>
+								<p className='text-secondary texto_16_800'>{fechaIni}</p> |
+								<p className='text-secondary texto_16_800'>{fechaFin}</p> |
+								<p className='flex items-center gap-3 text-tertiary texto_16_600'>
+									<span className='material-symbols-outlined'>id_card</span> {nombre}
+								</p>
 							</div>
-						</a>
-						
-					</div>
-				}
-				
-				{lista2 && <>
-					<SeparadorH separador='8' />
-					<div className='flex items-center justify-between mt-3'>
-						<div className='text-tertiary '>
-							<p className='texto_14_500'>Lista de servicios afectados</p>
-							<p className='texto_16_500'>{lista2}</p>
+
 						</div>
-						<a href={listaServicioPreviewUrl}> 
-							<div className='w-[34px] h-[34px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
-								<span className='material-symbols-outlined'>arrow_circle_down</span> 
-							</div>
-						</a>
+
+
+
+
+						<div className='flex flex-col mt-4 gap-[8px] rounded-[8px]'>
+
+							<h2 className='texto_16_800 text-subtitle'>{titulo}</h2>
+
+							{/* PREVIEW DEL ARCHIVO */}
+							{renderFilePreview()}
+
+							<div
+								className='texto_14_500 text-tertiary'
+								dangerouslySetInnerHTML={{ __html: msj }}
+							/>
+
+							{!!esPush && (
+								<>
+									<div className='flex flex-col'></div>
+									<SeparadorH separador='8' />
+
+									<p className='texto_16_500 text-secondary'> Contenido comunicación push</p>
+									<p className='texto_14_500 text-tertiary'> {msjPush}</p>
+
+
+								</>
+							)}
+						</div>
 					</div>
+
+					{lista1 &&
+						<div className='flex items-center justify-between  mt-3'>
+							<div className='text-tertiary'>
+								<p className='texto_14_500'>Lista de distribución</p>
+								<p className='texto_16_500'>{lista1}</p>
+							</div>
+							<a href={listaDistribuccionPreviewUrl}>
+								<div className='w-[34px] h-[34px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
+									<span className='material-symbols-outlined'>arrow_circle_down</span>
+								</div>
+							</a>
+
+						</div>
+					}
+
+					{lista2 && <>
+						<SeparadorH separador='8' />
+						<div className='flex items-center justify-between mt-3'>
+							<div className='text-tertiary '>
+								<p className='texto_14_500'>Lista de servicios afectados</p>
+								<p className='texto_16_500'>{lista2}</p>
+							</div>
+							<a href={listaServicioPreviewUrl}>
+								<div className='w-[34px] h-[34px] rounded-full bg-primary text-white flex items-center justify-center hover:bg-bg_secondary cursor-pointer'>
+									<span className='material-symbols-outlined'>arrow_circle_down</span>
+								</div>
+							</a>
+						</div>
 					</>
-				}
-			
-				<div className='flex flex-col'></div>
-				<SeparadorH separador='8' />
+					}
 
-				{isLoadingSaveComunicacion 
-					
-					?<>
-					
-						<div className='bg-tertiary p-[8px] flex items-center justify-center rounded-[12px] gap-[8px]'>
-								<Loader color="white" size="34"/>
+					<div className='flex flex-col'></div>
+					<SeparadorH separador='8' />
+
+					{isLoadingSaveComunicacion
+
+						? <>
+
+							<div className='bg-tertiary p-[8px] flex items-center justify-center rounded-[12px] gap-[8px]'>
+								<Loader color="white" size="34" />
 								<p className='text-white texto_20_600'> Enviando comunicación, esperá por favor... </p>
 
+							</div>
+						</>
+						: <>
+							<div className='flex flex-col lg:flex-row mt-[16px] justify-between gap-[8px]'>
+								{/* BOTÓN BUSCAR */}
+								<ButtonPrimary texto='EDITAR' click={modificarComunicacion} />
+								<ButtonPrimary texto='ENVIAR COMUNICACIÓN' click={enviarCominicacion} />
+							</div>
+						</>
+					}
+
+
+				</div>
+
+				: statusRespuesta == "OK"
+
+					?
+					<>
+						<div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#6FDD58] gap-[8px]'>
+							<span className='material-symbols-outlined text-white'>sentiment_satisfied</span>
+							<p className='text-white texto_20_600'> {mensajeRespuesta.data} </p>
+						</div>
+
+
+						<div className={`flex flex-col lg:flex-row mt-[16px] gap-[8px] ${esPush ? 'justify-between' : 'justify-end'}`}>
+
+							{!!esPush && (
+								<div className='flex flex-col items-start justify-center'>
+
+									<ButtonPrimary texto={"REPORTE"} click={traerReporte} />
+
+									{descargarPush && (
+										<span className='text-red-500 text-sm'> No se pudo descargar el reporte </span>
+									)}
+
+								</div>
+
+							)}
+
+							<div>
+								<ButtonPrimary
+									texto='TERMINAR'
+									click={() => { setTipoComunicacion(0) }}
+								/>
+							</div>
+
 						</div>
 					</>
-					:<>
-						<div className='flex flex-col lg:flex-row mt-[16px] justify-between gap-[8px]'>
-							{/* BOTÓN BUSCAR */}
-							<ButtonPrimary texto='EDITAR' click={modificarComunicacion}/>
-							<ButtonPrimary texto='ENVIAR COMUNICACIÓN' click={enviarCominicacion}/>
-						</div>
-						</>
-				}
 
-		
-			</div>
+					:
+					<><div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#FF8661] gap-[8px]'>
+						<span className='material-symbols-outlined text-white'>sentiment_sad</span>
+						<p className='text-white texto_20_600'> Lo sentimos, no se pudo enviar la comunicación </p>
 
-		: statusRespuesta == "OK" 
-
-			?
-			<>
-				<div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#6FDD58] gap-[8px]'>
-					<span className='material-symbols-outlined text-white'>sentiment_satisfied</span> 
-					<p className='text-white texto_20_600'> {mensajeRespuesta.data} </p>
-				</div>
-
-
-				<div className={`flex flex-col lg:flex-row mt-[16px] gap-[8px] ${esPush ? 'justify-between' : 'justify-end'}`}>
-
-					{!!esPush && (
-						<div className='flex flex-col items-start justify-center'>
-								
-							<ButtonPrimary texto= {"REPORTE"}  click={traerReporte}  />	
-							
-							{descargarPush && (
-								<span className='text-red-500 text-sm'> No se pudo descargar el reporte </span>
-							)}
-						
-						</div>
-
-					)}
-				
-					<div>
-						<ButtonPrimary 
-							texto='TERMINAR' 
-							click={() => {setTipoComunicacion(0)}}
-						/>
 					</div>
 
-				</div>
-			</>
-
-			:
-			<><div className='flex items-center justify-center p-[8px] rounded-[12px] bg-[#FF8661] gap-[8px]'>
-				<span className='material-symbols-outlined text-white'>sentiment_sad</span> 
-				<p className='text-white texto_20_600'> Lo sentimos, no se pudo enviar la comunicación </p>
-				
-			</div>
-
-				<div className='flex flex-col lg:flex-row mt-[16px] justify-end gap-[8px]'>
-					<ButtonPrimary 
-					texto='TERMINAR' 
-					click={() => {setTipoComunicacion(0)}}
-					/>
-				</div>
-			</>
-		}
+						<div className='flex flex-col lg:flex-row mt-[16px] justify-end gap-[8px]'>
+							<ButtonPrimary
+								texto='TERMINAR'
+								click={() => { setTipoComunicacion(0) }}
+							/>
+						</div>
+					</>
+			}
 		</>
 	);
 };

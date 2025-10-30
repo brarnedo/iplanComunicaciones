@@ -45,7 +45,8 @@ export const Notificacion = ({
 
 
 	//const urlImagen = 'https://portal2-des.iplan.com.ar/'; //DESA
-	const urlImagen = 'https://www.iplan.com.ar/'; //PROD
+	// const urlImagen = 'https://www.iplan.com.ar/'; //PROD
+	const urlImagen = 'https://portal-desa-cloud.iplan.com.ar/'; //NUEVO SERVER
 
 	const dispatch = useDispatch();
 	let navigate = useNavigate();
@@ -55,13 +56,13 @@ export const Notificacion = ({
 	const [deleteNoti, setDeleteNoti] = useState(false);
 	const [updateNoti, setUpdateNoti] = useState(false);
 
-	
 
-	const isLocalhost =	typeof window !== 'undefined' && window.location.hostname === 'localhost';
+
+	const isLocalhost = typeof window !== 'undefined' && window.location.hostname === 'localhost';
 
 	const handleCopy = () => {
 		setCopy(true);
-		setSeleccionada({ titulo, msj, tipo:(lista2 ? "aumento" : "general")});
+		setSeleccionada({ titulo, msj, tipo: (lista2 ? "aumento" : "general") });
 	}
 
 	const handleDelete = () => {
@@ -108,10 +109,10 @@ export const Notificacion = ({
 				return textContent && textContent.length > 0;
 			})
 			.test('max-length', 'Máximo 900 caracteres', function (value) {
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(value, 'text/html');
-					const textContent = doc.body.textContent || doc.body.innerText || '';
-				
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(value, 'text/html');
+				const textContent = doc.body.textContent || doc.body.innerText || '';
+
 				return textContent.length <= 900;
 			}),
 	});
@@ -128,75 +129,76 @@ export const Notificacion = ({
 
 
 	const onSubmit = async (values, { setSubmitting, resetForm }) => {
-		
+
 		const respuesta = await dispatch(updateNotificaciones(id, false, values));
 		//console.log("onSubmit", respuesta);
 		setEditando(respuesta);
-			
+
 	};
-	
+
 	const [descargarPush, setDescargarPush] = useState(false);
-	
+
 	const traerReporte = async () => {
-			
-      
-    const urlBase = 'https://www.iplan.com.ar/'; // PROD
-    
-    const myHeader = {
-        'Authorization': `Bearer ${Cookies.get('token')}`,
-        'Content-Type': 'application/json'
-    };
-    
-    const url = `${urlBase}comunicaciones/notificaciones_new/api/notifications/push-results.php?notification_id=${id}`;
-    
-    const requestConfig = {
-        method: "GET",
-        headers: myHeader,
-        credentials: 'include',
-    };
-    
-    try {
-      
-		const response = await fetch(url, requestConfig);
-        
-        if (!response.ok) {
-            console.log("FALLO - Response no OK");
-			setDescargarPush(true);
-            return {"Respuesta":"ERROR", "data":null}
-        }
-        
-        const blob = await response.blob();
-              
-        const blobUrl = window.URL.createObjectURL(blob);
-        
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = `reporte_push_${id}_${new Date().toISOString().split('T')[0]}.csv`; // Nombre del archivo
-        
-        // AGREGAR AL DOM, HACER CLICK Y REMOVER
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        // LIMPIAR URL TEMPORAL
-        window.URL.revokeObjectURL(blobUrl);
-        
-		setDescargarPush(false);
-        return { "Respuesta": "OK", "data": "Descarga iniciada" };
-        
-    } catch (error) {
-        console.error("Error en catch:", error);
-		setDescargarPush(true)
-        
-        // Manejo de sesión expirada
-        if (error.response?.data?.error_type === "session_expired") {
-            Cookies.remove('token');
-            window.location.href = '/comunicaciones/#/error';
-        } else {
-            return {"Respuesta": "ERROR", "data": null };
-        }
-    }
-  
+
+
+		// const urlBase = 'https://www.iplan.com.ar/'; // PROD
+		const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // NUEVO SERVER
+
+		const myHeader = {
+			'Authorization': `Bearer ${Cookies.get('token')}`,
+			'Content-Type': 'application/json'
+		};
+
+		const url = `${urlBase}comunicaciones/notificaciones_new/api/notifications/push-results.php?notification_id=${id}`;
+
+		const requestConfig = {
+			method: "GET",
+			headers: myHeader,
+			credentials: 'include',
+		};
+
+		try {
+
+			const response = await fetch(url, requestConfig);
+
+			if (!response.ok) {
+				console.log("FALLO - Response no OK");
+				setDescargarPush(true);
+				return { "Respuesta": "ERROR", "data": null }
+			}
+
+			const blob = await response.blob();
+
+			const blobUrl = window.URL.createObjectURL(blob);
+
+			const link = document.createElement('a');
+			link.href = blobUrl;
+			link.download = `reporte_push_${id}_${new Date().toISOString().split('T')[0]}.csv`; // Nombre del archivo
+
+			// AGREGAR AL DOM, HACER CLICK Y REMOVER
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+
+			// LIMPIAR URL TEMPORAL
+			window.URL.revokeObjectURL(blobUrl);
+
+			setDescargarPush(false);
+			return { "Respuesta": "OK", "data": "Descarga iniciada" };
+
+		} catch (error) {
+			console.error("Error en catch:", error);
+			setDescargarPush(true)
+
+			// Manejo de sesión expirada
+			if (error.response?.data?.error_type === "session_expired") {
+				Cookies.remove('token');
+				window.location.href = '/comunicaciones/#/error';
+			} else {
+				return { "Respuesta": "ERROR", "data": null };
+			}
+		}
+
 
 	}
 
@@ -206,7 +208,7 @@ export const Notificacion = ({
 
 			<div className='texto_14_500'>{titulo_interno}
 
-				
+
 			</div>
 
 			<div className='flex items-center justify-between w-full'>
@@ -215,12 +217,12 @@ export const Notificacion = ({
 					<p className='text-primary texto_16_800'>{fechaFin}</p> |
 					<p className='flex items-center gap-3'>
 						<span className='material-symbols-outlined'>id_card</span> {nombre}
-					</p> 
+					</p>
 					{msjPush && (
 						<>
 							| <p className='text-secondary texto_16_800'> PUSH </p>
 						</>
-						
+
 					)}
 
 
@@ -228,7 +230,7 @@ export const Notificacion = ({
 
 				{/* iconos */}
 				<div className='flex gap-2'>
-				
+
 					{origen == 'programadas' ? (
 						<>
 							<button
@@ -252,10 +254,10 @@ export const Notificacion = ({
 							</Link>
 						</>
 					)}
-					
+
 				</div>
 			</div>
-			
+
 
 
 			{!deleteNoti && !updateNoti && (
@@ -264,17 +266,17 @@ export const Notificacion = ({
 						<h2 className='texto_16_800 text-subtitle'>{titulo}</h2>
 						{img && (
 
-						
+
 							<div>
-							<img
-								alt='notificacion'
-								
-								src={
-									isLocalhost
-										? `${urlImagen}${img.url}`
-										: img.url
-								}
-							/>
+								<img
+									alt='notificacion'
+
+									src={
+										isLocalhost
+											? `${urlImagen}${img.url}`
+											: img.url
+									}
+								/>
 							</div>
 						)}
 						<div
@@ -342,16 +344,16 @@ export const Notificacion = ({
 						<>
 							<div className='h-[1px] w-full bg-bg_secondary my-4'></div>
 							<div className='flex flex-col items-end justify-end'>
-								
-								<ButtonPrimary texto= {"REPORTE"}  click={traerReporte}  />	
-								
+
+								<ButtonPrimary texto={"REPORTE"} click={traerReporte} />
+
 								{descargarPush && (
 									<span className='text-red-500 text-sm'> No se pudo descargar el reporte </span>
 								)}
-								
+
 							</div>
 
-							
+
 						</>
 					)}
 				</>
@@ -387,11 +389,11 @@ export const Notificacion = ({
 						onSubmit={onSubmit}>
 						{({ values, setFieldValue, handleSubmit, isSubmitting }) => (
 							<Form>
-								
-								
+
+
 								<>
 									<div className='bg-bg_primary flex flex-col items-center gap-[8px] p-4 mt-4  rounded-[8px]'>
-																			
+
 										{/* TITULO  / ENVIAR / ARCHIVAR / PUSH */}
 										<div className='flex flex-col xl:flex-row items-center xl:items-end gap-[12px] w-full '>
 											{/** TÍTULO */}
@@ -434,13 +436,13 @@ export const Notificacion = ({
 														}}
 														value={field.value}
 														onChange={(value) => {
-												const text = getPlainText(value);
-												  const textLength = text.length;
-											
-													setCharCount(textLength);
-													form.setFieldValue(field.name, value);
-												
-											}}
+															const text = getPlainText(value);
+															const textLength = text.length;
+
+															setCharCount(textLength);
+															form.setFieldValue(field.name, value);
+
+														}}
 														placeholder='Escribe el contenido...'
 														className='bg-white text-black texto_16_500 pl-[12px] pr-[12px] pt-[12px] pb-[12px] rounded-[8px] border-[1px] border-bg_secondary focus:border-secondary focus:border-[2px] focus:outline-none w-full placeholder:text-tertiary placeholder:opacity-70 resize-none'
 													/>
@@ -448,23 +450,22 @@ export const Notificacion = ({
 											</Field>
 
 
-												{/* CONTADOR DE CARACTERES */}
+											{/* CONTADOR DE CARACTERES */}
 
-							
+
 
 											<div className='flex justify-end mt-1 pr-[12px]'>
 												<ErrorMessage
-												name='contenidoComunicacion'
-												component='span'
-												className='text-red-500 text-sm absolute bottom-[-1px] left-[12px]'
-											/>
+													name='contenidoComunicacion'
+													component='span'
+													className='text-red-500 text-sm absolute bottom-[-1px] left-[12px]'
+												/>
 
-												<span className={`texto_12_500 ${
-													charCount > maxLength ? 'text-red-500' : 'text-tertiary'
-												}`}>
+												<span className={`texto_12_500 ${charCount > maxLength ? 'text-red-500' : 'text-tertiary'
+													}`}>
 													{charCount}/{maxLength}
 												</span>
-								</div>
+											</div>
 										</div>
 
 										<div className='flex flex-col'></div>
@@ -481,21 +482,21 @@ export const Notificacion = ({
 												type='submit'
 											/>
 										</div>
-																				
+
 									</div>
 								</>
-							
 
-								
-								
+
+
+
 							</Form>
 						)}
 					</Formik>
 
-					
+
 				</>
 			)}
-	
+
 		</>
 	);
 };
