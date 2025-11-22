@@ -44,7 +44,7 @@ export const Notificacion = ({
 }) => {
 
 
-	//const urlImagen = 'https://portal2-des.iplan.com.ar/'; //DESA
+	// const urlImagen = 'https://portal2-des.iplan.com.ar/'; //DESA
 	// const urlImagen = 'https://www.iplan.com.ar/'; //PROD
 	const urlImagen = 'https://portal-desa-cloud.iplan.com.ar/'; //NUEVO SERVER
 

@@ -1,5 +1,4 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-
 import { useState, useRef, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -7,28 +6,21 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSaveComunicacion } from '../store/slices/saveComunicacion/thunks';
 import { useSetState } from 'hooks';
-
 import Cookies from "js-cookie";
-
-
 import {
 	ButtonPrimary,
 	Input,
 	Loader,
 	SeparadorH,
 	SeparadorV,
-	Textarea
-} from '../ui/componentes';
-
-export { ButtonPrimary } from '../ui/componentes/ButtonPrimary';
-
-import { useNavigate } from 'react-router-dom';
+	Textarea,
+	Select
+} from 'componentesUI';
 
 export const NuevaComunicacion = () => {
 	const { seleccionada } = useSelector((state) => state.notificaciones);
 	const [tipoComunicacion, setTipoComunicacion] = useState(seleccionada.tipo);
 	const { setSeleccionada } = useSetState();
-
 	const [btnVolverVisible, setBtnVolverVisible] = useState(true);
 
 	const btnVolver = () => {
@@ -99,10 +91,8 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 	const [isOn, setIsOn] = useState(0);//0 no push - 1 push
 
-
 	const [charCount, setCharCount] = useState(0);
 	const maxLength = 900;
-
 
 	const [charCountTituloInterno, setCharCountTituloInterno] = useState(0);
 	const maxLengthTituloInterno = 45;
@@ -112,7 +102,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 	const [charCountMensajePush, setCharCountMensajePush] = useState(0);
 	const maxLengthMensajePush = 120;
-
 
 	const getPlainText = (html) => {
 		if (!html) return '';
@@ -146,7 +135,10 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 		listadoServicio: '',
 		imagen: '',
 		mensajePush: '',
+		navegacion: ''
 	};
+
+	const navOptions = [{ value: 'contactos', label: 'Contactos' }, { value: 'adhesion_pago', label: 'Adhesión y pago' }, { value: 'reset_modem ', label: 'Resetear modém' }, { value: 'reset_wifi', label: 'Resetear WiFi' }];
 
 	const validationSchema = Yup.object({
 		tituloInterno: Yup.string()
@@ -230,9 +222,9 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 				}
 				// Si isOn es false, siempre es válido
 				return true;
-			})
-
-
+			}),
+		navegacion: Yup.string()
+			.oneOf(navOptions.map(option => option.value), '')
 	});
 
 	const [selectedFile, setSelectedFile] = useState(null);
@@ -305,7 +297,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 		}
 	}
 
-
 	/** LISTA DE DISTRIBUCCIÓN */
 	const [selectedListaDistribuccion, setSelectedListaDistribuccion] = useState(null);
 	const listaDistribuccionInputRef = useRef(null);
@@ -320,7 +311,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 			}
 		};
 	}, [listaDistribuccionPreviewUrl]);
-
 
 	const triggerListaDistribuccion = () => {
 		listaDistribuccionInputRef.current?.click();
@@ -438,15 +428,12 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 		setPreviewComunicacion(true);
 	};
 
-
 	return (
 		<Formik
 			initialValues={initialValues}
 			validationSchema={validationSchema}
 			onSubmit={onSubmit}>
 			{({ values, setFieldValue, handleSubmit, isSubmitting }) => (
-
-
 				<Form>
 					{!previewComunicacion ? (
 						<div className='bg-bg_primary flex flex-1 flex-col p-[16px] rounded-[12px] pt-[16px] gap-[16px]'>
@@ -454,7 +441,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 							<div className='pb-[12px] border-b-[1px] border-tertiary'>
 								<p className='text-primary texto_20_500'>
 									{tipoComunicacion == "general" ? "Comunicación general" : "Comunicación de aumento"}
-
 								</p>
 							</div>
 
@@ -532,6 +518,40 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 								}
 							</div>
 
+							{isOn ? (
+								<div className='flex items-end gap-[12px] max-w-[450px] mt-3'>
+
+									<Field name='navegacion'>
+										{({ field, form }) => (
+											<Select
+												field={field}
+												label='Navegación'
+												placeholder='Ingresá...'
+												onChange={(e) => {
+													form.setFieldValue(field.name, e.target.value);
+												}}
+											>
+												<option value='' selected>
+													Seleccionar...
+												</option>
+												{navOptions.map(option => (
+													<option key={option.value} value={option.value}>
+														{option.label}
+													</option>
+												))}
+											</Select>
+										)}
+									</Field>
+
+									{/* <ErrorMessage
+									name='navegacion'
+									component='span'
+									className='text-red-500 text-sm absolute'
+								/> */}
+								</div>
+							) : null
+							}
+
 							<div className='flex flex-col'></div>
 
 							<SeparadorH separador='0' />
@@ -607,9 +627,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 
 								</div>
 
-
-
-
 								{/** HASTA */}
 								<div className='relative w-full xl:w-auto'>
 									<div className='flex flex-col'>
@@ -632,8 +649,6 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 										className='text-red-500 text-sm mt-1 absolute left-[12px] bottom-[-23px]'
 									/>
 								</div>
-
-
 
 							</div>
 
@@ -941,12 +956,14 @@ const FormularioGeneral = ({ tipoComunicacion = "NO LLEGO", setTipoComunicacion,
 								setTipoComunicacion={setTipoComunicacion}
 								msjPush={values.mensajePush}
 								setBtnVolverVisible={setBtnVolverVisible}
+								navegacion={values.navegacion}
 							/>
 						)}
-				</Form>
-			)}
+				</Form >
+			)
+			}
 
-		</Formik>
+		</Formik >
 	);
 };
 
@@ -972,6 +989,7 @@ export const PreviewComunicacion = ({
 	setTipoComunicacion,
 	msjPush = "",
 	setBtnVolverVisible,
+	navegacion = "",
 }) => {
 	const dispatch = useDispatch();
 
@@ -1028,6 +1046,7 @@ export const PreviewComunicacion = ({
 		completeFormData.append('mensaje', msj);
 		completeFormData.append('mensajePush', esPush ? msjPush : null);
 		completeFormData.append('type', tipo);
+		completeFormData.append('action', navegacion)
 
 		if (selectedListaDistribuccion) {
 			completeFormData.append('fileData', selectedListaDistribuccion);
