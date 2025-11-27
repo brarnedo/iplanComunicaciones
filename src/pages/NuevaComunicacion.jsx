@@ -1035,12 +1035,21 @@ export const PreviewComunicacion = ({
 
 	const enviarCominicacion = async () => {
 
+		// ✅ FUNCIÓN DE SANITIZACIÓN (solo quitar etiquetas HTML)
+		const sanitizeData = (input) => {
+			if (!input || typeof input !== 'string') return input;
+			return input.replace(/<\/?[^>]+(>|$)/g, '').trim();
+		};
+
+		const sanitizedTituloInterno = sanitizeData(tituloInterno);
+		const sanitizedTitulo = sanitizeData(titulo);
+
 		// Crear FormData completo al momento del envío
 		const completeFormData = new FormData();
 
 		// Agregar TODOS los datos del formulario
-		completeFormData.append('titulo_interno', tituloInterno);
-		completeFormData.append('titulo', tituloInterno);
+		completeFormData.append('titulo_interno', sanitizedTituloInterno);
+		completeFormData.append('titulo', sanitizedTitulo);
 		completeFormData.append('desde', fechaIni);
 		completeFormData.append('hasta', fechaFin);
 		completeFormData.append('mensaje', msj);
