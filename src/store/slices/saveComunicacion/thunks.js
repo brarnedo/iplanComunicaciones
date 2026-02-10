@@ -4,6 +4,7 @@ import { BASE, CREAR } from "env";
 import { setLoadingSaveComunicacion, setSaveComunicacion } from "./saveComunicacionSlice";
 
 export const getSaveComunicacion = (formDataComunicacion) => {
+    console.log("👀 - getSaveComunicacion - formDataComunicacion:", formDataComunicacion);
     return async (dispatch, getState) => {
         dispatch(setLoadingSaveComunicacion(true))
         

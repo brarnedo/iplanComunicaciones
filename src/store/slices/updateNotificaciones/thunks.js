@@ -1,4 +1,4 @@
-import { BASE, NOTIFICACIONES } from "env";
+import { BASE } from "env";
 import {
     setStatusUpdate,
     starLoadingUpdateNotificaciones,
@@ -22,8 +22,10 @@ export const updateNotificaciones = (id, estado, valores) => {
 
 
         //const urlBase = 'https://portal2-des.iplan.com.ar/'; // DESA
+        const urlBase = `${BASE}`; // PROD
         // const urlBase = 'https://www.iplan.com.ar/'; // PROD
-        const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // nuevo server
+        // const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // nuevo server
+        // const urlBase = 'https://portal-prod-cloud.iplan.com.ar/'; // nuevo server
 
 
         const myHeader = {

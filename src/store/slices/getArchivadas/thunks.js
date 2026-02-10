@@ -1,3 +1,4 @@
+import { BASE } from "env";
 import { useSelector } from 'react-redux';
 
 export const getArchivadas = () => {
@@ -6,7 +7,9 @@ export const getArchivadas = () => {
 
         // const urlBase = 'https://portal2-des.iplan.com.ar/'; // DESA
         // const urlBase = 'https://www.iplan.com.ar/'; // PROD
-        const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // PROD
+        const urlBase = `${BASE}`; // PROD
+        // const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // DESA
+        // const urlBase = 'https://portal-prod-cloud.iplan.com.ar/'; // PROD
 
         try {
 

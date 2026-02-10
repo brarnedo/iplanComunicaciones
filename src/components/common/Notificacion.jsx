@@ -1,3 +1,4 @@
+import { BASE } from "env";
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useSetState } from 'hooks';
 import { useState } from 'react';
@@ -46,7 +47,9 @@ export const Notificacion = ({
 
 	// const urlImagen = 'https://portal2-des.iplan.com.ar/'; //DESA
 	// const urlImagen = 'https://www.iplan.com.ar/'; //PROD
-	const urlImagen = 'https://portal-desa-cloud.iplan.com.ar/'; //NUEVO SERVER
+	const urlImagen = `${BASE}`; //PROD
+	// const urlImagen = 'https://portal-desa-cloud.iplan.com.ar/'; //NUEVO SERVER
+	// const urlImagen = 'https://portal-prod-cloud.iplan.com.ar/'; //NUEVO SERVER
 
 	const dispatch = useDispatch();
 	let navigate = useNavigate();
@@ -141,8 +144,8 @@ export const Notificacion = ({
 	const traerReporte = async () => {
 
 
-		// const urlBase = 'https://www.iplan.com.ar/'; // PROD
-		const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // NUEVO SERVER
+		const urlBase = 'https://www.iplan.com.ar/'; // PROD
+		// const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // NUEVO SERVER
 
 		const myHeader = {
 			'Authorization': `Bearer ${Cookies.get('token')}`,

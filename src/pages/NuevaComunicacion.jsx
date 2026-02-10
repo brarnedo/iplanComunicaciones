@@ -1,3 +1,4 @@
+import { BASE } from "env";
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useState, useRef, useEffect } from 'react';
 import ReactQuill from 'react-quill';
@@ -1101,9 +1102,10 @@ export const PreviewComunicacion = ({
 
 	const traerReporte = async () => {
 
-
+		const urlBase = `${BASE}`; // PROD
 		// const urlBase = 'https://www.iplan.com.ar/'; // PROD
-		const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // NUEVO SERVER
+		// const urlBase = 'https://portal-desa-cloud.iplan.com.ar/'; // NUEVO SERVER
+		// const urlBase = 'https://portal-prod-cloud.iplan.com.ar/'; // NUEVO SERVER
 
 		const myHeader = {
 			'Authorization': `Bearer ${Cookies.get('token')}`,
