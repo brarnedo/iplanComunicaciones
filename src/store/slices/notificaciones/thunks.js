@@ -2397,9 +2397,6 @@ export const getNotificaciones = (param) => {
 
             ////prod
             const response = await axios.request(config);
-            console.log("👀 - :2400 - return - response:", response);
-
-
               if (response.status == 200) {
                 dispatch(starLoadingNotificaciones(false));
                 dispatch(setNotificaciones({ notificaciones: response.data.data }));

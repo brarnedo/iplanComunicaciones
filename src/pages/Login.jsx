@@ -10,7 +10,6 @@ import Cookies from "js-cookie";
 
 
 export const Login = () => {
-    console.log("Render Login");
     let navigate = useNavigate();
     const dispatch = useDispatch();
 

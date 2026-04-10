@@ -165,7 +165,6 @@ export const Notificacion = ({
 			const response = await fetch(url, requestConfig);
 
 			if (!response.ok) {
-				console.log("FALLO - Response no OK");
 				setDescargarPush(true);
 				return { "Respuesta": "ERROR", "data": null }
 			}

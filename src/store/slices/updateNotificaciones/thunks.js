@@ -1,4 +1,4 @@
-import { BASE } from "env";
+import { BASE, STATUS, ACTUALIZAR } from "env";
 import {
     setStatusUpdate,
     starLoadingUpdateNotificaciones,
@@ -43,7 +43,7 @@ export const updateNotificaciones = (id, estado, valores) => {
                 id: id
             });
 
-            url = `${urlBase}webService/notificaciones/notifications/status.php`;
+            url = `${urlBase}${STATUS}`;
 
         } else {
 
@@ -54,7 +54,7 @@ export const updateNotificaciones = (id, estado, valores) => {
                 mensaje: valores.contenidoComunicacion
             });
 
-            url = `${urlBase}webService/notificaciones/notifications/update.php`;
+            url = `${urlBase}${ACTUALIZAR}`;
         }
 
         const requestConfig = {
@@ -68,8 +68,6 @@ export const updateNotificaciones = (id, estado, valores) => {
 
             const response = await fetch(url, requestConfig);
             const respuesta = await response.json();
-            //console.log(respuesta);
-
 
             // // fallo
             // // const respuesta = {
@@ -105,41 +103,24 @@ export const updateNotificaciones = (id, estado, valores) => {
             //     }
             // }
 
-
-            // console.log('🕐 Iniciando envío... (5 segundos)');
-
             // // ⏰ SIMULAR DEMORA DE 5 SEGUNDOS
             // await new Promise(resolve => setTimeout(resolve, 5000));
-
-            // console.log('✅ Simulación completada después de 5 segundos');
-
-
-
 
             dispatch(starLoadingUpdateNotificaciones(false));
 
             dispatch(starLoadingDeleteNotificaciones(false));
 
-
-
             //return {"Respuesta":"ERROR", "data":null}
             //return {"Respuesta":"OK", "data": respuesta}
 
-
-
-
             if (!response.ok) {
-                console.log("FALLO");
                 return { "Respuesta": "ERROR", "data": null }
             }
-
-            console.log("EXITO");
+            // console.log("EXITO");
             return { "Respuesta": "OK", "data": respuesta }
 
-
-
         } catch (error) {
-            console.log("FALLO");
+            // console.log("FALLO");
             if (error.response.data.error_type == "session_expired") {
                 Cookies.remove('token');
                 window.location.href = '/comunicaciones/#/error';

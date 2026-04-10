@@ -1,5 +1,4 @@
-import { BASE } from "env";
-import { useSelector } from 'react-redux';
+import { BASE, NOTIFICACIONES} from "env";
 
 export const getArchivadas = () => {
 
@@ -14,7 +13,6 @@ export const getArchivadas = () => {
         try {
 
             const { session } = getState().auth;
-            console.log(session)
 
             const myBody = JSON.stringify({
                 "session": session
@@ -25,10 +23,9 @@ export const getArchivadas = () => {
                 body: myBody
             }
 
-            const response = await fetch(`${urlBase}comunicaciones/notificaciones_new/api/notifications/get.php?type=programadas`, configRequest);
+            const response = await fetch(`${urlBase}${NOTIFICACIONES}?type=programadas`, configRequest);
             const respuesta = await response.json();
-
-            console.log(respuesta);
+           
 
 
         } catch (error) {
